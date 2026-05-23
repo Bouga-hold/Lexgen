@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexGen — Générateur de CGV</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root { --ink:#0f0f0d;--paper:#f7f5f0;--cream:#ede9e0;--gold:#b8975a;--gold-light:#d4b57a;--muted:#6b6660;--border:#d5cfc4;--white:#ffffff; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+header{padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--white);}
+.logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;letter-spacing:-0.02em;color:var(--ink);text-decoration:none;}
+.logo span{color:var(--gold);}
+.badge{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:4px 12px;border-radius:20px;}
+.back-link{font-size:13px;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--ink);}
+main{max-width:1100px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+@media(max-width:768px){main{grid-template-columns:1fr;}}
+.panel{background:var(--white);border:1px solid var(--border);border-radius:4px;padding:2rem;}
+.panel-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:500;margin-bottom:0.25rem;}
+.panel-sub{font-size:13px;color:var(--muted);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--cream);}
+.section-label{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin:1.5rem 0 0.75rem;}
+.section-label:first-of-type{margin-top:0;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:3px;background:var(--paper);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);background:var(--white);}
+.field textarea{resize:vertical;min-height:70px;}
+.field select{appearance:none;cursor:pointer;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.checkbox-group{display:flex;flex-direction:column;gap:8px;}
+.checkbox-item{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.checkbox-item input{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;}
+.checkbox-item span{font-size:13px;font-weight:300;}
+.generate-btn{width:100%;margin-top:1.5rem;padding:13px;background:var(--ink);color:var(--white);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.06em;cursor:pointer;transition:background 0.2s;}
+.generate-btn:hover{background:#2a2a26;}
+.preview-panel{position:sticky;top:2rem;}
+.preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.preview-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;}
+.download-btn{padding:7px 16px;background:var(--gold);color:var(--white);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:none;}
+.download-btn.visible{display:block;}
+#preview-box{background:var(--white);border:1px solid var(--border);border-radius:4px;min-height:500px;padding:2.5rem;font-size:13px;line-height:1.8;color:var(--ink);position:relative;}
+.empty-state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);}
+.empty-state svg{opacity:0.2;}
+.empty-state p{font-size:13px;text-align:center;max-width:200px;}
+.doc-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--ink);}
+.doc-main-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}
+.doc-subtitle{font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;}
+.doc-ref{font-size:11px;color:var(--muted);margin-top:6px;}
+.doc-parties{background:var(--cream);border-left:3px solid var(--gold);padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 3px 3px 0;font-size:12.5px;}
+.doc-section{margin:1.25rem 0;}
+.doc-section-title{font-family:'Playfair Display',serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;color:var(--gold);}
+.doc-section p{font-size:12.5px;line-height:1.75;}
+.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-family:'Playfair Display',serif;font-size:4rem;font-weight:600;color:rgba(184,151,90,0.07);pointer-events:none;white-space:nowrap;letter-spacing:0.2em;}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="logo">Lex<span>Gen</span></a>
+  <a href="index.html" class="back-link">← Retour aux contrats</a>
+  <div class="badge">CGV</div>
+</header>
+<main>
+  <div class="panel">
+    <div class="panel-title">Conditions Générales de Vente</div>
+    <div class="panel-sub">Générateur de CGV conformes au droit français et à la réglementation européenne.</div>
+
+    <div class="section-label">Votre entreprise</div>
+    <div class="field"><label>Raison sociale</label><input type="text" id="nom" placeholder="Ex : Ma Boutique SAS" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Forme juridique</label><select id="forme" onchange="liveUpdate()"><option>SAS</option><option>SARL</option><option>Auto-entrepreneur</option><option>SA</option><option>EURL</option></select></div>
+      <div class="field"><label>Capital social</label><input type="text" id="capital" placeholder="Ex : 10 000 €" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>Siège social</label><input type="text" id="siege" placeholder="12 rue de la Paix, 75001 Paris" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>SIRET</label><input type="text" id="siret" placeholder="000 000 000 00000" oninput="liveUpdate()"></div>
+      <div class="field"><label>N° TVA intracommunautaire</label><input type="text" id="tva" placeholder="FR00000000000" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>Email de contact</label><input type="text" id="email" placeholder="contact@maboutique.fr" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Votre activité</div>
+    <div class="field"><label>Type de vente</label><select id="type-vente" onchange="liveUpdate()"><option value="biens">Vente de produits physiques</option><option value="services">Prestations de services</option><option value="numerique">Produits numériques / digitaux</option><option value="mixte">Mixte (produits + services)</option></select></div>
+    <div class="field"><label>Description de l'activité</label><input type="text" id="activite" placeholder="Ex : vente en ligne de vêtements et accessoires de mode" oninput="liveUpdate()"></div>
+    <div class="field"><label>Site internet</label><input type="text" id="site" placeholder="www.maboutique.fr" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Livraison & paiement</div>
+    <div class="row2">
+      <div class="field"><label>Délai de livraison</label><select id="delai" onchange="liveUpdate()"><option value="2 à 5 jours ouvrés">2 à 5 jours ouvrés</option><option value="5 à 10 jours ouvrés">5 à 10 jours ouvrés</option><option value="24 à 48h">24 à 48h</option><option value="selon le produit">Selon le produit</option></select></div>
+      <div class="field"><label>Délai de rétractation</label><select id="retractation" onchange="liveUpdate()"><option value="14 jours">14 jours (légal)</option><option value="30 jours">30 jours (étendu)</option></select></div>
+    </div>
+    <div class="field"><label>Moyens de paiement acceptés</label><select id="paiement" onchange="liveUpdate()"><option value="carte bancaire, virement et PayPal">CB, virement et PayPal</option><option value="carte bancaire">Carte bancaire uniquement</option><option value="carte bancaire et virement">CB et virement</option><option value="carte bancaire, virement, PayPal et chèque">CB, virement, PayPal et chèque</option></select></div>
+
+    <div class="section-label">Clauses optionnelles</div>
+    <div class="checkbox-group">
+      <label class="checkbox-item"><input type="checkbox" id="cl-garantie" onchange="liveUpdate()"><span>Garantie légale de conformité (produits physiques)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-donnees" onchange="liveUpdate()"><span>Clause données personnelles (RGPD)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-force" onchange="liveUpdate()"><span>Clause de force majeure</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-prop" onchange="liveUpdate()"><span>Clause de propriété intellectuelle</span></label>
+    </div>
+
+    <div class="field" style="margin-top:1.5rem"><label>Date de mise à jour</label><input type="date" id="date-maj" oninput="liveUpdate()"></div>
+    <button class="generate-btn" onclick="generateDoc()">Générer les CGV complètes</button>
+  </div>
+
+  <div class="preview-panel">
+    <div class="preview-header">
+      <div class="preview-title">Aperçu du document</div>
+      <button class="download-btn" id="dl-btn" onclick="downloadDoc()">Télécharger PDF</button>
+    </div>
+    <div id="preview-box">
+      <div class="empty-state" id="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <p>Remplissez le formulaire pour voir vos CGV apparaître ici</p>
+      </div>
+      <div id="doc-content" style="display:none"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+function v(id){return document.getElementById(id)?.value||'';}
+function c(id){return document.getElementById(id)?.checked||false;}
+function fmt(str,fb){return str.trim()||fb;}
+function getRef(){const d=new Date();return `CGV-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;}
+let docRef=getRef();
+function fmtDate(id){const r=v(id);if(!r)return '[date]';return new Date(r).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});}
+
+function buildDoc(){
+  const nom=fmt(v('nom'),'[Raison sociale]');
+  const forme=v('forme');
+  const capital=fmt(v('capital'),'[Capital]');
+  const siege=fmt(v('siege'),'[Siège social]');
+  const siret=fmt(v('siret'),'[SIRET]');
+  const tva=fmt(v('tva'),'[N° TVA]');
+  const email=fmt(v('email'),'[Email]');
+  const site=fmt(v('site'),'[Site web]');
+  const activite=fmt(v('activite'),'vente de produits et services');
+  const typeVente=v('type-vente');
+  const delai=v('delai')||'2 à 5 jours ouvrés';
+  const retractation=v('retractation')||'14 jours';
+  const paiement=v('paiement')||'carte bancaire, virement et PayPal';
+  const dateMaj=fmtDate('date-maj');
+
+  const isBiens = typeVente==='biens'||typeVente==='mixte';
+  const isServices = typeVente==='services'||typeVente==='mixte';
+  const isNumerique = typeVente==='numerique';
+
+  return `
+    <div class="watermark">LEXGEN</div>
+    <div class="doc-header">
+      <div class="doc-main-title">Conditions Générales de Vente</div>
+      <div class="doc-subtitle">${nom}</div>
+      <div class="doc-ref">Réf. ${docRef} · Mise à jour : ${dateMaj}</div>
+    </div>
+
+    <div class="doc-parties">
+      <strong>${nom}</strong>, ${forme} au capital de ${capital}, dont le siège social est situé au ${siege}, immatriculée au RCS sous le numéro SIRET ${siret}, n° TVA intracommunautaire ${tva}, joignable à l'adresse ${email}, ci-après dénommée le <strong>« Vendeur »</strong>.
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 1 — Objet et champ d'application</div>
+      <p>Les présentes Conditions Générales de Vente (CGV) régissent l'ensemble des ventes conclues par ${nom} via son site internet ${site}, portant sur ${activite}. Elles s'appliquent à tout achat effectué par un client (ci-après le « Client »), qu'il soit professionnel ou particulier, sauf conditions particulières négociées par écrit.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 2 — Commandes</div>
+      <p>Toute commande implique l'acceptation pleine et entière des présentes CGV. Le Client valide sa commande en cliquant sur le bouton de confirmation. La vente est réputée conclue à la date de confirmation de commande par le Vendeur, matérialisée par l'envoi d'un email de confirmation.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 3 — Prix</div>
+      <p>Les prix sont indiqués en euros, toutes taxes comprises (TTC). Le Vendeur se réserve le droit de modifier ses prix à tout moment, étant entendu que le prix applicable est celui en vigueur au moment de la validation de la commande. En cas de promotion, les prix promotionnels s'appliquent uniquement pendant la durée indiquée.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 4 — Paiement</div>
+      <p>Le règlement s'effectue par ${paiement}. Le paiement est exigible immédiatement à la commande. En cas de paiement par virement, la commande est traitée à réception du virement. Tout retard de paiement entraîne l'application de pénalités au taux légal en vigueur.</p>
+    </div>
+
+    ${isBiens ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 5 — Livraison</div>
+      <p>Les produits sont livrés à l'adresse indiquée par le Client lors de sa commande. Le délai de livraison est de <strong>${delai}</strong> à compter de la confirmation de commande. En cas de retard, le Client sera informé dans les meilleurs délais. Le Vendeur ne saurait être tenu responsable des retards imputables au transporteur ou à un cas de force majeure.</p>
+    </div>` : ''}
+
+    ${isServices ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 5 — Exécution des services</div>
+      <p>Les services sont exécutés dans les délais convenus au moment de la commande. Le Client s'engage à fournir toutes les informations nécessaires à la bonne exécution du service. Tout retard imputable au Client ne saurait engager la responsabilité du Vendeur.</p>
+    </div>` : ''}
+
+    ${isNumerique ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 5 — Accès aux produits numériques</div>
+      <p>Les produits numériques sont mis à disposition immédiatement après confirmation du paiement, par téléchargement ou accès à un espace dédié. Le Client est informé que le droit de rétractation ne s'applique pas aux contenus numériques dont l'exécution a commencé avec son accord préalable exprès.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 6 — Droit de rétractation</div>
+      <p>Conformément à l'article L221-18 du Code de la consommation, le Client particulier dispose d'un délai de <strong>${retractation}</strong> à compter de la réception du bien (ou de la conclusion du contrat pour les services) pour exercer son droit de rétractation, sans avoir à justifier de motifs. Le remboursement sera effectué dans les 14 jours suivant la réception de la demande.</p>
+    </div>
+
+    ${c('cl-garantie') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 7 — Garanties légales</div>
+      <p>Tous les produits bénéficient de la garantie légale de conformité (Art. L217-4 à L217-14 Code de la consommation) et de la garantie contre les vices cachés (Art. 1641 à 1649 Code civil). En cas de défaut de conformité, le Client peut demander le remplacement ou le remboursement du produit dans un délai de 2 ans à compter de la délivrance.</p>
+    </div>` : ''}
+
+    ${c('cl-donnees') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${c('cl-garantie') ? 8 : 7} — Données personnelles (RGPD)</div>
+      <p>Les données personnelles collectées lors de la commande sont traitées par ${nom} en qualité de responsable de traitement, aux fins d'exécution du contrat et de gestion de la relation client. Conformément au Règlement (UE) 2016/679 (RGPD), le Client dispose d'un droit d'accès, de rectification et de suppression de ses données en contactant ${email}.</p>
+    </div>` : ''}
+
+    ${c('cl-force') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Force majeure</div>
+      <p>Aucune partie ne pourra être tenue responsable de l'inexécution de ses obligations en cas de force majeure au sens de l'article 1218 du Code civil (catastrophes naturelles, pandémies, grèves, décisions gouvernementales…). La partie concernée devra en informer l'autre dans les 48 heures.</p>
+    </div>` : ''}
+
+    ${c('cl-prop') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Propriété intellectuelle</div>
+      <p>L'ensemble des éléments du site ${site} (textes, images, logos, base de données) est protégé par le droit de la propriété intellectuelle et demeure la propriété exclusive de ${nom}. Toute reproduction, même partielle, est strictement interdite sans autorisation préalable écrite.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">Droit applicable & litiges</div>
+      <p>Les présentes CGV sont soumises au droit français. En cas de litige, le Client peut recourir au service de médiation compétent ou saisir les tribunaux français. Pour les litiges de consommation, la plateforme européenne de règlement en ligne des litiges est accessible sur ec.europa.eu/consumers/odr.</p>
+    </div>
+  `;
+}
+
+function liveUpdate(){
+  if(!v('nom'))return;
+  document.getElementById('empty-state').style.display='none';
+  document.getElementById('doc-content').style.display='block';
+  document.getElementById('doc-content').innerHTML=buildDoc();
+}
+
+function generateDoc(){
+  document.getElementById('empty-state').style.display='none';
+  document.getElementById('doc-content').style.display='block';
+  document.getElementById('doc-content').innerHTML=buildDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  document.getElementById('preview-box').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function downloadDoc(){
+  const content=document.getElementById('doc-content').innerHTML;
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>CGV — ${v('nom')}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>body{font-family:'DM Sans',sans-serif;font-weight:300;color:#0f0f0d;padding:3rem;max-width:720px;margin:auto;line-height:1.8;font-size:13px;}.doc-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid #0f0f0d;}.doc-main-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}.doc-subtitle{font-size:11px;color:#6b6660;letter-spacing:0.1em;text-transform:uppercase;}.doc-ref{font-size:11px;color:#6b6660;margin-top:6px;}.doc-parties{background:#ede9e0;border-left:3px solid #b8975a;padding:1rem 1.25rem;margin:1.5rem 0;}.doc-section{margin:1.25rem 0;}.doc-section-title{font-family:'Playfair Display',serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;color:#b8975a;}.watermark{display:none;}@media print{body{padding:1.5rem;}}</style></head><body>${content}</body></html>`);
+  win.document.close();
+  setTimeout(()=>win.print(),500);
+}
+
+document.getElementById('date-maj').valueAsDate=new Date();
+</script>
+</body>
+</html>

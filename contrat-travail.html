@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexGen — Générateur de Contrat de Travail</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f0f0d;--paper:#f7f5f0;--cream:#ede9e0;--gold:#b8975a;--muted:#6b6660;--border:#d5cfc4;--white:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+header{padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--white);}
+.logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;letter-spacing:-0.02em;color:var(--ink);text-decoration:none;}
+.logo span{color:var(--gold);}
+.badge{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:4px 12px;border-radius:20px;}
+.back-link{font-size:13px;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--ink);}
+main{max-width:1100px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+@media(max-width:768px){main{grid-template-columns:1fr;}}
+.panel{background:var(--white);border:1px solid var(--border);border-radius:4px;padding:2rem;}
+.panel-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:500;margin-bottom:0.25rem;}
+.panel-sub{font-size:13px;color:var(--muted);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--cream);}
+.section-label{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin:1.5rem 0 0.75rem;}
+.section-label:first-of-type{margin-top:0;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:3px;background:var(--paper);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);background:var(--white);}
+.field select{appearance:none;cursor:pointer;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.checkbox-group{display:flex;flex-direction:column;gap:8px;}
+.checkbox-item{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.checkbox-item input{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;}
+.checkbox-item span{font-size:13px;font-weight:300;}
+.type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.5rem;}
+.type-btn{padding:10px;border:1px solid var(--border);border-radius:3px;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;color:var(--muted);}
+.type-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.generate-btn{width:100%;margin-top:1.5rem;padding:13px;background:var(--ink);color:var(--white);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.06em;cursor:pointer;transition:background 0.2s;}
+.generate-btn:hover{background:#2a2a26;}
+.preview-panel{position:sticky;top:2rem;}
+.preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.preview-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;}
+.download-btn{padding:7px 16px;background:var(--gold);color:var(--white);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:none;}
+.download-btn.visible{display:block;}
+#preview-box{background:var(--white);border:1px solid var(--border);border-radius:4px;min-height:500px;padding:2.5rem;font-size:13px;line-height:1.8;color:var(--ink);position:relative;}
+.empty-state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);}
+.empty-state svg{opacity:0.2;}
+.empty-state p{font-size:13px;text-align:center;max-width:200px;}
+.doc-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--ink);}
+.doc-main-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}
+.doc-subtitle{font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;}
+.doc-ref{font-size:11px;color:var(--muted);margin-top:6px;}
+.doc-parties{background:var(--cream);border-left:3px solid var(--gold);padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 3px 3px 0;font-size:12.5px;}
+.doc-section{margin:1.25rem 0;}
+.doc-section-title{font-family:'Playfair Display',serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;color:var(--gold);}
+.doc-section p{font-size:12.5px;line-height:1.75;}
+.doc-signatures{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);}
+.sig-block{font-size:12px;}
+.sig-line{border-bottom:1px solid var(--ink);height:32px;margin:0.5rem 0;}
+.sig-label{font-size:11px;color:var(--muted);}
+.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-family:'Playfair Display',serif;font-size:4rem;font-weight:600;color:rgba(184,151,90,0.07);pointer-events:none;white-space:nowrap;letter-spacing:0.2em;}
+.cdd-fields{display:none;}
+.cdd-fields.visible{display:block;}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="logo">Lex<span>Gen</span></a>
+  <a href="index.html" class="back-link">← Retour aux contrats</a>
+  <div class="badge">Contrat de travail</div>
+</header>
+<main>
+  <div class="panel">
+    <div class="panel-title">Contrat de travail</div>
+    <div class="panel-sub">CDI ou CDD conforme au Code du travail français.</div>
+
+    <div class="section-label">Type de contrat</div>
+    <div class="type-toggle">
+      <button class="type-btn active" id="btn-cdi" onclick="setType('cdi')">CDI — Durée indéterminée</button>
+      <button class="type-btn" id="btn-cdd" onclick="setType('cdd')">CDD — Durée déterminée</button>
+    </div>
+
+    <div class="section-label">L'employeur</div>
+    <div class="field"><label>Raison sociale</label><input type="text" id="emp-nom" placeholder="Ex : Tech Startup SAS" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Forme juridique</label><select id="emp-forme" onchange="liveUpdate()"><option>SAS</option><option>SARL</option><option>SA</option><option>Auto-entrepreneur</option></select></div>
+      <div class="field"><label>SIRET</label><input type="text" id="emp-siret" placeholder="000 000 000 00000" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>Siège social</label><input type="text" id="emp-addr" placeholder="12 rue de la Paix, 75001 Paris" oninput="liveUpdate()"></div>
+    <div class="field"><label>Représentant légal (nom et qualité)</label><input type="text" id="emp-rep" placeholder="Ex : Jean Martin, Président" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Le salarié</div>
+    <div class="row2">
+      <div class="field"><label>Prénom</label><input type="text" id="sal-prenom" placeholder="Prénom" oninput="liveUpdate()"></div>
+      <div class="field"><label>Nom</label><input type="text" id="sal-nom" placeholder="NOM" oninput="liveUpdate()"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Date de naissance</label><input type="date" id="sal-naissance" oninput="liveUpdate()"></div>
+      <div class="field"><label>Nationalité</label><input type="text" id="sal-nat" placeholder="Française" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>Adresse</label><input type="text" id="sal-addr" placeholder="Adresse du salarié" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Poste & conditions</div>
+    <div class="field"><label>Intitulé du poste</label><input type="text" id="poste" placeholder="Ex : Développeur Full Stack" oninput="liveUpdate()"></div>
+    <div class="field"><label>Description des missions</label><textarea id="missions" placeholder="Ex : Développement et maintenance des applications web, participation aux réunions d'équipe..." oninput="liveUpdate()"></textarea></div>
+    <div class="field"><label>Lieu de travail</label><input type="text" id="lieu" placeholder="Ex : 12 rue de la Paix, 75001 Paris (télétravail possible)" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Durée hebdomadaire</label><select id="duree-hebdo" onchange="liveUpdate()"><option value="35 heures">35h (temps plein)</option><option value="39 heures">39h</option><option value="32 heures">32h</option><option value="28 heures">28h (temps partiel)</option><option value="17h30">17h30 (mi-temps)</option></select></div>
+      <div class="field"><label>Date de début</label><input type="date" id="date-debut" oninput="liveUpdate()"></div>
+    </div>
+
+    <div class="cdd-fields" id="cdd-fields">
+      <div class="section-label">Spécificités CDD</div>
+      <div class="field"><label>Date de fin du CDD</label><input type="date" id="date-fin" oninput="liveUpdate()"></div>
+      <div class="field"><label>Motif du recours au CDD</label><select id="motif-cdd" onchange="liveUpdate()"><option value="remplacement d'un salarié absent">Remplacement d'un salarié absent</option><option value="accroissement temporaire d'activité">Accroissement temporaire d'activité</option><option value="emploi saisonnier">Emploi saisonnier</option><option value="contrat d'usage">Contrat d'usage</option></select></div>
+    </div>
+
+    <div class="section-label">Rémunération</div>
+    <div class="row2">
+      <div class="field"><label>Salaire brut mensuel</label><input type="text" id="salaire" placeholder="Ex : 2 800" oninput="liveUpdate()"></div>
+      <div class="field"><label>Période d'essai</label><select id="essai" onchange="liveUpdate()"><option value="2 mois">2 mois (cadre : 4 mois)</option><option value="1 mois">1 mois</option><option value="3 mois">3 mois</option><option value="Aucune">Sans période d'essai</option></select></div>
+    </div>
+    <div class="field"><label>Convention collective applicable</label><input type="text" id="convention" placeholder="Ex : SYNTEC (Bureaux d'études techniques)" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Clauses optionnelles</div>
+    <div class="checkbox-group">
+      <label class="checkbox-item"><input type="checkbox" id="cl-teletravail" onchange="liveUpdate()"><span>Clause de télétravail</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-conf" onchange="liveUpdate()"><span>Clause de confidentialité</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-mob" onchange="liveUpdate()"><span>Clause de mobilité géographique</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-nc" onchange="liveUpdate()"><span>Clause de non-concurrence</span></label>
+    </div>
+
+    <div class="field" style="margin-top:1.5rem"><label>Date de signature</label><input type="date" id="date-sign" oninput="liveUpdate()"></div>
+    <button class="generate-btn" onclick="generateDoc()">Générer le contrat complet</button>
+  </div>
+
+  <div class="preview-panel">
+    <div class="preview-header">
+      <div class="preview-title">Aperçu du document</div>
+      <button class="download-btn" id="dl-btn" onclick="downloadDoc()">Télécharger PDF</button>
+    </div>
+    <div id="preview-box">
+      <div class="empty-state" id="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <p>Remplissez le formulaire pour voir votre contrat apparaître ici</p>
+      </div>
+      <div id="doc-content" style="display:none"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+let contractType='cdi';
+function v(id){return document.getElementById(id)?.value||'';}
+function c(id){return document.getElementById(id)?.checked||false;}
+function fmt(str,fb){return str.trim()||fb;}
+function fmtDate(id){const r=v(id);if(!r)return '[date]';return new Date(r).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});}
+
+function setType(type){
+  contractType=type;
+  document.getElementById('btn-cdi').classList.toggle('active',type==='cdi');
+  document.getElementById('btn-cdd').classList.toggle('active',type==='cdd');
+  document.getElementById('cdd-fields').classList.toggle('visible',type==='cdd');
+  liveUpdate();
+}
+
+function buildDoc(){
+  const empNom=fmt(v('emp-nom'),'[Employeur]');
+  const empForme=v('emp-forme');
+  const empSiret=v('emp-siret');
+  const empAddr=fmt(v('emp-addr'),'[Adresse employeur]');
+  const empRep=fmt(v('emp-rep'),'[Représentant]');
+  const salPrenom=fmt(v('sal-prenom'),'[Prénom]');
+  const salNom=fmt(v('sal-nom'),'[NOM]');
+  const salAddr=fmt(v('sal-addr'),'[Adresse salarié]');
+  const salNat=fmt(v('sal-nat'),'française');
+  const salNaissance=fmtDate('sal-naissance');
+  const poste=fmt(v('poste'),'[Poste]');
+  const missions=fmt(v('missions'),'[Missions à préciser]');
+  const lieu=fmt(v('lieu'),'[Lieu de travail]');
+  const dureeHebdo=v('duree-hebdo')||'35 heures';
+  const dateDebut=fmtDate('date-debut');
+  const salaire=fmt(v('salaire'),'[Salaire]');
+  const essai=v('essai')||'2 mois';
+  const convention=fmt(v('convention'),'[Convention collective]');
+  const dateSign=fmtDate('date-sign');
+  const isCDD=contractType==='cdd';
+  const dateFin=fmtDate('date-fin');
+  const motifCDD=v('motif-cdd')||'accroissement temporaire d\'activité';
+
+  return `
+    <div class="watermark">LEXGEN</div>
+    <div class="doc-header">
+      <div class="doc-main-title">Contrat de travail à ${isCDD ? 'durée déterminée (CDD)' : 'durée indéterminée (CDI)'}</div>
+      <div class="doc-subtitle">Employment Contract · Droit français</div>
+      <div class="doc-ref">Réf. ${isCDD ? 'CDD' : 'CDI'}-${new Date().getFullYear()}-${Math.floor(Math.random()*900+100)}</div>
+    </div>
+
+    <div class="doc-parties">
+      <strong>Entre les soussignés :</strong><br><br>
+      <strong>${empNom}</strong>, ${empForme}${empSiret ? `, SIRET ${empSiret}` : ''}, dont le siège social est situé au ${empAddr}, représentée par ${empRep}, ci-après dénommée l'<strong>« Employeur »</strong><br><br>
+      <strong>Et :</strong><br><br>
+      <strong>${salPrenom} ${salNom}</strong>, né(e) le ${salNaissance}, de nationalité ${salNat}, demeurant au ${salAddr}, ci-après dénommé(e) le <strong>« Salarié »</strong>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 1 — Nature et durée du contrat</div>
+      <p>${isCDD
+        ? `Le présent contrat est un <strong>contrat à durée déterminée (CDD)</strong> conclu pour le motif suivant : <strong>${motifCDD}</strong>. Il prend effet le <strong>${dateDebut}</strong> et prend fin le <strong>${dateFin}</strong>. À l'issue du CDD, une indemnité de fin de contrat (prime de précarité) égale à 10% de la rémunération brute totale sera versée au Salarié, sauf embauche en CDI.`
+        : `Le présent contrat est un <strong>contrat à durée indéterminée (CDI)</strong> prenant effet le <strong>${dateDebut}</strong>.`
+      }</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 2 — Poste & missions</div>
+      <p>Le Salarié est engagé en qualité de <strong>${poste}</strong>. À ce titre, ses principales missions sont les suivantes : ${missions}. Cette liste n'est pas limitative et le Salarié pourra être amené à accomplir toute tâche relevant de sa qualification professionnelle.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 3 — Lieu de travail</div>
+      <p>Le Salarié exercera ses fonctions au sein de : <strong>${lieu}</strong>. L'Employeur se réserve le droit de modifier le lieu de travail dans un périmètre raisonnable, sous réserve d'un préavis suffisant.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 4 — Durée du travail</div>
+      <p>La durée de travail est fixée à <strong>${dureeHebdo} par semaine</strong>, réparties conformément aux dispositions légales et conventionnelles applicables. Les horaires pourront être aménagés en accord avec les nécessités du service, dans le respect des dispositions du Code du travail.</p>
+    </div>
+
+    ${essai !== 'Aucune' ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 5 — Période d'essai</div>
+      <p>Le présent contrat est soumis à une période d'essai de <strong>${essai}</strong> à compter de la date d'embauche, renouvelable une fois dans les conditions légales. Durant cette période, chaque partie peut rompre le contrat sans indemnité, sous réserve du respect des délais de prévenance prévus aux articles L1221-25 et suivants du Code du travail.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 6 — Rémunération</div>
+      <p>En contrepartie de son travail, le Salarié percevra un salaire brut mensuel de <strong>${salaire} €</strong>, versé le dernier jour ouvré de chaque mois. Ce salaire inclut l'ensemble des éléments fixes de rémunération. Des éléments variables (primes, participation…) pourront venir compléter cette rémunération selon les politiques en vigueur dans l'entreprise.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 7 — Convention collective</div>
+      <p>Le Salarié relèvera de la convention collective suivante : <strong>${convention}</strong>. En cas de conflit entre les dispositions du présent contrat et celles de la convention collective, les dispositions les plus favorables au Salarié s'appliqueront.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 8 — Congés payés</div>
+      <p>Le Salarié bénéficiera de 2,5 jours ouvrables de congés payés par mois de travail effectif, soit 30 jours ouvrables par an (5 semaines), conformément aux dispositions de l'article L3141-3 du Code du travail.</p>
+    </div>
+
+    ${c('cl-teletravail') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Télétravail</div>
+      <p>Le Salarié pourra exercer ses fonctions en télétravail selon les modalités définies dans la charte de télétravail de l'entreprise ou par accord entre les parties. L'Employeur prendra en charge les frais liés au télétravail conformément aux dispositions légales en vigueur.</p>
+    </div>` : ''}
+
+    ${c('cl-conf') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Confidentialité</div>
+      <p>Le Salarié s'engage à maintenir strictement confidentielle toute information dont il aurait connaissance dans l'exercice de ses fonctions, pendant la durée du contrat et après sa cessation, pour toute durée nécessaire à la protection des intérêts légitimes de l'Employeur.</p>
+    </div>` : ''}
+
+    ${c('cl-mob') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Mobilité géographique</div>
+      <p>Le Salarié accepte, dans l'intérêt de l'entreprise, de changer son lieu de travail sur l'ensemble du territoire national, sous réserve d'un préavis d'un mois. Cette mobilité ne constitue pas une modification du contrat de travail.</p>
+    </div>` : ''}
+
+    ${c('cl-nc') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Non-concurrence</div>
+      <p>En cas de rupture du contrat, le Salarié s'engage à ne pas exercer d'activité concurrente directe pendant une durée de 12 mois à compter de la date de départ effectif. En contrepartie, l'Employeur versera une indemnité mensuelle égale à 1/3 du salaire brut mensuel moyen des 12 derniers mois.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">Droit applicable</div>
+      <p>Le présent contrat est soumis au droit français, notamment au Code du travail. Tout litige relatif à son exécution ou à sa rupture sera soumis au Conseil de Prud'hommes compétent.</p>
+    </div>
+
+    <div class="doc-signatures">
+      <div class="sig-block">
+        <div><strong>${empNom}</strong></div>
+        <div class="sig-label">L'Employeur · ${empRep}</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateSign}</div>
+      </div>
+      <div class="sig-block">
+        <div><strong>${salPrenom} ${salNom}</strong></div>
+        <div class="sig-label">Le Salarié · "Lu et approuvé"</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateSign}</div>
+      </div>
+    </div>
+  `;
+}
+
+function liveUpdate(){
+  if(!v('emp-nom')&&!v('sal-nom'))return;
+  document.getElementById('empty-state').style.display='none';
+  document.getElementById('doc-content').style.display='block';
+  document.getElementById('doc-content').innerHTML=buildDoc();
+}
+
+function generateDoc(){
+  document.getElementById('empty-state').style.display='none';
+  document.getElementById('doc-content').style.display='block';
+  document.getElementById('doc-content').innerHTML=buildDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  document.getElementById('preview-box').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function downloadDoc(){
+  const content=document.getElementById('doc-content').innerHTML;
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Contrat de travail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>body{font-family:'DM Sans',sans-serif;font-weight:300;color:#0f0f0d;padding:3rem;max-width:720px;margin:auto;line-height:1.8;font-size:13px;}.doc-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid #0f0f0d;}.doc-main-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}.doc-subtitle{font-size:11px;color:#6b6660;letter-spacing:0.1em;text-transform:uppercase;}.doc-ref{font-size:11px;color:#6b6660;margin-top:6px;}.doc-parties{background:#ede9e0;border-left:3px solid #b8975a;padding:1rem 1.25rem;margin:1.5rem 0;}.doc-section{margin:1.25rem 0;}.doc-section-title{font-family:'Playfair Display',serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;color:#b8975a;}.doc-signatures{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #d5cfc4;}.sig-line{border-bottom:1px solid #0f0f0d;height:32px;margin:0.5rem 0;}.sig-label{font-size:11px;color:#6b6660;}.watermark{display:none;}@media print{body{padding:1.5rem;}}</style></head><body>${content}</body></html>`);
+  win.document.close();
+  setTimeout(()=>win.print(),500);
+}
+
+document.getElementById('date-sign').valueAsDate=new Date();
+document.getElementById('date-debut').valueAsDate=new Date();
+</script>
+</body>
+</html>
