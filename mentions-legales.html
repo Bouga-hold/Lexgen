@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexGen — Mentions légales</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f0f0d;--paper:#f7f5f0;--cream:#ede9e0;--gold:#b8975a;--muted:#6b6660;--border:#d5cfc4;--white:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.25rem 3rem;display:flex;align-items:center;justify-content:space-between;background:rgba(247,245,240,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;letter-spacing:-0.02em;color:var(--ink);text-decoration:none;}
+.logo span{color:var(--gold);}
+.back-link{font-size:13px;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--ink);}
+.content{max-width:760px;margin:0 auto;padding:8rem 2rem 5rem;}
+.page-tag{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+h1{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;letter-spacing:-0.02em;margin-bottom:0.5rem;}
+.update-date{font-size:13px;color:var(--muted);margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border);}
+.article{margin-bottom:2.5rem;}
+.article h2{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;margin-bottom:0.75rem;display:flex;align-items:baseline;gap:0.75rem;}
+.article-num{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);}
+.article p{font-size:14px;line-height:1.8;color:var(--muted);margin-bottom:0.75rem;}
+.info-block{background:var(--cream);border-left:3px solid var(--gold);padding:1rem 1.25rem;border-radius:0 3px 3px 0;margin:1rem 0;font-size:13px;line-height:1.8;}
+.info-block strong{color:var(--ink);font-weight:500;}
+footer{border-top:1px solid var(--border);padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);}
+.footer-legal{display:flex;gap:1.5rem;}
+.footer-legal a{color:var(--muted);text-decoration:none;}
+.footer-legal a:hover{color:var(--ink);}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Lex<span>Gen</span></a>
+  <a href="index.html" class="back-link">← Retour à l'accueil</a>
+</nav>
+<div class="content">
+  <div class="page-tag">Légal</div>
+  <h1>Mentions légales</h1>
+  <div class="update-date">Conformément à la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique</div>
+
+  <div class="article">
+    <h2><span class="article-num">1.</span> Éditeur du site</h2>
+    <div class="info-block">
+      <strong>LexGen</strong><br>
+      Plateforme de génération de documents juridiques<br>
+      Email : contact@lexgen.fr<br>
+      Site : lexgen-ecru.vercel.app
+    </div>
+  </div>
+
+  <div class="article">
+    <h2><span class="article-num">2.</span> Hébergement</h2>
+    <div class="info-block">
+      <strong>Vercel Inc.</strong><br>
+      340 Pine Street, Suite 701<br>
+      San Francisco, CA 94104 — États-Unis<br>
+      Site : vercel.com
+    </div>
+  </div>
+
+  <div class="article">
+    <h2><span class="article-num">3.</span> Propriété intellectuelle</h2>
+    <p>L'ensemble du contenu de ce site (textes, modèles de documents, interface, design, code source) est protégé par le droit de la propriété intellectuelle française et internationale. Toute reproduction, même partielle, est strictement interdite sans autorisation préalable écrite de LexGen.</p>
+  </div>
+
+  <div class="article">
+    <h2><span class="article-num">4.</span> Responsabilité</h2>
+    <p>Les documents générés par LexGen sont fournis à titre informatif et ne constituent pas un conseil juridique. LexGen ne peut être tenu responsable des conséquences liées à l'utilisation des documents générés sans vérification par un professionnel du droit.</p>
+    <p>LexGen s'efforce d'assurer l'exactitude des informations disponibles sur le site. Toutefois, il ne peut garantir l'exhaustivité ou l'actualité de ces informations au regard de l'évolution permanente du droit.</p>
+  </div>
+
+  <div class="article">
+    <h2><span class="article-num">5.</span> Données personnelles</h2>
+    <p>Le traitement des données personnelles des utilisateurs est décrit dans notre <a href="confidentialite.html" style="color:var(--gold);">Politique de confidentialité</a>, conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679) et à la loi Informatique et Libertés.</p>
+  </div>
+
+  <div class="article">
+    <h2><span class="article-num">6.</span> Droit applicable</h2>
+    <p>Le présent site et ses mentions légales sont soumis au droit français. Tout litige relatif à l'utilisation du site sera soumis à la compétence exclusive des tribunaux français.</p>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 LexGen</span>
+  <div class="footer-legal">
+    <a href="cgu.html">CGU</a>
+    <a href="mentions-legales.html">Mentions légales</a>
+    <a href="confidentialite.html">Confidentialité</a>
+  </div>
+</footer>
+</body>
+</html>

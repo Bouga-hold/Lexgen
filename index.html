@@ -397,14 +397,89 @@ nav {
 .step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
 /* FOOTER */
-footer {
-  padding: 2rem 3rem;
-  border-top: 1px solid var(--border);
+.footer-main {
+  background: var(--ink);
+  padding: 4rem 3rem;
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+.footer-brand .logo-footer {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 1rem;
+  display: block;
+  text-decoration: none;
+}
+.footer-brand .logo-footer span { color: var(--gold); }
+.footer-brand p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.7;
+  max-width: 260px;
+}
+.footer-col h4 {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 0.6rem; }
+.footer-col ul li a {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col ul li a:hover { color: var(--white); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 1.25rem 3rem;
+  background: var(--ink);
+}
+.footer-bottom-inner {
+  max-width: 1100px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 12px;
-  color: var(--muted);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.footer-bottom-inner span {
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+}
+.footer-legal {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.footer-legal a {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-legal a:hover { color: rgba(255,255,255,0.7); }
+.footer-legal-sep {
+  font-size: 11px;
+  color: rgba(255,255,255,0.15);
+}
+@media(max-width:900px){
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-main { padding: 3rem 1.5rem; }
+  .footer-bottom { padding: 1.25rem 1.5rem; }
+  .footer-bottom-inner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
 }
 
 @media (max-width: 900px) {
@@ -782,10 +857,54 @@ footer {
   </div>
 </section>
 
-<footer>
-  <span>© 2026 LexGen · Tous droits réservés</span>
-  <span>Les documents générés sont fournis à titre informatif. LexGen ne remplace pas le conseil d'un avocat.</span>
+<footer class="footer-main">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo-footer">Lex<span>Gen</span></a>
+      <p>Générez vos contrats juridiques conformes au droit français en quelques minutes. Sans avocat, sans attente.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contrats</h4>
+      <ul>
+        <li><a href="nda.html">Accord de confidentialité</a></li>
+        <li><a href="prestation.html">Contrat de prestation</a></li>
+        <li><a href="cgv.html">CGV</a></li>
+        <li><a href="contrat-travail.html">Contrat de travail</a></li>
+        <li><a href="#contrats">Pacte d'associés</a></li>
+        <li><a href="#contrats">Statuts de société</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Guide</h4>
+      <ul>
+        <li><a href="#details">À quoi sert chaque contrat ?</a></li>
+        <li><a href="#comment">Comment ça marche</a></li>
+        <li><a href="cgu.html">CGU</a></li>
+        <li><a href="mentions-legales.html">Mentions légales</a></li>
+        <li><a href="confidentialite.html">Confidentialité</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:contact@lexgen.fr">contact@lexgen.fr</a></li>
+        <li><a href="cgu.html">Conditions d'utilisation</a></li>
+      </ul>
+    </div>
+  </div>
 </footer>
+<div class="footer-bottom">
+  <div class="footer-bottom-inner">
+    <span>© 2026 LexGen · Tous droits réservés · Les documents générés sont fournis à titre informatif.</span>
+    <div class="footer-legal">
+      <a href="cgu.html">Conditions générales</a>
+      <span class="footer-legal-sep">·</span>
+      <a href="mentions-legales.html">Mentions légales</a>
+      <span class="footer-legal-sep">·</span>
+      <a href="confidentialite.html">Politique de confidentialité</a>
+    </div>
+  </div>
+</div>
 
 <script>
 function toggle(btn) {
