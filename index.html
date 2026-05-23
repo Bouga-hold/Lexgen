@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexGen — Générateur de NDA</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0f0f0d;
+  --paper: #f7f5f0;
+  --cream: #ede9e0;
+  --gold: #b8975a;
+  --gold-light: #d4b57a;
+  --muted: #6b6660;
+  --border: #d5cfc4;
+  --white: #ffffff;
+  --success: #2d6a4f;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  padding: 1.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.logo span { color: var(--gold); }
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* Layout */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+@media (max-width: 768px) { main { grid-template-columns: 1fr; } }
+
+/* Form panel */
+.panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2rem;
+}
+.panel-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+.panel-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--cream);
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 1.5rem 0 0.75rem;
+}
+.section-label:first-of-type { margin-top: 0; }
+
+.field { margin-bottom: 1rem; }
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 5px;
+  letter-spacing: 0.02em;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--paper);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--ink);
+  transition: border-color 0.2s;
+  outline: none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--gold);
+  background: var(--white);
+}
+.field textarea { resize: vertical; min-height: 70px; }
+.field select { appearance: none; cursor: pointer; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+.checkbox-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.checkbox-item input { width: 15px; height: 15px; accent-color: var(--gold); cursor: pointer; }
+.checkbox-item span { font-size: 13px; font-weight: 300; }
+
+.generate-btn {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 13px;
+  background: var(--ink);
+  color: var(--white);
+  border: none;
+  border-radius: 3px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.generate-btn:hover { background: #2a2a26; }
+.generate-btn:active { transform: scale(0.99); }
+
+/* Preview panel */
+.preview-panel {
+  position: sticky;
+  top: 2rem;
+}
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.preview-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.download-btn {
+  padding: 7px 16px;
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  border-radius: 3px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: none;
+}
+.download-btn:hover { background: var(--gold-light); }
+.download-btn.visible { display: block; }
+
+/* Document preview */
+#preview-box {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  min-height: 500px;
+  padding: 2.5rem;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink);
+  position: relative;
+}
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--muted);
+}
+.empty-state svg { opacity: 0.2; }
+.empty-state p { font-size: 13px; text-align: center; max-width: 200px; }
+
+/* Document styles */
+.doc-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--ink);
+}
+.doc-main-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.doc-subtitle {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.doc-ref {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.doc-parties {
+  background: var(--cream);
+  border-left: 3px solid var(--gold);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 0 3px 3px 0;
+  font-size: 12.5px;
+}
+.doc-parties strong { font-weight: 500; }
+.doc-section { margin: 1.25rem 0; }
+.doc-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+  color: var(--gold);
+}
+.doc-section p { font-size: 12.5px; line-height: 1.75; }
+.doc-signatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.sig-block { font-size: 12px; }
+.sig-line {
+  border-bottom: 1px solid var(--ink);
+  height: 32px;
+  margin: 0.5rem 0;
+}
+.sig-label { font-size: 11px; color: var(--muted); }
+
+/* Watermark */
+.watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-35deg);
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 600;
+  color: rgba(184,151,90,0.07);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.2em;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Lex<span>Gen</span></div>
+  <div class="badge">Prototype · NDA</div>
+</header>
+
+<main>
+  <!-- FORM -->
+  <div class="panel">
+    <div class="panel-title">Générer un NDA</div>
+    <div class="panel-sub">Remplissez les champs — votre accord de confidentialité est généré instantanément.</div>
+
+    <div class="section-label">Partie divulgatrice</div>
+    <div class="field">
+      <label>Nom / Raison sociale</label>
+      <input type="text" id="p1-name" placeholder="Ex : Acme SAS" oninput="liveUpdate()">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Forme juridique</label>
+        <select id="p1-type" onchange="liveUpdate()">
+          <option value="SAS">SAS</option>
+          <option value="SARL">SARL</option>
+          <option value="SA">SA</option>
+          <option value="Auto-entrepreneur">Auto-entrepreneur</option>
+          <option value="Personne physique">Personne physique</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Représentant légal</label>
+        <input type="text" id="p1-rep" placeholder="Prénom Nom" oninput="liveUpdate()">
+      </div>
+    </div>
+    <div class="field">
+      <label>Siège social / Adresse</label>
+      <input type="text" id="p1-addr" placeholder="12 rue de la Paix, 75001 Paris" oninput="liveUpdate()">
+    </div>
+
+    <div class="section-label">Partie réceptrice</div>
+    <div class="field">
+      <label>Nom / Raison sociale</label>
+      <input type="text" id="p2-name" placeholder="Ex : Beta Technologies" oninput="liveUpdate()">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Forme juridique</label>
+        <select id="p2-type" onchange="liveUpdate()">
+          <option value="SAS">SAS</option>
+          <option value="SARL">SARL</option>
+          <option value="SA">SA</option>
+          <option value="Auto-entrepreneur">Auto-entrepreneur</option>
+          <option value="Personne physique">Personne physique</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Représentant légal</label>
+        <input type="text" id="p2-rep" placeholder="Prénom Nom" oninput="liveUpdate()">
+      </div>
+    </div>
+    <div class="field">
+      <label>Siège social / Adresse</label>
+      <input type="text" id="p2-addr" placeholder="8 avenue des Champs, 69000 Lyon" oninput="liveUpdate()">
+    </div>
+
+    <div class="section-label">Objet & durée</div>
+    <div class="field">
+      <label>Objet de la divulgation</label>
+      <textarea id="objet" placeholder="Ex : Échanges relatifs à un projet de partenariat commercial portant sur le développement d'une application SaaS..." oninput="liveUpdate()"></textarea>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Durée de confidentialité</label>
+        <select id="duree" onchange="liveUpdate()">
+          <option value="1 an">1 an</option>
+          <option value="2 ans" selected>2 ans</option>
+          <option value="3 ans">3 ans</option>
+          <option value="5 ans">5 ans</option>
+          <option value="une durée indéterminée">Indéterminée</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Date de signature</label>
+        <input type="date" id="date-sign" oninput="liveUpdate()">
+      </div>
+    </div>
+
+    <div class="section-label">Clauses optionnelles</div>
+    <div class="checkbox-group">
+      <label class="checkbox-item">
+        <input type="checkbox" id="cl-penalite" onchange="liveUpdate()">
+        <span>Clause pénale (pénalités en cas de violation)</span>
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="cl-retour" onchange="liveUpdate()">
+        <span>Obligation de restitution des documents</span>
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="cl-non-solicitation" onchange="liveUpdate()">
+        <span>Clause de non-sollicitation du personnel</span>
+      </label>
+    </div>
+
+    <button class="generate-btn" onclick="generateDoc()">Générer le contrat complet</button>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-panel">
+    <div class="preview-header">
+      <div class="preview-title">Aperçu du document</div>
+      <button class="download-btn" id="dl-btn" onclick="downloadDoc()">Télécharger PDF</button>
+    </div>
+    <div id="preview-box">
+      <div class="empty-state" id="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <p>Remplissez le formulaire pour voir votre NDA apparaître ici</p>
+      </div>
+      <div id="doc-content" style="display:none"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+function v(id) { return document.getElementById(id)?.value || ''; }
+function c(id) { return document.getElementById(id)?.checked || false; }
+
+function fmt(str, fallback) { return str.trim() || fallback; }
+
+function getRef() {
+  const d = new Date();
+  return `NDA-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${Math.floor(Math.random()*900+100)}`;
+}
+
+let docRef = getRef();
+
+function buildDoc() {
+  const p1 = fmt(v('p1-name'), '[Partie Divulgatrice]');
+  const p2 = fmt(v('p2-name'), '[Partie Réceptrice]');
+  const p1t = v('p1-type');
+  const p2t = v('p2-type');
+  const p1r = fmt(v('p1-rep'), '[Représentant]');
+  const p2r = fmt(v('p2-rep'), '[Représentant]');
+  const p1a = fmt(v('p1-addr'), '[Adresse]');
+  const p2a = fmt(v('p2-addr'), '[Adresse]');
+  const obj = fmt(v('objet'), '[objet de la divulgation à préciser]');
+  const dur = v('duree') || '2 ans';
+  const dateRaw = v('date-sign');
+  const dateStr = dateRaw
+    ? new Date(dateRaw).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})
+    : '[date]';
+
+  const penalite = c('cl-penalite');
+  const retour = c('cl-retour');
+  const nonSol = c('cl-non-solicitation');
+
+  return `
+    <div class="watermark">LEXGEN</div>
+    <div class="doc-header">
+      <div class="doc-main-title">Accord de Confidentialité</div>
+      <div class="doc-subtitle">Non-Disclosure Agreement · NDA</div>
+      <div class="doc-ref">Réf. ${docRef} · Droit français applicable</div>
+    </div>
+
+    <div class="doc-parties">
+      <strong>Entre les soussignés :</strong><br><br>
+      <strong>${p1}</strong>, ${p1t}, dont le siège social est situé au ${p1a}, représentée par ${p1r}, ci-après dénommée la <strong>« Partie Divulgatrice »</strong><br><br>
+      <strong>Et :</strong><br><br>
+      <strong>${p2}</strong>, ${p2t}, dont le siège social est situé au ${p2a}, représentée par ${p2r}, ci-après dénommée la <strong>« Partie Réceptrice »</strong>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 1 — Objet</div>
+      <p>Le présent accord a pour objet de définir les conditions dans lesquelles la Partie Divulgatrice communique à la Partie Réceptrice des informations confidentielles dans le cadre de : ${obj}</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 2 — Définition des informations confidentielles</div>
+      <p>Sont considérées comme confidentielles toutes les informations, données, documents, savoir-faire, procédés techniques, financiers ou commerciaux, transmis sous quelque forme que ce soit (orale, écrite, électronique), et ce qu'ils soient ou non expressément désignés comme confidentiels.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 3 — Obligations de la Partie Réceptrice</div>
+      <p>La Partie Réceptrice s'engage à : (i) garder strictement confidentielles les informations reçues ; (ii) ne pas les divulguer à des tiers sans accord préalable écrit ; (iii) n'utiliser ces informations qu'aux fins définies à l'article 1 ; (iv) limiter l'accès aux seuls collaborateurs qui en ont strictement besoin, lesquels sont soumis aux mêmes obligations.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 4 — Exclusions</div>
+      <p>Les obligations du présent accord ne s'appliquent pas aux informations : (i) appartenant au domaine public antérieurement à leur divulgation ; (ii) connues de la Partie Réceptrice avant leur communication ; (iii) reçues légitimement d'un tiers autorisé ; (iv) dont la divulgation est requise par la loi ou une décision judiciaire.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 5 — Durée</div>
+      <p>Le présent accord prend effet à la date de signature et s'applique pour une durée de <strong>${dur}</strong> à compter de cette date. À l'issue de cette période, les obligations de confidentialité demeurent applicables pour toute information dont la divulgation causerait un préjudice à la Partie Divulgatrice.</p>
+    </div>
+
+    ${penalite ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 6 — Clause pénale</div>
+      <p>En cas de violation des obligations du présent accord, la Partie Réceptrice sera redevable d'une indemnité forfaitaire d'un montant de 10 000 € (dix mille euros) par infraction constatée, sans préjudice du droit pour la Partie Divulgatrice de réclamer des dommages et intérêts complémentaires en réparation de son préjudice réel.</p>
+    </div>` : ''}
+
+    ${retour ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${penalite ? 7 : 6} — Restitution des documents</div>
+      <p>À la demande de la Partie Divulgatrice ou à l'expiration du présent accord, la Partie Réceptrice s'engage à restituer ou à détruire l'intégralité des documents, supports et données confidentiels en sa possession, et à en certifier la destruction par écrit.</p>
+    </div>` : ''}
+
+    ${nonSol ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${penalite && retour ? 8 : penalite || retour ? 7 : 6} — Non-sollicitation</div>
+      <p>Pendant la durée du présent accord et pour une période de 12 mois suivant son expiration, chaque Partie s'interdit de solliciter ou d'embaucher directement ou indirectement tout collaborateur de l'autre Partie ayant été impliqué dans les échanges visés à l'article 1.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">Droit applicable & juridiction</div>
+      <p>Le présent accord est soumis au droit français. Tout litige relatif à son interprétation ou à son exécution sera soumis, à défaut d'accord amiable, à la compétence exclusive des tribunaux de Paris.</p>
+    </div>
+
+    <div class="doc-signatures">
+      <div class="sig-block">
+        <div><strong>${p1}</strong></div>
+        <div class="sig-label">Partie Divulgatrice</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateStr}</div>
+        <div style="margin-top:6px;font-size:11px;color:var(--muted)">${p1r}</div>
+      </div>
+      <div class="sig-block">
+        <div><strong>${p2}</strong></div>
+        <div class="sig-label">Partie Réceptrice</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateStr}</div>
+        <div style="margin-top:6px;font-size:11px;color:var(--muted)">${p2r}</div>
+      </div>
+    </div>
+  `;
+}
+
+function liveUpdate() {
+  const p1 = v('p1-name');
+  const p2 = v('p2-name');
+  if (!p1 && !p2) return;
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('doc-content').style.display = 'block';
+  document.getElementById('doc-content').innerHTML = buildDoc();
+}
+
+function generateDoc() {
+  docRef = getRef();
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('doc-content').style.display = 'block';
+  document.getElementById('doc-content').innerHTML = buildDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  document.getElementById('preview-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function downloadDoc() {
+  const content = document.getElementById('doc-content').innerHTML;
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>NDA — ${docRef}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'DM Sans', sans-serif; font-weight: 300; color: #0f0f0d; padding: 3rem; max-width: 720px; margin: auto; line-height: 1.8; font-size: 13px; }
+    .doc-header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #0f0f0d; }
+    .doc-main-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+    .doc-subtitle { font-size: 11px; color: #6b6660; letter-spacing: 0.1em; text-transform: uppercase; }
+    .doc-ref { font-size: 11px; color: #6b6660; margin-top: 6px; }
+    .doc-parties { background: #ede9e0; border-left: 3px solid #b8975a; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .doc-section { margin: 1.25rem 0; }
+    .doc-section-title { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: #b8975a; }
+    .doc-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #d5cfc4; }
+    .sig-line { border-bottom: 1px solid #0f0f0d; height: 32px; margin: 0.5rem 0; }
+    .sig-label { font-size: 11px; color: #6b6660; }
+    .watermark { display: none; }
+    @media print { body { padding: 1.5rem; } }
+  </style></head><body>${content}</body></html>`);
+  win.document.close();
+  setTimeout(() => win.print(), 500);
+}
+
+// Set today's date
+document.getElementById('date-sign').valueAsDate = new Date();
+</script>
+</body>
+</html>
