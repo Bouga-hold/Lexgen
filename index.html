@@ -157,6 +157,36 @@ nav {
 }
 .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
+/* TESTIMONIALS */
+.testimonials { display: flex; flex-direction: column; gap: 14px; }
+.testi-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+}
+.testi-text {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink);
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+.testi-author { display: flex; align-items: center; gap: 10px; }
+.testi-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.testi-name { font-size: 12px; font-weight: 500; color: var(--ink); }
+.testi-role { font-size: 11px; color: var(--muted); }
+.testi-stars { font-size: 11px; color: var(--gold); margin-bottom: 6px; }
+
 /* CONTRACTS */
 .contracts {
   padding: 6rem 3rem;
@@ -402,7 +432,7 @@ footer {
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
   <div class="hero-left">
     <div class="hero-tag">Contrats juridiques · Droit français</div>
     <h1>Vos contrats<br>juridiques,<br><em>en quelques minutes.</em></h1>
@@ -423,6 +453,42 @@ footer {
       <div>
         <div class="stat-val">9€</div>
         <div class="stat-label">Par contrat généré</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="testimonials">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">« J'avais besoin d'un NDA en urgence avant une réunion avec un investisseur. En 10 minutes, j'avais un document complet et professionnel. Bluffant. »</div>
+      <div class="testi-author">
+        <div class="testi-avatar">KL</div>
+        <div>
+          <div class="testi-name">Karim L.</div>
+          <div class="testi-role">Fondateur, startup fintech</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">« En tant que freelance, je signais des contrats de prestation approximatifs. LexGen m'a permis d'avoir enfin des documents solides pour chaque mission. »</div>
+      <div class="testi-author">
+        <div class="testi-avatar">SA</div>
+        <div>
+          <div class="testi-name">Sophie A.</div>
+          <div class="testi-role">Designer UX freelance</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">« Simple, rapide et bien moins cher qu'un cabinet. J'ai généré mes CGV pour ma boutique en ligne en 15 minutes. Je recommande à tous les e-commerçants. »</div>
+      <div class="testi-author">
+        <div class="testi-avatar">MR</div>
+        <div>
+          <div class="testi-name">Marc R.</div>
+          <div class="testi-role">E-commerçant, mode</div>
+        </div>
       </div>
     </div>
   </div>
@@ -447,8 +513,8 @@ footer {
       </div>
     </a>
 
-    <div class="contract-card soon">
-      <div class="status-badge badge-soon">Bientôt</div>
+    <a href="prestation.html" class="contract-card available">
+      <div class="status-badge badge-available">Disponible</div>
       <div class="contract-icon">📋</div>
       <div class="contract-name">Contrat de prestation</div>
       <div class="contract-desc">Sécurisez vos missions freelance ou sous-traitance avec un contrat complet et personnalisé.</div>
@@ -457,7 +523,7 @@ footer {
         <span>·</span>
         <span>~8 minutes</span>
       </div>
-    </div>
+    </a>
 
     <div class="contract-card soon">
       <div class="status-badge badge-soon">Bientôt</div>
@@ -528,17 +594,28 @@ footer {
           <div class="acc-row">
             <div>
               <div class="acc-block-label">Ce que c'est</div>
-              <div class="acc-block-text">Un engagement à ne pas divulguer des informations sensibles échangées entre deux parties, qu'il soit mutuel ou unilatéral.</div>
+              <div class="acc-block-text">Un engagement contractuel — mutuel ou unilatéral — par lequel une ou deux parties s'obligent à ne pas divulguer des informations confidentielles reçues dans le cadre d'une relation professionnelle. Il peut couvrir des données techniques, financières, commerciales ou stratégiques.</div>
             </div>
             <div>
               <div class="acc-block-label">Quand l'utiliser</div>
-              <div class="acc-block-text">Avant une négociation commerciale, un partenariat, une levée de fonds, ou le partage d'un projet confidentiel avec un prestataire.</div>
+              <div class="acc-block-text">Avant toute négociation commerciale, discussion de partenariat, levée de fonds, entretien avec un investisseur, ou partage d'informations sensibles avec un prestataire, sous-traitant ou candidat à un poste stratégique.</div>
+            </div>
+          </div>
+          <div class="acc-row" style="margin-top:0">
+            <div>
+              <div class="acc-block-label">Ce qu'il protège</div>
+              <div class="acc-block-text">Savoir-faire, données clients, plans de développement, prototypes, informations financières non publiées, stratégie commerciale, code source, formules ou procédés techniques.</div>
+            </div>
+            <div>
+              <div class="acc-block-label">Durée typique</div>
+              <div class="acc-block-text">De 1 à 5 ans selon les enjeux. Certaines clauses peuvent être à durée indéterminée pour les secrets commerciaux les plus sensibles.</div>
             </div>
           </div>
           <div class="acc-articles">
             <span class="article-tag">Art. 1103 Code civil</span>
             <span class="article-tag">Art. L151-1 Code de commerce</span>
-            <span class="article-tag">Loi du 30 juil. 2018 sur le secret des affaires</span>
+            <span class="article-tag">Loi du 30 juil. 2018 — secret des affaires</span>
+            <span class="article-tag">Directive UE 2016/943</span>
           </div>
         </div>
       </div>
@@ -553,16 +630,27 @@ footer {
           <div class="acc-row">
             <div>
               <div class="acc-block-label">Ce que c'est</div>
-              <div class="acc-block-text">Un contrat qui encadre la réalisation d'une mission entre un prestataire (freelance ou société) et un client, avec délais, livrables et rémunération.</div>
+              <div class="acc-block-text">Un contrat par lequel un prestataire (freelance, consultant ou société) s'engage à réaliser une mission définie pour un client, contre rémunération. Il précise les livrables, les délais, le prix, les conditions de paiement et la propriété intellectuelle.</div>
             </div>
             <div>
               <div class="acc-block-label">Quand l'utiliser</div>
-              <div class="acc-block-text">Dès qu'un freelance ou une société réalise une mission pour un client : développement, conseil, design, rédaction, communication…</div>
+              <div class="acc-block-text">Dès qu'une mission est confiée à un prestataire externe : développement web, conseil en stratégie, design graphique, rédaction, formation, audit, etc. Indispensable même pour les petites missions.</div>
+            </div>
+          </div>
+          <div class="acc-row" style="margin-top:0">
+            <div>
+              <div class="acc-block-label">Points clés couverts</div>
+              <div class="acc-block-text">Description de la mission, livrables attendus, calendrier, prix HT/TTC, conditions de paiement, pénalités de retard, propriété intellectuelle, clause de confidentialité et résiliation.</div>
+            </div>
+            <div>
+              <div class="acc-block-label">Risque sans contrat</div>
+              <div class="acc-block-text">Litige sur les livrables, non-paiement, revendication de propriété intellectuelle par le client, ou qualification en contrat de travail déguisé (risque de requalification en CDI).</div>
             </div>
           </div>
           <div class="acc-articles">
             <span class="article-tag">Art. 1710 Code civil</span>
             <span class="article-tag">Art. L441-1 Code de commerce</span>
+            <span class="article-tag">Art. L111-1 Code de la propriété intellectuelle</span>
           </div>
         </div>
       </div>

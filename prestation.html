@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexGen — Générateur de Contrat de Prestation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0f0f0d; --paper: #f7f5f0; --cream: #ede9e0;
+  --gold: #b8975a; --gold-light: #d4b57a; --muted: #6b6660;
+  --border: #d5cfc4; --white: #ffffff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; }
+header { padding: 1.5rem 3rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--white); }
+.logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+.logo span { color: var(--gold); }
+.badge { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; }
+.back-link { font-size: 13px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+.back-link:hover { color: var(--ink); }
+main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+@media (max-width: 768px) { main { grid-template-columns: 1fr; } }
+.panel { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 2rem; }
+.panel-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 500; margin-bottom: 0.25rem; }
+.panel-sub { font-size: 13px; color: var(--muted); margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--cream); }
+.section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin: 1.5rem 0 0.75rem; }
+.section-label:first-of-type { margin-top: 0; }
+.field { margin-bottom: 1rem; }
+.field label { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
+.field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 3px; background: var(--paper); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: var(--ink); outline: none; transition: border-color 0.2s; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); background: var(--white); }
+.field textarea { resize: vertical; min-height: 80px; }
+.field select { appearance: none; cursor: pointer; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+.checkbox-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.checkbox-item input { width: 15px; height: 15px; accent-color: var(--gold); cursor: pointer; }
+.checkbox-item span { font-size: 13px; font-weight: 300; }
+.generate-btn { width: 100%; margin-top: 1.5rem; padding: 13px; background: var(--ink); color: var(--white); border: none; border-radius: 3px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; cursor: pointer; transition: background 0.2s; }
+.generate-btn:hover { background: #2a2a26; }
+.preview-panel { position: sticky; top: 2rem; }
+.preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.preview-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 500; }
+.download-btn { padding: 7px 16px; background: var(--gold); color: var(--white); border: none; border-radius: 3px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; display: none; }
+.download-btn.visible { display: block; }
+#preview-box { background: var(--white); border: 1px solid var(--border); border-radius: 4px; min-height: 500px; padding: 2.5rem; font-size: 13px; line-height: 1.8; color: var(--ink); position: relative; }
+.empty-state { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--muted); }
+.empty-state svg { opacity: 0.2; }
+.empty-state p { font-size: 13px; text-align: center; max-width: 200px; }
+.doc-header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid var(--ink); }
+.doc-main-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+.doc-subtitle { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+.doc-ref { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.doc-parties { background: var(--cream); border-left: 3px solid var(--gold); padding: 1rem 1.25rem; margin: 1.5rem 0; border-radius: 0 3px 3px 0; font-size: 12.5px; }
+.doc-section { margin: 1.25rem 0; }
+.doc-section-title { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--gold); }
+.doc-section p { font-size: 12.5px; line-height: 1.75; }
+.doc-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.sig-block { font-size: 12px; }
+.sig-line { border-bottom: 1px solid var(--ink); height: 32px; margin: 0.5rem 0; }
+.sig-label { font-size: 11px; color: var(--muted); }
+.watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-35deg); font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 600; color: rgba(184,151,90,0.07); pointer-events: none; white-space: nowrap; letter-spacing: 0.2em; }
+</style>
+</head>
+<body>
+<header>
+  <a href="/" class="logo">Lex<span>Gen</span></a>
+  <a href="index.html" class="back-link">← Retour aux contrats</a>
+  <div class="badge">Contrat de prestation</div>
+</header>
+
+<main>
+  <div class="panel">
+    <div class="panel-title">Contrat de prestation</div>
+    <div class="panel-sub">Remplissez les champs — votre contrat est généré instantanément.</div>
+
+    <div class="section-label">Le prestataire</div>
+    <div class="field"><label>Nom / Raison sociale</label><input type="text" id="p1-name" placeholder="Ex : Jean Dupont Consulting" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Forme juridique</label><select id="p1-type" onchange="liveUpdate()"><option>Auto-entrepreneur</option><option>SAS</option><option>SARL</option><option>EURL</option><option>Personne physique</option></select></div>
+      <div class="field"><label>SIRET</label><input type="text" id="p1-siret" placeholder="000 000 000 00000" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>Adresse</label><input type="text" id="p1-addr" placeholder="12 rue de la Paix, 75001 Paris" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Le client</div>
+    <div class="field"><label>Nom / Raison sociale</label><input type="text" id="p2-name" placeholder="Ex : Beta Technologies SAS" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Forme juridique</label><select id="p2-type" onchange="liveUpdate()"><option>SAS</option><option>SARL</option><option>SA</option><option>Auto-entrepreneur</option><option>Personne physique</option></select></div>
+      <div class="field"><label>Représentant légal</label><input type="text" id="p2-rep" placeholder="Prénom Nom" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>Adresse</label><input type="text" id="p2-addr" placeholder="8 avenue des Champs, 69000 Lyon" oninput="liveUpdate()"></div>
+
+    <div class="section-label">La mission</div>
+    <div class="field"><label>Intitulé de la mission</label><input type="text" id="mission" placeholder="Ex : Développement d'une application web" oninput="liveUpdate()"></div>
+    <div class="field"><label>Description des livrables</label><textarea id="livrables" placeholder="Ex : Conception et développement d'une interface utilisateur React, API REST Node.js, déploiement sur AWS..." oninput="liveUpdate()"></textarea></div>
+    <div class="row2">
+      <div class="field"><label>Date de début</label><input type="date" id="date-debut" oninput="liveUpdate()"></div>
+      <div class="field"><label>Date de fin</label><input type="date" id="date-fin" oninput="liveUpdate()"></div>
+    </div>
+
+    <div class="section-label">Rémunération</div>
+    <div class="row2">
+      <div class="field"><label>Montant HT</label><input type="text" id="montant" placeholder="Ex : 5 000" oninput="liveUpdate()"></div>
+      <div class="field"><label>Mode de facturation</label><select id="facturation" onchange="liveUpdate()"><option value="forfait">Forfait global</option><option value="jour">Taux journalier (TJM)</option><option value="heure">Taux horaire</option></select></div>
+    </div>
+    <div class="field"><label>Conditions de paiement</label><select id="paiement" onchange="liveUpdate()"><option value="30 jours">30 jours après facturation</option><option value="15 jours">15 jours après facturation</option><option value="à réception">À réception de facture</option><option value="50% à la commande, 50% à la livraison">50% commande · 50% livraison</option></select></div>
+
+    <div class="section-label">Clauses optionnelles</div>
+    <div class="checkbox-group">
+      <label class="checkbox-item"><input type="checkbox" id="cl-pi" onchange="liveUpdate()"><span>Cession de propriété intellectuelle au client</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-conf" onchange="liveUpdate()"><span>Clause de confidentialité</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-exclu" onchange="liveUpdate()"><span>Clause d'exclusivité</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-penalite" onchange="liveUpdate()"><span>Pénalités de retard de paiement</span></label>
+    </div>
+
+    <div class="field" style="margin-top:1.5rem"><label>Date de signature</label><input type="date" id="date-sign" oninput="liveUpdate()"></div>
+    <button class="generate-btn" onclick="generateDoc()">Générer le contrat complet</button>
+  </div>
+
+  <div class="preview-panel">
+    <div class="preview-header">
+      <div class="preview-title">Aperçu du document</div>
+      <button class="download-btn" id="dl-btn" onclick="downloadDoc()">Télécharger PDF</button>
+    </div>
+    <div id="preview-box">
+      <div class="empty-state" id="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <p>Remplissez le formulaire pour voir votre contrat apparaître ici</p>
+      </div>
+      <div id="doc-content" style="display:none"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+function v(id) { return document.getElementById(id)?.value || ''; }
+function c(id) { return document.getElementById(id)?.checked || false; }
+function fmt(str, fallback) { return str.trim() || fallback; }
+function getRef() { const d = new Date(); return `PREST-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${Math.floor(Math.random()*900+100)}`; }
+let docRef = getRef();
+
+function fmtDate(id) {
+  const raw = v(id);
+  if (!raw) return '[date]';
+  return new Date(raw).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'});
+}
+
+function buildDoc() {
+  const p1 = fmt(v('p1-name'), '[Prestataire]');
+  const p2 = fmt(v('p2-name'), '[Client]');
+  const p1t = v('p1-type'); const p2t = v('p2-type');
+  const p1s = v('p1-siret') ? `, SIRET ${v('p1-siret')}` : '';
+  const p1a = fmt(v('p1-addr'), '[Adresse prestataire]');
+  const p2a = fmt(v('p2-addr'), '[Adresse client]');
+  const p2r = fmt(v('p2-rep'), '[Représentant]');
+  const mission = fmt(v('mission'), '[Mission à préciser]');
+  const livrables = fmt(v('livrables'), '[Livrables à préciser]');
+  const montant = fmt(v('montant'), '[Montant]');
+  const facturation = v('facturation');
+  const paiement = v('paiement') || '30 jours';
+  const dateDebut = fmtDate('date-debut');
+  const dateFin = fmtDate('date-fin');
+  const dateSign = fmtDate('date-sign');
+
+  const factLabel = facturation === 'forfait' ? 'forfait global' : facturation === 'jour' ? 'taux journalier' : 'taux horaire';
+
+  return `
+    <div class="watermark">LEXGEN</div>
+    <div class="doc-header">
+      <div class="doc-main-title">Contrat de Prestation de Services</div>
+      <div class="doc-subtitle">Service Agreement</div>
+      <div class="doc-ref">Réf. ${docRef} · Droit français applicable</div>
+    </div>
+
+    <div class="doc-parties">
+      <strong>Entre les soussignés :</strong><br><br>
+      <strong>${p1}</strong>, ${p1t}${p1s}, dont l'adresse est ${p1a}, ci-après dénommé le <strong>« Prestataire »</strong><br><br>
+      <strong>Et :</strong><br><br>
+      <strong>${p2}</strong>, ${p2t}, dont le siège social est situé au ${p2a}, représentée par ${p2r}, ci-après dénommée le <strong>« Client »</strong>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 1 — Objet de la mission</div>
+      <p>Le Prestataire s'engage à réaliser pour le compte du Client la mission suivante : <strong>${mission}</strong>.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 2 — Livrables</div>
+      <p>Dans le cadre de cette mission, le Prestataire s'engage à fournir les livrables suivants : ${livrables}. Tout livrable supplémentaire fera l'objet d'un avenant au présent contrat.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 3 — Durée de la mission</div>
+      <p>La mission débutera le <strong>${dateDebut}</strong> et prendra fin le <strong>${dateFin}</strong>. Toute prolongation devra faire l'objet d'un accord écrit entre les parties.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 4 — Rémunération</div>
+      <p>En contrepartie des services rendus, le Client versera au Prestataire la somme de <strong>${montant} € HT</strong> sur la base d'un ${factLabel}. Les factures seront réglées <strong>${paiement}</strong>. La TVA applicable sera ajoutée conformément à la réglementation en vigueur.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 5 — Obligations des parties</div>
+      <p>Le Prestataire s'engage à réaliser la mission avec professionnalisme et dans les délais convenus. Le Client s'engage à fournir en temps utile toutes les informations et ressources nécessaires à la bonne exécution de la mission, et à effectuer les paiements dans les délais prévus.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 6 — Indépendance des parties</div>
+      <p>Le Prestataire intervient en tant que professionnel indépendant. Le présent contrat ne crée aucun lien de subordination entre les parties et ne peut être requalifié en contrat de travail. Le Prestataire demeure libre d'exercer d'autres activités professionnelles pendant la durée de la mission, sauf clause d'exclusivité.</p>
+    </div>
+
+    ${c('cl-pi') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 7 — Propriété intellectuelle</div>
+      <p>À compter du paiement intégral des sommes dues, le Prestataire cède au Client l'ensemble des droits de propriété intellectuelle sur les livrables produits dans le cadre de la mission, pour toute exploitation, sur tous supports, pour le monde entier et pour toute la durée légale de protection.</p>
+    </div>` : `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 7 — Propriété intellectuelle</div>
+      <p>Le Prestataire conserve l'intégralité des droits de propriété intellectuelle sur les livrables produits. Le Client bénéficie d'une licence d'utilisation non exclusive et non transférable des livrables, limitée à ses besoins propres.</p>
+    </div>`}
+
+    ${c('cl-conf') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 8 — Confidentialité</div>
+      <p>Les parties s'engagent à garder confidentielles toutes les informations échangées dans le cadre de la mission. Cette obligation de confidentialité survivra à la fin du présent contrat pour une durée de 3 ans.</p>
+    </div>` : ''}
+
+    ${c('cl-exclu') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${c('cl-conf') ? 9 : 8} — Exclusivité</div>
+      <p>Pendant la durée de la mission, le Prestataire s'engage à ne pas exercer de mission similaire pour le compte de concurrents directs du Client, tels que définis d'un commun accord entre les parties.</p>
+    </div>` : ''}
+
+    ${c('cl-penalite') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Pénalités de retard</div>
+      <p>En cas de retard de paiement, des pénalités seront automatiquement applicables au taux de 3 fois le taux d'intérêt légal en vigueur, conformément à l'article L441-10 du Code de commerce. Une indemnité forfaitaire de 40 € sera également due pour frais de recouvrement.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">Résiliation</div>
+      <p>Chaque partie peut résilier le présent contrat avec un préavis de 15 jours par lettre recommandée avec accusé de réception. Les prestations réalisées jusqu'à la date de résiliation seront facturées au prorata.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Droit applicable & juridiction</div>
+      <p>Le présent contrat est soumis au droit français. Tout litige sera soumis, à défaut d'accord amiable, à la compétence exclusive des tribunaux de Paris.</p>
+    </div>
+
+    <div class="doc-signatures">
+      <div class="sig-block">
+        <div><strong>${p1}</strong></div>
+        <div class="sig-label">Le Prestataire</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateSign}</div>
+      </div>
+      <div class="sig-block">
+        <div><strong>${p2}</strong></div>
+        <div class="sig-label">Le Client · ${p2r}</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateSign}</div>
+      </div>
+    </div>
+  `;
+}
+
+function liveUpdate() {
+  const p1 = v('p1-name'); const p2 = v('p2-name');
+  if (!p1 && !p2) return;
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('doc-content').style.display = 'block';
+  document.getElementById('doc-content').innerHTML = buildDoc();
+}
+
+function generateDoc() {
+  docRef = getRef();
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('doc-content').style.display = 'block';
+  document.getElementById('doc-content').innerHTML = buildDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  document.getElementById('preview-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function downloadDoc() {
+  const content = document.getElementById('doc-content').innerHTML;
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Contrat Prestation — ${docRef}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'DM Sans', sans-serif; font-weight: 300; color: #0f0f0d; padding: 3rem; max-width: 720px; margin: auto; line-height: 1.8; font-size: 13px; }
+    .doc-header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #0f0f0d; }
+    .doc-main-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+    .doc-subtitle { font-size: 11px; color: #6b6660; letter-spacing: 0.1em; text-transform: uppercase; }
+    .doc-ref { font-size: 11px; color: #6b6660; margin-top: 6px; }
+    .doc-parties { background: #ede9e0; border-left: 3px solid #b8975a; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .doc-section { margin: 1.25rem 0; }
+    .doc-section-title { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: #b8975a; }
+    .doc-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #d5cfc4; }
+    .sig-line { border-bottom: 1px solid #0f0f0d; height: 32px; margin: 0.5rem 0; }
+    .sig-label { font-size: 11px; color: #6b6660; }
+    .watermark { display: none; }
+    @media print { body { padding: 1.5rem; } }
+  </style></head><body>${content}</body></html>`);
+  win.document.close();
+  setTimeout(() => win.print(), 500);
+}
+
+document.getElementById('date-sign').valueAsDate = new Date();
+document.getElementById('date-debut').valueAsDate = new Date();
+</script>
+</body>
+</html>
