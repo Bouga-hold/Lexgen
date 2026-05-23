@@ -15,6 +15,7 @@
   --muted: #6b6660;
   --border: #d5cfc4;
   --white: #ffffff;
+  --beige: #f0ece3;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -60,14 +61,13 @@ nav {
 .nav-links a:hover { color: var(--ink); }
 .nav-cta {
   padding: 8px 20px;
-  background: var(--ink);
+  background: var(--ink) !important;
   color: var(--white) !important;
   border-radius: 3px;
   font-size: 13px !important;
   font-weight: 500 !important;
-  transition: background 0.2s !important;
 }
-.nav-cta:hover { background: #2a2a26 !important; color: var(--white) !important; }
+.nav-cta:hover { opacity: 0.85; }
 
 /* HERO */
 .hero {
@@ -75,11 +75,10 @@ nav {
   display: flex;
   align-items: center;
   padding: 8rem 3rem 4rem;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  gap: 4rem;
 }
-.hero-left { flex: 1; }
+.hero-left { max-width: 620px; }
 .hero-tag {
   display: inline-block;
   font-size: 11px;
@@ -109,7 +108,7 @@ nav {
   font-size: 16px;
   line-height: 1.7;
   color: var(--muted);
-  max-width: 460px;
+  max-width: 480px;
   margin-bottom: 2.5rem;
 }
 .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
@@ -124,10 +123,10 @@ nav {
   font-weight: 500;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: opacity 0.2s;
   display: inline-block;
 }
-.btn-primary:hover { background: #2a2a26; }
+.btn-primary:hover { opacity: 0.85; }
 .btn-ghost {
   padding: 13px 28px;
   background: transparent;
@@ -158,49 +157,10 @@ nav {
 }
 .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-.hero-right {
-  flex: 0 0 420px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 2rem;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.06);
-}
-.card-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1rem;
-}
-.mock-doc { font-size: 11px; line-height: 1.8; color: var(--muted); }
-.mock-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin-bottom: 0.5rem;
-}
-.mock-sub { text-align: center; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
-.mock-line { height: 8px; background: var(--cream); border-radius: 2px; margin-bottom: 6px; }
-.mock-line.short { width: 60%; }
-.mock-line.med { width: 80%; }
-.mock-line.full { width: 100%; }
-.mock-highlight { height: 8px; background: rgba(184,151,90,0.2); border-radius: 2px; margin-bottom: 6px; }
-.mock-sigs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-.mock-sig-line { border-bottom: 1px solid var(--ink); height: 20px; margin-bottom: 4px; }
-.mock-sig-label { font-size: 9px; color: var(--muted); }
-.typing-cursor { display: inline-block; width: 2px; height: 12px; background: var(--gold); animation: blink 1s infinite; vertical-align: middle; }
-@keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
-
-/* CONTRACTS SECTION */
+/* CONTRACTS */
 .contracts {
   padding: 6rem 3rem;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 .section-tag {
@@ -213,7 +173,7 @@ nav {
 }
 .section-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
   font-weight: 300;
   letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
@@ -227,7 +187,7 @@ nav {
 }
 .contracts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
 }
 .contract-card {
@@ -241,43 +201,26 @@ nav {
   display: block;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
   position: relative;
-  overflow: hidden;
 }
-.contract-card:hover {
+.contract-card.available:hover {
   border-color: var(--gold);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.07);
   transform: translateY(-2px);
 }
-.contract-card.available::after {
-  content: 'Disponible';
-  position: absolute;
-  top: 1rem; right: 1rem;
+.contract-card.soon { opacity: 0.7; cursor: default; }
+.status-badge {
+  display: inline-block;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #2d6a4f;
-  background: #d8f3dc;
   padding: 2px 8px;
   border-radius: 10px;
-}
-.contract-card.soon::after {
-  content: 'Bientôt';
-  position: absolute;
-  top: 1rem; right: 1rem;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  background: var(--cream);
-  padding: 2px 8px;
-  border-radius: 10px;
-}
-.contract-icon {
-  font-size: 1.8rem;
   margin-bottom: 1rem;
 }
+.badge-available { color: #2d6a4f; background: #d8f3dc; }
+.badge-soon { color: var(--muted); background: var(--cream); }
+.contract-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
 .contract-name {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.2rem;
@@ -296,24 +239,104 @@ nav {
   gap: 0.75rem;
   font-size: 12px;
   color: var(--muted);
+  padding-top: 1rem;
+  border-top: 1px solid var(--cream);
 }
-.contract-price {
+.contract-price { font-weight: 500; color: var(--ink); }
+
+/* DETAILS SECTION */
+.details {
+  background: var(--white);
+  padding: 6rem 3rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.details-inner { max-width: 1100px; margin: 0 auto; }
+.accordion { margin-top: 3rem; display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.acc-item { border-bottom: 1px solid var(--border); }
+.acc-item:last-child { border-bottom: none; }
+.acc-trigger {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1.25rem 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+.acc-trigger:hover { background: var(--paper); }
+.acc-trigger.open { background: var(--paper); }
+.acc-icon { font-size: 1.3rem; flex-shrink: 0; }
+.acc-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
   font-weight: 500;
   color: var(--ink);
+  flex: 1;
+}
+.acc-chevron {
+  font-size: 12px;
+  color: var(--muted);
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+.acc-trigger.open .acc-chevron { transform: rotate(180deg); }
+.acc-body {
+  display: none;
+  padding: 0 1.75rem 1.5rem 4.1rem;
+  border-top: 1px solid var(--cream);
+}
+.acc-body.open { display: block; }
+.acc-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+.acc-block-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.acc-block-text {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.acc-articles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cream);
+}
+.article-tag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: var(--cream);
+  padding: 3px 10px;
+  border-radius: 10px;
 }
 
 /* HOW IT WORKS */
 .how {
-  background: var(--ink);
+  background: var(--beige);
   padding: 6rem 3rem;
+  border-top: 1px solid var(--border);
 }
-.how-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+.how-inner { max-width: 1100px; margin: 0 auto; }
 .how .section-tag { color: var(--gold); }
-.how .section-title { color: var(--white); }
-.how .section-sub { color: rgba(255,255,255,0.5); }
+.how .section-title { color: var(--ink); }
+.how .section-sub { color: var(--muted); }
 .steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -322,25 +345,26 @@ nav {
 }
 .step {
   padding: 2rem;
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: 4px;
 }
 .step-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 3rem;
-  font-weight: 300;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--gold);
-  opacity: 0.6;
   margin-bottom: 1rem;
-  line-height: 1;
 }
 .step-title {
-  font-size: 15px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
   font-weight: 500;
-  color: var(--white);
+  color: var(--ink);
   margin-bottom: 0.5rem;
 }
-.step-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+.step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
 /* FOOTER */
 footer {
@@ -354,13 +378,13 @@ footer {
 }
 
 @media (max-width: 900px) {
-  .hero { flex-direction: column; padding: 6rem 1.5rem 3rem; }
-  .hero-right { flex: none; width: 100%; }
+  .hero { padding: 6rem 1.5rem 3rem; }
   nav { padding: 1rem 1.5rem; }
   .nav-links { gap: 1rem; }
-  .contracts { padding: 4rem 1.5rem; }
-  .steps { grid-template-columns: 1fr; }
+  .contracts, .details, .how-inner { padding: 4rem 1.5rem; }
+  .details { padding: 4rem 1.5rem; }
   .how { padding: 4rem 1.5rem; }
+  .steps { grid-template-columns: 1fr; }
   footer { flex-direction: column; gap: 0.5rem; text-align: center; }
 }
 </style>
@@ -371,6 +395,7 @@ footer {
   <a href="/" class="logo">Lex<span>Gen</span></a>
   <div class="nav-links">
     <a href="#contrats">Contrats</a>
+    <a href="#details">Guide</a>
     <a href="#comment">Comment ça marche</a>
     <a href="nda.html" class="nav-cta">Générer un contrat</a>
   </div>
@@ -379,7 +404,7 @@ footer {
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-tag">Droit des affaires · Droit français</div>
+    <div class="hero-tag">Contrats juridiques · Droit français</div>
     <h1>Vos contrats<br>juridiques,<br><em>en quelques minutes.</em></h1>
     <p class="hero-sub">LexGen génère des contrats professionnels conformes au droit français. Remplissez un formulaire, téléchargez votre PDF. Sans avocat, sans attente.</p>
     <div class="hero-actions">
@@ -401,38 +426,6 @@ footer {
       </div>
     </div>
   </div>
-
-  <div class="hero-right">
-    <div class="card-label">Aperçu · Accord de confidentialité</div>
-    <div class="mock-doc">
-      <div class="mock-title">Accord de Confidentialité</div>
-      <div class="mock-sub">Non-Disclosure Agreement · NDA</div>
-      <div class="mock-highlight"></div>
-      <div class="mock-line full"></div>
-      <div class="mock-line med"></div>
-      <div class="mock-line full"></div>
-      <div class="mock-line short"></div>
-      <br>
-      <div class="mock-line full"></div>
-      <div class="mock-line full"></div>
-      <div class="mock-line med"></div>
-      <br>
-      <div class="mock-highlight"></div>
-      <div class="mock-line full"></div>
-      <div class="mock-line full"></div>
-      <div class="mock-line short"></div>
-      <div class="mock-sigs">
-        <div>
-          <div class="mock-sig-line"></div>
-          <div class="mock-sig-label">Partie Divulgatrice</div>
-        </div>
-        <div>
-          <div class="mock-sig-line"></div>
-          <div class="mock-sig-label">Partie Réceptrice</div>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- CONTRACTS -->
@@ -443,6 +436,7 @@ footer {
 
   <div class="contracts-grid">
     <a href="nda.html" class="contract-card available">
+      <div class="status-badge badge-available">Disponible</div>
       <div class="contract-icon">🤝</div>
       <div class="contract-name">Accord de confidentialité</div>
       <div class="contract-desc">Protégez vos informations sensibles lors de négociations, partenariats ou discussions précontractuelles.</div>
@@ -454,6 +448,7 @@ footer {
     </a>
 
     <div class="contract-card soon">
+      <div class="status-badge badge-soon">Bientôt</div>
       <div class="contract-icon">📋</div>
       <div class="contract-name">Contrat de prestation</div>
       <div class="contract-desc">Sécurisez vos missions freelance ou sous-traitance avec un contrat complet et personnalisé.</div>
@@ -465,6 +460,7 @@ footer {
     </div>
 
     <div class="contract-card soon">
+      <div class="status-badge badge-soon">Bientôt</div>
       <div class="contract-icon">🛒</div>
       <div class="contract-name">Conditions Générales de Vente</div>
       <div class="contract-desc">CGV conformes pour votre boutique en ligne ou votre activité de vente de produits et services.</div>
@@ -476,6 +472,7 @@ footer {
     </div>
 
     <div class="contract-card soon">
+      <div class="status-badge badge-soon">Bientôt</div>
       <div class="contract-icon">👥</div>
       <div class="contract-name">Pacte d'associés</div>
       <div class="contract-desc">Définissez les règles entre associés : gouvernance, cession de parts, clauses de sortie.</div>
@@ -487,9 +484,10 @@ footer {
     </div>
 
     <div class="contract-card soon">
+      <div class="status-badge badge-soon">Bientôt</div>
       <div class="contract-icon">💼</div>
-      <div class="contract-name">Contrat de travail (CDI/CDD)</div>
-      <div class="contract-desc">Rédigez un contrat de travail conforme au droit français pour vos premiers recrutements.</div>
+      <div class="contract-name">Contrat de travail</div>
+      <div class="contract-desc">Rédigez un contrat CDI ou CDD conforme au droit français pour vos premiers recrutements.</div>
       <div class="contract-meta">
         <span class="contract-price">9€</span>
         <span>·</span>
@@ -498,6 +496,7 @@ footer {
     </div>
 
     <div class="contract-card soon">
+      <div class="status-badge badge-soon">Bientôt</div>
       <div class="contract-icon">🏢</div>
       <div class="contract-name">Statuts de société</div>
       <div class="contract-desc">Statuts SAS ou SARL personnalisés pour lancer votre entreprise dans les règles de l'art.</div>
@@ -510,25 +509,184 @@ footer {
   </div>
 </section>
 
+<!-- DETAILS -->
+<section class="details" id="details">
+  <div class="details-inner">
+    <div class="section-tag">Guide des contrats</div>
+    <h2 class="section-title">À quoi sert<br>chaque contrat ?</h2>
+    <p class="section-sub">Cliquez sur un contrat pour voir son utilité, le bon moment pour l'utiliser, et les textes de loi applicables.</p>
+
+    <div class="accordion">
+
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggle(this)">
+          <span class="acc-icon">🤝</span>
+          <span class="acc-name">Accord de confidentialité (NDA)</span>
+          <span class="acc-chevron">▼</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div>
+              <div class="acc-block-label">Ce que c'est</div>
+              <div class="acc-block-text">Un engagement à ne pas divulguer des informations sensibles échangées entre deux parties, qu'il soit mutuel ou unilatéral.</div>
+            </div>
+            <div>
+              <div class="acc-block-label">Quand l'utiliser</div>
+              <div class="acc-block-text">Avant une négociation commerciale, un partenariat, une levée de fonds, ou le partage d'un projet confidentiel avec un prestataire.</div>
+            </div>
+          </div>
+          <div class="acc-articles">
+            <span class="article-tag">Art. 1103 Code civil</span>
+            <span class="article-tag">Art. L151-1 Code de commerce</span>
+            <span class="article-tag">Loi du 30 juil. 2018 sur le secret des affaires</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggle(this)">
+          <span class="acc-icon">📋</span>
+          <span class="acc-name">Contrat de prestation de services</span>
+          <span class="acc-chevron">▼</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div>
+              <div class="acc-block-label">Ce que c'est</div>
+              <div class="acc-block-text">Un contrat qui encadre la réalisation d'une mission entre un prestataire (freelance ou société) et un client, avec délais, livrables et rémunération.</div>
+            </div>
+            <div>
+              <div class="acc-block-label">Quand l'utiliser</div>
+              <div class="acc-block-text">Dès qu'un freelance ou une société réalise une mission pour un client : développement, conseil, design, rédaction, communication…</div>
+            </div>
+          </div>
+          <div class="acc-articles">
+            <span class="article-tag">Art. 1710 Code civil</span>
+            <span class="article-tag">Art. L441-1 Code de commerce</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggle(this)">
+          <span class="acc-icon">🛒</span>
+          <span class="acc-name">Conditions Générales de Vente (CGV)</span>
+          <span class="acc-chevron">▼</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div>
+              <div class="acc-block-label">Ce que c'est</div>
+              <div class="acc-block-text">Le document qui régit les relations entre un vendeur et ses clients : prix, délais de livraison, politique de retour, responsabilités et litiges.</div>
+            </div>
+            <div>
+              <div class="acc-block-label">Quand l'utiliser</div>
+              <div class="acc-block-text">Obligatoires pour tout e-commerçant vendant à des particuliers (B2C). Fortement recommandées en B2B pour sécuriser chaque transaction.</div>
+            </div>
+          </div>
+          <div class="acc-articles">
+            <span class="article-tag">Art. L441-1 Code de commerce</span>
+            <span class="article-tag">Art. L221-11 Code de la consommation</span>
+            <span class="article-tag">Directive UE 2011/83</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggle(this)">
+          <span class="acc-icon">👥</span>
+          <span class="acc-name">Pacte d'associés</span>
+          <span class="acc-chevron">▼</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div>
+              <div class="acc-block-label">Ce que c'est</div>
+              <div class="acc-block-text">Un accord confidentiel entre associés qui complète les statuts : gouvernance, droits de vote, cession de parts, clauses de sortie et de préemption.</div>
+            </div>
+            <div>
+              <div class="acc-block-label">Quand l'utiliser</div>
+              <div class="acc-block-text">À la création d'une société à plusieurs associés, ou lors d'une levée de fonds. Indispensable pour prévenir les conflits entre fondateurs.</div>
+            </div>
+          </div>
+          <div class="acc-articles">
+            <span class="article-tag">Art. 1134 Code civil</span>
+            <span class="article-tag">Art. L227-1 Code de commerce</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggle(this)">
+          <span class="acc-icon">💼</span>
+          <span class="acc-name">Contrat de travail (CDI / CDD)</span>
+          <span class="acc-chevron">▼</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div>
+              <div class="acc-block-label">Ce que c'est</div>
+              <div class="acc-block-text">Le contrat qui formalise la relation employeur-salarié : poste, rémunération, durée de travail, période d'essai et conditions de rupture.</div>
+            </div>
+            <div>
+              <div class="acc-block-label">Quand l'utiliser</div>
+              <div class="acc-block-text">Dès votre premier recrutement. Le CDI est la règle générale, le CDD est l'exception réservée à des cas précis (remplacement, accroissement temporaire d'activité).</div>
+            </div>
+          </div>
+          <div class="acc-articles">
+            <span class="article-tag">Art. L1221-1 Code du travail</span>
+            <span class="article-tag">Art. L1242-1 Code du travail</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggle(this)">
+          <span class="acc-icon">🏢</span>
+          <span class="acc-name">Statuts de société (SAS / SARL)</span>
+          <span class="acc-chevron">▼</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div>
+              <div class="acc-block-label">Ce que c'est</div>
+              <div class="acc-block-text">Le document fondateur de votre société : objet social, capital, gouvernance, répartition des parts et règles de fonctionnement interne.</div>
+            </div>
+            <div>
+              <div class="acc-block-label">Quand l'utiliser</div>
+              <div class="acc-block-text">Obligatoires pour immatriculer votre société au RCS. La SAS offre plus de flexibilité pour les startups, la SARL est plus encadrée et rassurante pour les PME.</div>
+            </div>
+          </div>
+          <div class="acc-articles">
+            <span class="article-tag">Art. L227-1 Code de commerce</span>
+            <span class="article-tag">Art. L223-1 Code de commerce</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- HOW IT WORKS -->
 <section class="how" id="comment">
   <div class="how-inner">
     <div class="section-tag">Simple & rapide</div>
     <h2 class="section-title">Comment ça marche ?</h2>
-    <p class="section-sub">Trois étapes pour obtenir un contrat juridiquement solide, sans passer par un cabinet.</p>
+    <p class="section-sub">Trois étapes pour obtenir un contrat solide, sans passer par un cabinet d'avocats.</p>
     <div class="steps">
       <div class="step">
-        <div class="step-num">01</div>
+        <div class="step-num">Étape 1</div>
         <div class="step-title">Choisissez votre contrat</div>
         <div class="step-desc">Sélectionnez le document adapté à votre situation parmi notre bibliothèque de contrats en droit français.</div>
       </div>
       <div class="step">
-        <div class="step-num">02</div>
+        <div class="step-num">Étape 2</div>
         <div class="step-title">Remplissez le formulaire</div>
         <div class="step-desc">Répondez aux questions en langage clair. Le contrat se génère en temps réel sous vos yeux.</div>
       </div>
       <div class="step">
-        <div class="step-num">03</div>
+        <div class="step-num">Étape 3</div>
         <div class="step-title">Téléchargez votre PDF</div>
         <div class="step-desc">Obtenez un document professionnel, prêt à être signé, en quelques minutes. 9€ par contrat, sans abonnement.</div>
       </div>
@@ -541,5 +699,17 @@ footer {
   <span>Les documents générés sont fournis à titre informatif. LexGen ne remplace pas le conseil d'un avocat.</span>
 </footer>
 
+<script>
+function toggle(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.acc-body.open').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.acc-trigger.open').forEach(b => b.classList.remove('open'));
+  if (!isOpen) {
+    body.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+</script>
 </body>
 </html>
