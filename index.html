@@ -157,35 +157,49 @@ nav {
 }
 .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-/* TESTIMONIALS */
-.testimonials { display: flex; flex-direction: column; gap: 14px; }
-.testi-card {
+/* GARANTIES */
+.garanties { display: flex; flex-direction: column; gap: 12px; }
+.garantie-card {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 4px;
-  padding: 1.25rem 1.5rem;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
-.testi-text {
-  font-size: 13px;
-  line-height: 1.65;
-  color: var(--ink);
-  font-style: italic;
-  margin-bottom: 0.75rem;
-}
-.testi-author { display: flex; align-items: center; gap: 10px; }
-.testi-avatar {
-  width: 32px; height: 32px;
+.garantie-icon {
+  width: 36px; height: 36px;
   border-radius: 50%;
   background: var(--cream);
   display: flex; align-items: center; justify-content: center;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--gold);
+  font-size: 16px;
   flex-shrink: 0;
 }
-.testi-name { font-size: 12px; font-weight: 500; color: var(--ink); }
-.testi-role { font-size: 11px; color: var(--muted); }
-.testi-stars { font-size: 11px; color: var(--gold); margin-bottom: 6px; }
+.garantie-body {}
+.garantie-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+.garantie-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.chiffres {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+.chiffre-card {
+  background: var(--ink);
+  border-radius: 4px;
+  padding: 1rem;
+  text-align: center;
+}
+.chiffre-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.chiffre-label { font-size: 11px; color: rgba(255,255,255,0.5); line-height: 1.4; }
 
 /* CONTRACTS */
 .contracts {
@@ -483,14 +497,51 @@ nav {
 }
 
 @media (max-width: 900px) {
-  .hero { padding: 6rem 1.5rem 3rem; }
-  nav { padding: 1rem 1.5rem; }
-  .nav-links { gap: 1rem; }
-  .contracts, .details, .how-inner { padding: 4rem 1.5rem; }
-  .details { padding: 4rem 1.5rem; }
-  .how { padding: 4rem 1.5rem; }
-  .steps { grid-template-columns: 1fr; }
-  footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  /* NAV */
+  nav { padding: 1rem 1.5rem; position: fixed; }
+  .nav-links a:not(.nav-cta) { display: none; }
+  .nav-cta { font-size: 12px !important; padding: 7px 14px !important; }
+
+  /* HERO */
+  .hero {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 6rem 1.5rem 3rem !important;
+    gap: 2.5rem !important;
+    min-height: auto !important;
+  }
+  .hero h1 { font-size: 2.6rem; }
+  .hero-sub { font-size: 14px; }
+  .hero-stats { gap: 1.5rem; }
+  .stat-val { font-size: 1.6rem; }
+  .testimonials { display: flex; flex-direction: column; gap: 12px; }
+
+  /* SECTIONS */
+  .contracts { padding: 3rem 1.5rem; }
+  .contracts-grid { grid-template-columns: 1fr; }
+  .details { padding: 3rem 1.5rem; }
+  .details-inner { padding: 0 !important; }
+  .how { padding: 3rem 1.5rem; }
+  .how-inner { padding: 0 !important; }
+  .steps { grid-template-columns: 1fr; gap: 12px; }
+  .acc-row { grid-template-columns: 1fr; gap: 0.75rem; }
+
+  /* FOOTER */
+  .footer-main { padding: 3rem 1.5rem; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-bottom { padding: 1.25rem 1.5rem; }
+  .footer-bottom-inner { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .footer-legal { flex-wrap: wrap; gap: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2.2rem; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions a { width: 100%; text-align: center; }
+  .hero-stats { flex-wrap: wrap; gap: 1rem; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .nav-cta { font-size: 11px !important; padding: 6px 12px !important; }
 }
 </style>
 </head>
@@ -516,54 +567,50 @@ nav {
       <a href="#contrats" class="btn-primary">Choisir un contrat</a>
       <a href="#comment" class="btn-ghost">Comment ça marche</a>
     </div>
-    <div class="hero-stats">
-      <div>
-        <div class="stat-val">5 min</div>
-        <div class="stat-label">Temps moyen de génération</div>
-      </div>
-      <div>
-        <div class="stat-val">100%</div>
-        <div class="stat-label">Droit français applicable</div>
-      </div>
-      <div>
-        <div class="stat-val">9€</div>
-        <div class="stat-label">Par contrat généré</div>
-      </div>
-    </div>
+
   </div>
 
-  <div class="testimonials">
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <div class="testi-text">« J'avais besoin d'un NDA en urgence avant une réunion avec un investisseur. En 10 minutes, j'avais un document complet et professionnel. Bluffant. »</div>
-      <div class="testi-author">
-        <div class="testi-avatar">KL</div>
-        <div>
-          <div class="testi-name">Karim L.</div>
-          <div class="testi-role">Fondateur, startup fintech</div>
-        </div>
+  <div class="garanties">
+    <div class="garantie-card">
+      <div class="garantie-icon">⚖️</div>
+      <div class="garantie-body">
+        <div class="garantie-title">Conformes au droit français</div>
+        <div class="garantie-desc">Chaque document est rédigé par un juriste spécialisé en droit des affaires et mis à jour selon l'évolution de la législation.</div>
       </div>
     </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <div class="testi-text">« En tant que freelance, je signais des contrats de prestation approximatifs. Zelko m'a permis d'avoir enfin des documents solides pour chaque mission. »</div>
-      <div class="testi-author">
-        <div class="testi-avatar">SA</div>
-        <div>
-          <div class="testi-name">Sophie A.</div>
-          <div class="testi-role">Designer UX freelance</div>
-        </div>
+    <div class="garantie-card">
+      <div class="garantie-icon">🔒</div>
+      <div class="garantie-body">
+        <div class="garantie-title">Données sécurisées</div>
+        <div class="garantie-desc">Vos informations ne sont jamais stockées sur nos serveurs. Le document est généré localement dans votre navigateur.</div>
       </div>
     </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <div class="testi-text">« Simple, rapide et bien moins cher qu'un cabinet. J'ai généré mes CGV pour ma boutique en ligne en 15 minutes. Je recommande à tous les e-commerçants. »</div>
-      <div class="testi-author">
-        <div class="testi-avatar">MR</div>
-        <div>
-          <div class="testi-name">Marc R.</div>
-          <div class="testi-role">E-commerçant, mode</div>
-        </div>
+    <div class="garantie-card">
+      <div class="garantie-icon">⚡</div>
+      <div class="garantie-body">
+        <div class="garantie-title">Généré en temps réel</div>
+        <div class="garantie-desc">Votre contrat se construit au fur et à mesure que vous remplissez le formulaire. Téléchargement immédiat en PDF.</div>
+      </div>
+    </div>
+    <div class="garantie-card">
+      <div class="garantie-icon">💶</div>
+      <div class="garantie-body">
+        <div class="garantie-title">Prix fixe, sans surprise</div>
+        <div class="garantie-desc">À partir de 9€ par contrat, sans abonnement ni frais cachés. Vous payez uniquement ce dont vous avez besoin.</div>
+      </div>
+    </div>
+    <div class="chiffres">
+      <div class="chiffre-card">
+        <div class="chiffre-val">5 min</div>
+        <div class="chiffre-label">Temps moyen de génération</div>
+      </div>
+      <div class="chiffre-card">
+        <div class="chiffre-val">6</div>
+        <div class="chiffre-label">Types de contrats disponibles</div>
+      </div>
+      <div class="chiffre-card">
+        <div class="chiffre-val">9€</div>
+        <div class="chiffre-label">À partir de par contrat</div>
       </div>
     </div>
   </div>
