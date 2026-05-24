@@ -112,6 +112,11 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; display: grid; gri
       <label class="checkbox-item"><input type="checkbox" id="cl-conf" onchange="liveUpdate()"><span>Clause de confidentialité</span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-exclu" onchange="liveUpdate()"><span>Clause d'exclusivité</span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-penalite" onchange="liveUpdate()"><span>Pénalités de retard de paiement</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-reversibilite" onchange="liveUpdate()"><span>Clause de réversibilité (restitution des données)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-sous-traitance" onchange="liveUpdate()"><span>Autorisation de sous-traitance</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-reference" onchange="liveUpdate()"><span>Clause de référence commerciale</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-garantie-livrable" onchange="liveUpdate()"><span>Garantie des vices cachés sur les livrables</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-force-majeure" onchange="liveUpdate()"><span>Clause de force majeure</span></label>
     </div>
 
     <div class="field" style="margin-top:1.5rem"><label>Date de signature</label><input type="date" id="date-sign" oninput="liveUpdate()"></div>
@@ -242,6 +247,36 @@ function buildDoc() {
       <div class="doc-section-title">Résiliation</div>
       <p>Chaque partie peut résilier le présent contrat avec un préavis de 15 jours par lettre recommandée avec accusé de réception. Les prestations réalisées jusqu'à la date de résiliation seront facturées au prorata.</p>
     </div>
+
+    ${c('cl-reversibilite') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Réversibilité</div>
+      <p>À l'expiration ou en cas de résiliation du présent contrat, le Prestataire s'engage à restituer au Client, dans un délai de 30 jours, l'ensemble des données, fichiers, codes sources et documents lui appartenant, dans un format standard et exploitable. Le Prestataire s'engage à supprimer toute copie de ces données de ses systèmes et à en certifier la suppression par écrit à première demande.</p>
+    </div>` : ''}
+
+    ${c('cl-sous-traitance') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Sous-traitance</div>
+      <p>Le Prestataire est autorisé à faire appel à des sous-traitants pour l'exécution de tout ou partie de la mission, sous réserve d'en informer préalablement le Client et de s'assurer que lesdits sous-traitants respectent des obligations au moins équivalentes à celles prévues au présent contrat, notamment en matière de confidentialité. Le Prestataire demeure seul responsable vis-à-vis du Client de la bonne exécution de la mission.</p>
+    </div>` : ''}
+
+    ${c('cl-reference') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Référence commerciale</div>
+      <p>Le Client autorise le Prestataire à mentionner son nom et son logo à titre de référence commerciale dans ses supports de communication (site internet, portfolio, présentations commerciales), sans autre contrepartie. Cette autorisation est révocable à tout moment par simple notification écrite du Client au Prestataire.</p>
+    </div>` : ''}
+
+    ${c('cl-garantie-livrable') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Garantie des livrables</div>
+      <p>Le Prestataire garantit que les livrables sont exempts de vices cachés rendant leur utilisation impossible ou diminuant leur valeur au point que le Client ne les aurait pas acceptés s'il en avait eu connaissance. En cas de vice constaté dans un délai de 3 mois suivant la livraison, le Prestataire s'engage à corriger les défauts à ses frais dans un délai raisonnable, ou à rembourser tout ou partie de la prestation si la correction s'avère impossible.</p>
+    </div>` : ''}
+
+    ${c('cl-force-majeure') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Force majeure</div>
+      <p>Aucune partie ne pourra être tenue responsable de l'inexécution de ses obligations en cas de survenance d'un événement de force majeure au sens de l'article 1218 du Code civil (catastrophe naturelle, pandémie, grève générale, décision gouvernementale, etc.). La partie concernée devra notifier l'autre dans les 48 heures. Si l'événement de force majeure dure plus de 30 jours, chaque partie pourra résilier le contrat sans indemnité, les prestations réalisées restant dues.</p>
+    </div>` : ''}
 
     <div class="doc-section">
       <div class="doc-section-title">Droit applicable & juridiction</div>
