@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zelko — Générateur de Bail d'Habitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a2e1a;--paper:#f4f1ea;--cream:#e8e2d0;--gold:#2d5a27;--gold-light:#4a7c42;--muted:#5a6b5a;--border:#c8d4c0;--white:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+header{padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--white);}
+.logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;letter-spacing:-0.02em;color:var(--ink);text-decoration:none;}
+.logo span{color:var(--gold);}
+.badge{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:4px 12px;border-radius:20px;}
+.back-link{font-size:13px;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--ink);}
+main{max-width:1100px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+@media(max-width:768px){main{grid-template-columns:1fr;}}
+.panel{background:var(--white);border:1px solid var(--border);border-radius:4px;padding:2rem;}
+.panel-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:500;margin-bottom:0.25rem;}
+.panel-sub{font-size:13px;color:var(--muted);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--cream);}
+.section-label{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin:1.5rem 0 0.75rem;}
+.section-label:first-of-type{margin-top:0;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:3px;background:var(--paper);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);background:var(--white);}
+.field textarea{resize:vertical;min-height:70px;}
+.field select{appearance:none;cursor:pointer;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.checkbox-group{display:flex;flex-direction:column;gap:8px;}
+.checkbox-item{display:flex;align-items:flex-start;gap:8px;cursor:pointer;}
+.checkbox-item input{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;margin-top:2px;flex-shrink:0;}
+.checkbox-item span{font-size:13px;font-weight:300;line-height:1.5;}
+.type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.5rem;}
+.type-btn{padding:9px;border:1px solid var(--border);border-radius:3px;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;color:var(--muted);}
+.type-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.info-note{font-size:11px;color:var(--muted);background:var(--cream);padding:6px 10px;border-radius:3px;margin-top:4px;line-height:1.5;}
+.generate-btn{width:100%;margin-top:1.5rem;padding:13px;background:var(--ink);color:var(--white);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.06em;cursor:pointer;transition:background 0.2s;}
+.generate-btn:hover{background:#2a3d2a;}
+.preview-panel{position:sticky;top:2rem;}
+.preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.preview-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;}
+.download-btn{padding:7px 16px;background:var(--gold);color:var(--white);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:none;}
+.download-btn.visible{display:block;}
+#preview-box{background:var(--white);border:1px solid var(--border);border-radius:4px;min-height:500px;padding:2.5rem;font-size:13px;line-height:1.8;color:var(--ink);position:relative;overflow-y:auto;max-height:85vh;}
+.empty-state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);}
+.empty-state svg{opacity:0.2;}
+.empty-state p{font-size:13px;text-align:center;max-width:200px;}
+.doc-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--ink);}
+.doc-main-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}
+.doc-subtitle{font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;}
+.doc-ref{font-size:11px;color:var(--muted);margin-top:6px;}
+.doc-parties{background:var(--cream);border-left:3px solid var(--gold);padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 3px 3px 0;font-size:12.5px;}
+.doc-section{margin:1.25rem 0;}
+.doc-section-title{font-family:'Playfair Display',serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;color:var(--gold);}
+.doc-section p{font-size:12.5px;line-height:1.75;margin-bottom:0.4rem;}
+.doc-signatures{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);}
+.sig-block{font-size:12px;}
+.sig-line{border-bottom:1px solid var(--ink);height:32px;margin:0.5rem 0;}
+.sig-label{font-size:11px;color:var(--muted);}
+.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-family:'Playfair Display',serif;font-size:4rem;font-weight:600;color:rgba(45,90,39,0.05);pointer-events:none;white-space:nowrap;letter-spacing:0.2em;}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="logo">Zel<span>ko</span></a>
+  <a href="index.html" class="back-link">← Retour aux contrats</a>
+  <div class="badge">Bail d'habitation</div>
+</header>
+
+<main>
+  <div class="panel">
+    <div class="panel-title">Bail d'habitation</div>
+    <div class="panel-sub">Conforme à la loi du 6 juillet 1989 et à la loi ALUR du 24 mars 2014.</div>
+
+    <div class="section-label">Type de bail</div>
+    <div class="type-toggle">
+      <button class="type-btn active" id="btn-vide" onclick="setType('vide')">Location vide</button>
+      <button class="type-btn" id="btn-meuble" onclick="setType('meuble')">Location meublée</button>
+    </div>
+
+    <div class="section-label">Le bailleur</div>
+    <div class="field"><label>Nom / Raison sociale</label><input type="text" id="bail-nom" placeholder="Ex : Jean Dupont" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Qualité</label><select id="bail-qualite" onchange="liveUpdate()"><option value="personne physique">Personne physique</option><option value="SCI">SCI</option><option value="société">Société</option></select></div>
+      <div class="field"><label>Représentant (si société)</label><input type="text" id="bail-rep" placeholder="Prénom Nom" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>Adresse du bailleur</label><input type="text" id="bail-addr" placeholder="12 rue de la Paix, 75001 Paris" oninput="liveUpdate()"></div>
+    <div class="field"><label>Email / Téléphone</label><input type="text" id="bail-contact" placeholder="contact@email.fr / 06 00 00 00 00" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Le locataire</div>
+    <div class="row2">
+      <div class="field"><label>Prénom</label><input type="text" id="loc-prenom" placeholder="Prénom" oninput="liveUpdate()"></div>
+      <div class="field"><label>Nom</label><input type="text" id="loc-nom" placeholder="NOM" oninput="liveUpdate()"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Date de naissance</label><input type="date" id="loc-naissance" oninput="liveUpdate()"></div>
+      <div class="field"><label>Lieu de naissance</label><input type="text" id="loc-lieu-naissance" placeholder="Paris (75)" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>Adresse actuelle</label><input type="text" id="loc-addr" placeholder="Adresse actuelle du locataire" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Le garant (optionnel)</div>
+    <div class="field"><label>Nom du garant</label><input type="text" id="garant-nom" placeholder="Prénom NOM (laisser vide si aucun)" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Adresse du garant</label><input type="text" id="garant-addr" placeholder="Adresse du garant" oninput="liveUpdate()"></div>
+      <div class="field"><label>Type de garantie</label><select id="garant-type" onchange="liveUpdate()"><option value="caution solidaire">Caution solidaire</option><option value="caution simple">Caution simple</option></select></div>
+    </div>
+
+    <div class="section-label">Le logement</div>
+    <div class="field"><label>Adresse complète du bien</label><input type="text" id="bien-addr" placeholder="8 rue des Fleurs, Apt 3B, 75015 Paris" oninput="liveUpdate()"></div>
+    <div class="field"><label>Description du bien</label><textarea id="bien-desc" placeholder="Ex : Appartement au 3ème étage sans ascenseur, composé d'un salon, d'une chambre, d'une cuisine équipée et d'une salle de bain..." oninput="liveUpdate()"></textarea></div>
+    <div class="row3">
+      <div class="field"><label>Surface (m²)</label><input type="text" id="bien-surface" placeholder="45" oninput="liveUpdate()"></div>
+      <div class="field"><label>Nb de pièces</label><input type="text" id="bien-pieces" placeholder="3" oninput="liveUpdate()"></div>
+      <div class="field"><label>Étage</label><input type="text" id="bien-etage" placeholder="3ème" oninput="liveUpdate()"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Type de bien</label><select id="bien-type" onchange="liveUpdate()"><option value="appartement">Appartement</option><option value="maison">Maison</option><option value="studio">Studio</option></select></div>
+      <div class="field"><label>Chauffage</label><select id="bien-chauffage" onchange="liveUpdate()"><option value="individuel (gaz)">Individuel gaz</option><option value="individuel (électrique)">Individuel électrique</option><option value="collectif">Collectif</option><option value="individuel (fioul)">Individuel fioul</option></select></div>
+    </div>
+    <div class="field"><label>Numéro de DPE (classe énergétique)</label><input type="text" id="bien-dpe" placeholder="Ex : Classe C — 120 kWh/m²/an" oninput="liveUpdate()"></div>
+    <div class="info-note">Le DPE est obligatoire depuis la loi Climat et Résilience (2021). Un logement classé F ou G est un "passoire thermique".</div>
+
+    <div class="section-label">Durée & loyer</div>
+    <div class="row2">
+      <div class="field"><label>Date de prise d'effet</label><input type="date" id="date-debut" oninput="liveUpdate()"></div>
+      <div class="field"><label>Durée</label><select id="duree" onchange="liveUpdate()">
+        <option value="3 ans">3 ans (vide — particulier)</option>
+        <option value="6 ans">6 ans (vide — société)</option>
+        <option value="1 an">1 an (meublé)</option>
+        <option value="9 mois">9 mois (meublé étudiant)</option>
+      </select></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Loyer mensuel hors charges (€)</label><input type="text" id="loyer" placeholder="Ex : 900" oninput="liveUpdate()"></div>
+      <div class="field"><label>Charges mensuelles (€)</label><input type="text" id="charges" placeholder="Ex : 80" oninput="liveUpdate()"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Dépôt de garantie (€)</label><input type="text" id="depot" placeholder="Ex : 900" oninput="liveUpdate()"></div>
+      <div class="field"><label>Mode de paiement</label><select id="paiement" onchange="liveUpdate()"><option value="virement bancaire">Virement bancaire</option><option value="chèque">Chèque</option><option value="prélèvement automatique">Prélèvement automatique</option></select></div>
+    </div>
+    <div class="field"><label>Date de paiement mensuel</label><select id="date-paiement" onchange="liveUpdate()"><option value="le 1er">Le 1er du mois</option><option value="le 5">Le 5 du mois</option><option value="le 10">Le 10 du mois</option><option value="le 15">Le 15 du mois</option></select></div>
+    <div class="info-note">Pour un logement vide, le dépôt de garantie est limité à 1 mois de loyer hors charges. Pour un meublé, il est limité à 2 mois.</div>
+
+    <div class="section-label">Charges & provisions</div>
+    <div class="field"><label>Mode de récupération des charges</label><select id="charges-mode" onchange="liveUpdate()"><option value="provisions sur charges avec régularisation annuelle">Provisions avec régularisation annuelle</option><option value="forfait de charges non révisable">Forfait de charges (meublé)</option></select></div>
+    <div class="field"><label>Charges récupérables incluses</label><textarea id="charges-detail" placeholder="Ex : eau froide et chaude, entretien des parties communes, taxe d'ordures ménagères, ascenseur..." oninput="liveUpdate()"></textarea></div>
+
+    <div class="section-label">Clauses optionnelles</div>
+    <div class="checkbox-group">
+      <label class="checkbox-item"><input type="checkbox" id="cl-animaux" onchange="liveUpdate()"><span>Autorisation des animaux domestiques</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-no-animaux" onchange="liveUpdate()"><span>Interdiction des animaux (sauf chiens d'assistance)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-colocation" onchange="liveUpdate()"><span>Clause de colocation</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-travaux-loc" onchange="liveUpdate()"><span>Travaux d'amélioration par le locataire</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-resiliation-anticipee" onchange="liveUpdate()"><span>Résiliation anticipée (préavis réduit à 1 mois — zone tendue)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-indexation" onchange="liveUpdate()"><span>Révision annuelle du loyer (IRL)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-sous-location" onchange="liveUpdate()"><span>Interdiction expresse de sous-location</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-assurance" onchange="liveUpdate()"><span>Obligation d'assurance habitation renforcée</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-clause-resolutoire" onchange="liveUpdate()"><span>Clause résolutoire (résiliation automatique en cas d'impayé)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-entretien" onchange="liveUpdate()"><span>Obligations d'entretien détaillées</span></label>
+    </div>
+
+    <div id="meuble-section" style="display:none">
+      <div class="section-label">Inventaire du mobilier (meublé)</div>
+      <div class="field"><label>Liste du mobilier fourni</label><textarea id="mobilier" placeholder="Ex : Lit double avec sommier et matelas, armoire, bureau, chaise, canapé, table basse, table à manger, 4 chaises, réfrigérateur, four, micro-ondes, lave-linge, télévision, luminaires..." oninput="liveUpdate()"></textarea></div>
+      <div class="info-note">Le décret du 31 juillet 2015 impose une liste minimale de mobilier pour les locations meublées (lit, volets/rideaux, plaques de cuisson, four, réfrigérateur, vaisselle, table, sièges, rangements, luminaires, matériel d'entretien).</div>
+    </div>
+
+    <div class="field" style="margin-top:1.5rem"><label>Date de signature</label><input type="date" id="date-sign" oninput="liveUpdate()"></div>
+    <button class="generate-btn" onclick="generateDoc()">Générer le bail complet</button>
+  </div>
+
+  <div class="preview-panel">
+    <div class="preview-header">
+      <div class="preview-title">Aperçu du document</div>
+      <button class="download-btn" id="dl-btn" onclick="downloadDoc()">Télécharger PDF</button>
+    </div>
+    <div id="preview-box">
+      <div class="empty-state" id="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <p>Remplissez le formulaire pour voir votre bail apparaître ici</p>
+      </div>
+      <div id="doc-content" style="display:none"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+let bailType = 'vide';
+function v(id){return document.getElementById(id)?.value||'';}
+function c(id){return document.getElementById(id)?.checked||false;}
+function fmt(str,fb){return str.trim()||fb;}
+function fmtDate(id){const r=v(id);if(!r)return '[date]';return new Date(r).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});}
+function getRef(){const d=new Date();return `BAIL-HAB-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${Math.floor(Math.random()*900+100)}`;}
+let docRef = getRef();
+
+function setType(type){
+  bailType = type;
+  document.getElementById('btn-vide').classList.toggle('active', type==='vide');
+  document.getElementById('btn-meuble').classList.toggle('active', type==='meuble');
+  document.getElementById('meuble-section').style.display = type==='meuble' ? 'block' : 'none';
+  if(type==='meuble') document.getElementById('duree').value = '1 an';
+  else document.getElementById('duree').value = '3 ans';
+  liveUpdate();
+}
+
+function buildDoc(){
+  const bailNom = fmt(v('bail-nom'), '[Bailleur]');
+  const bailQualite = v('bail-qualite');
+  const bailRep = v('bail-rep');
+  const bailAddr = fmt(v('bail-addr'), '[Adresse bailleur]');
+  const bailContact = v('bail-contact');
+  const locPrenom = fmt(v('loc-prenom'), '[Prénom]');
+  const locNom = fmt(v('loc-nom'), '[NOM]');
+  const locNaissance = fmtDate('loc-naissance');
+  const locLieuNaissance = fmt(v('loc-lieu-naissance'), '[Lieu de naissance]');
+  const locAddr = fmt(v('loc-addr'), '[Adresse locataire]');
+  const garantNom = v('garant-nom');
+  const garantAddr = v('garant-addr');
+  const garantType = v('garant-type') || 'caution solidaire';
+  const bienAddr = fmt(v('bien-addr'), '[Adresse du bien]');
+  const bienDesc = fmt(v('bien-desc'), '[Description du bien]');
+  const bienSurface = fmt(v('bien-surface'), '[Surface]');
+  const bienPieces = fmt(v('bien-pieces'), '[Nb pièces]');
+  const bienEtage = fmt(v('bien-etage'), '[Étage]');
+  const bienType = v('bien-type') || 'appartement';
+  const bienChauffage = v('bien-chauffage') || 'individuel (gaz)';
+  const bienDpe = fmt(v('bien-dpe'), '[DPE non renseigné]');
+  const dateDebut = fmtDate('date-debut');
+  const duree = v('duree') || '3 ans';
+  const loyer = fmt(v('loyer'), '[Loyer]');
+  const charges = fmt(v('charges'), '[Charges]');
+  const depot = fmt(v('depot'), '[Dépôt]');
+  const paiement = v('paiement') || 'virement bancaire';
+  const datePaiement = v('date-paiement') || 'le 1er';
+  const chargesMode = v('charges-mode') || 'provisions sur charges avec régularisation annuelle';
+  const chargesDetail = fmt(v('charges-detail'), 'eau, entretien des parties communes, ordures ménagères');
+  const mobilier = v('mobilier');
+  const dateSign = fmtDate('date-sign');
+  const isVide = bailType === 'vide';
+  const isMeuble = bailType === 'meuble';
+  const totalLoyer = loyer && charges ? `${parseInt(loyer.replace(/\s/g,'')) + parseInt(charges.replace(/\s/g,''))} €` : '[Total]';
+
+  let artNum = 1;
+  const art = (title) => {
+    const n = artNum++;
+    return `Article ${n} — ${title}`;
+  };
+
+  return `
+    <div class="watermark">ZELKO</div>
+    <div class="doc-header">
+      <div class="doc-main-title">Contrat de Location ${isMeuble ? 'Meublée' : 'Vide'}</div>
+      <div class="doc-subtitle">${isMeuble ? 'Bail meublé — Loi du 6 juillet 1989 · Art. 25-3 et s.' : 'Bail d\'habitation — Loi du 6 juillet 1989 modifiée par la loi ALUR'}</div>
+      <div class="doc-ref">Réf. ${docRef} · Usage d'habitation principale</div>
+    </div>
+
+    <div class="doc-parties">
+      <strong>Entre les soussignés :</strong><br><br>
+      <strong>${bailNom}</strong>, ${bailQualite}${bailRep ? `, représenté(e) par ${bailRep}` : ''}, domicilié(e) au ${bailAddr}${bailContact ? `, joignable au ${bailContact}` : ''}, ci-après dénommé le <strong>« Bailleur »</strong><br><br>
+      <strong>Et :</strong><br><br>
+      <strong>${locPrenom} ${locNom}</strong>, né(e) le ${locNaissance} à ${locLieuNaissance}, demeurant actuellement au ${locAddr}, ci-après dénommé(e) le <strong>« Locataire »</strong>
+      ${garantNom ? `<br><br><strong>Se portant garant :</strong><br><br><strong>${garantNom}</strong>, demeurant au ${garantAddr}, ci-après dénommé(e) le <strong>« Garant »</strong>, intervenant en qualité de <strong>${garantType}</strong>` : ''}
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Désignation du logement')}</div>
+      <p>Le Bailleur loue au Locataire, qui accepte, le bien immobilier suivant :</p>
+      <p>• <strong>Adresse :</strong> ${bienAddr}</p>
+      <p>• <strong>Nature :</strong> ${bienType} à usage d'habitation principale</p>
+      <p>• <strong>Surface habitable :</strong> ${bienSurface} m² (loi Carrez)</p>
+      <p>• <strong>Nombre de pièces principales :</strong> ${bienPieces}</p>
+      <p>• <strong>Étage :</strong> ${bienEtage}</p>
+      <p>• <strong>Chauffage :</strong> ${bienChauffage}</p>
+      <p>• <strong>Description :</strong> ${bienDesc}</p>
+      <p>• <strong>Diagnostic de Performance Énergétique (DPE) :</strong> ${bienDpe}</p>
+    </div>
+
+    ${isMeuble && mobilier ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Inventaire du mobilier')}</div>
+      <p>Le logement est loué meublé et équipé des éléments suivants, conformément au décret du 31 juillet 2015 :</p>
+      <p>${mobilier}</p>
+      <p>Un inventaire détaillé et contradictoire sera établi à l'entrée dans les lieux et annexé au présent bail.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Durée du bail')}</div>
+      <p>Le présent bail est consenti pour une durée de <strong>${duree}</strong>, prenant effet le <strong>${dateDebut}</strong>.${isVide ? ` Conformément à l'article 10 de la loi du 6 juillet 1989, le bail se renouvelle tacitement à son expiration pour la même durée, sauf congé donné dans les délais légaux.` : ` À l'issue de cette période, le bail se renouvelle tacitement pour un an, sauf congé donné par l'une ou l'autre des parties dans les délais légaux.`}</p>
+      <p><strong>Congé du Locataire :</strong> Le Locataire peut donner congé à tout moment, avec un préavis de ${c('cl-resiliation-anticipee') ? '<strong>1 mois</strong> (zone tendue)' : '<strong>3 mois</strong>'} pour un logement vide${isMeuble ? ', ou <strong>1 mois</strong> pour un logement meublé' : ''}. Le congé est donné par lettre recommandée avec accusé de réception ou acte d'huissier.</p>
+      <p><strong>Congé du Bailleur :</strong> Le Bailleur peut donner congé à l'expiration du bail, avec un préavis de <strong>6 mois</strong>, pour l'un des motifs suivants : reprise pour habitation personnelle ou familiale, vente du logement, ou motif légitime et sérieux.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Loyer et charges')}</div>
+      <p>Le loyer mensuel est fixé à <strong>${loyer} € hors charges</strong>. Les charges mensuelles s'élèvent à <strong>${charges} €</strong> (${chargesMode}). Le loyer total charges comprises s'établit à <strong>${totalLoyer} TTC</strong>.</p>
+      <p>Le loyer est payable <strong>${datePaiement} de chaque mois</strong> par <strong>${paiement}</strong>. Une quittance sera remise au Locataire sur demande et gratuitement.</p>
+      <p><strong>Charges récupérables :</strong> ${chargesDetail}.</p>
+      ${chargesMode.includes('régularisation') ? '<p>Une régularisation annuelle des charges sera effectuée sur présentation des justificatifs. En cas de trop-perçu, le Bailleur restituera le solde au Locataire dans le mois suivant la régularisation.</p>' : ''}
+    </div>
+
+    ${c('cl-indexation') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Révision du loyer')}</div>
+      <p>Le loyer sera révisé chaque année à la date anniversaire du bail, en fonction de la variation de l'<strong>Indice de Référence des Loyers (IRL)</strong> publié par l'INSEE. La révision ne peut excéder la variation de cet indice. En cas d'oubli de révision, le Bailleur peut procéder à un rappel dans la limite d'un an.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Dépôt de garantie')}</div>
+      <p>À la signature des présentes, le Locataire verse au Bailleur la somme de <strong>${depot} €</strong> à titre de dépôt de garantie, soit <strong>${loyer ? Math.round(parseInt(depot.replace(/\s/g,''))/parseInt(loyer.replace(/\s/g,''))) : '[X]'} mois</strong> de loyer hors charges. Cette somme est conforme au plafond légal (${isVide ? '1 mois' : '2 mois'} de loyer hors charges pour un logement ${isVide ? 'vide' : 'meublé'}).</p>
+      <p>Le dépôt de garantie sera restitué dans un délai d'<strong>un mois</strong> (si l'état des lieux de sortie est conforme à l'état des lieux d'entrée) ou de <strong>deux mois</strong> (en cas de différence), déduction faite des sommes dues par le Locataire. Le Bailleur justifiera par écrit toute retenue sur le dépôt.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('État des lieux')}</div>
+      <p>Un état des lieux <strong>contradictoire et détaillé</strong> sera établi à l'entrée et à la sortie du Locataire, en présence des deux parties ou de leurs mandataires. Il sera annexé au présent bail. En l'absence d'état des lieux d'entrée imputable au Bailleur, le logement est présumé avoir été remis en bon état.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Obligations du Locataire')}</div>
+      <p>Le Locataire s'engage à : (i) payer le loyer et les charges aux termes convenus ; (ii) user paisiblement des locaux loués ; (iii) répondre des dégradations survenues pendant l'occupation ; (iv) prendre à sa charge les réparations locatives définies par le décret du 26 août 1987 ; (v) permettre l'accès au logement pour les travaux nécessaires ; (vi) ne pas transformer le logement sans l'accord écrit du Bailleur ; (vii) s'assurer contre les risques locatifs.</p>
+      ${c('cl-entretien') ? `<p><strong>Entretien courant :</strong> Le Locataire prend en charge l'entretien courant des équipements : remplacement des joints, ampoules, fusibles, robinets défectueux, entretien annuel de la chaudière individuelle, débouchage des canalisations, entretien de la ventilation et des volets. Les réparations importantes restent à la charge du Bailleur.</p>` : ''}
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Obligations du Bailleur')}</div>
+      <p>Le Bailleur s'engage à : (i) délivrer un logement décent au sens de la loi (surface minimale, équipements, absence de risque pour la sécurité) ; (ii) assurer la jouissance paisible du logement ; (iii) entretenir les locaux en état de servir à l'usage prévu ; (iv) effectuer les réparations autres que locatives ; (v) remettre les diagnostics techniques obligatoires (DPE, plomb, amiante si applicable, état des risques naturels).</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Assurance')}</div>
+      <p>Le Locataire est tenu de souscrire une assurance contre les risques locatifs (incendie, dégâts des eaux, explosion) auprès d'une compagnie d'assurance. Il devra en justifier au Bailleur à la remise des clés, puis chaque année à la date anniversaire du bail sur demande. À défaut, le Bailleur pourra souscrire une assurance pour le compte du Locataire, dont le coût lui sera répercuté.${c('cl-assurance') ? ' Le Locataire s\'engage également à souscrire une garantie responsabilité civile vie privée couvrant les dommages causés aux tiers.' : ''}</p>
+    </div>
+
+    ${c('cl-animaux') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Animaux domestiques')}</div>
+      <p>Le Bailleur autorise le Locataire à détenir des animaux domestiques dans le logement, sous réserve qu'ils ne causent aucune nuisance aux voisins et aucune dégradation du logement. Le Locataire demeure responsable de tout dommage causé par ses animaux.</p>
+    </div>` : ''}
+
+    ${c('cl-no-animaux') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Animaux domestiques')}</div>
+      <p>Conformément à l'article 10 de la loi du 6 juillet 1989, il est interdit au Locataire de détenir des animaux susceptibles de causer des nuisances dans le logement loué. Cette interdiction ne s'applique pas aux chiens d'assistance pour personnes handicapées.</p>
+    </div>` : ''}
+
+    ${c('cl-colocation') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Colocation')}</div>
+      <p>Le présent bail est conclu dans le cadre d'une colocation au sens de l'article 8-1 de la loi du 6 juillet 1989. Chaque colocataire est solidairement tenu au paiement de l'intégralité du loyer et des charges. En cas de départ d'un colocataire, la solidarité cesse à l'expiration d'un délai de 6 mois suivant son congé, sauf remplacement par un nouveau colocataire accepté par le Bailleur.</p>
+    </div>` : ''}
+
+    ${c('cl-travaux-loc') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Travaux d\'amélioration')}</div>
+      <p>Le Locataire est autorisé à réaliser des travaux d'amélioration à ses frais, sous réserve de l'accord préalable et écrit du Bailleur. À l'issue du bail, les améliorations resteront acquises au Bailleur sans indemnité, sauf accord contraire. Aucune réduction de loyer ne pourra être réclamée en contrepartie de ces travaux.</p>
+    </div>` : ''}
+
+    ${c('cl-sous-location') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Sous-location')}</div>
+      <p>Toute sous-location, même partielle et même à titre gratuit, est expressément interdite sans l'accord préalable et écrit du Bailleur, conformément à l'article 8 de la loi du 6 juillet 1989. Toute infraction à cette clause pourra entraîner la résiliation du bail aux torts du Locataire.</p>
+    </div>` : ''}
+
+    ${c('cl-clause-resolutoire') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Clause résolutoire')}</div>
+      <p>Conformément à l'article 24 de la loi du 6 juillet 1989, le présent bail contient une clause résolutoire. Le bail sera résilié de plein droit, après commandement de payer demeuré infructueux pendant <strong>2 mois</strong>, en cas de : non-paiement du loyer ou des charges aux termes convenus, non-versement du dépôt de garantie, non-souscription d'une assurance habitation, ou trouble de voisinage constaté par décision de justice.</p>
+    </div>` : ''}
+
+    ${garantNom ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Cautionnement')}</div>
+      <p><strong>${garantNom}</strong>, demeurant au ${garantAddr}, se porte ${garantType} du paiement du loyer, des charges, des réparations locatives et de toutes sommes dues par le Locataire au titre du présent bail.</p>
+      <p>Conformément à l'article 22-1 de la loi du 6 juillet 1989, le Garant déclare avoir pris connaissance du présent bail et avoir été informé de la nature et de l'étendue de son engagement. La présente caution prend fin à l'expiration du bail et de ses renouvellements.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Diagnostics techniques')}</div>
+      <p>Les diagnostics techniques suivants sont annexés au présent bail : Diagnostic de Performance Énergétique (DPE), état des risques naturels, miniers et technologiques (ERNMT), constat de risque d'exposition au plomb (si logement construit avant 1949), état relatif à la présence d'amiante (si applicable), diagnostic bruit (si applicable).</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Droit applicable & litiges')}</div>
+      <p>Le présent bail est soumis aux dispositions de la loi du 6 juillet 1989 modifiée et de la loi ALUR du 24 mars 2014. En cas de litige, les parties s'engagent à recourir à la Commission Départementale de Conciliation (CDC) avant toute saisine du Tribunal judiciaire compétent du lieu de situation du logement.</p>
+    </div>
+
+    <div class="doc-signatures">
+      <div class="sig-block">
+        <div><strong>${bailNom}</strong></div>
+        <div class="sig-label">Le Bailleur</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateSign}</div>
+      </div>
+      <div class="sig-block">
+        <div><strong>${locPrenom} ${locNom}</strong></div>
+        <div class="sig-label">Le Locataire · "Lu et approuvé"</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateSign}</div>
+      </div>
+    </div>
+    ${garantNom ? `
+    <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+      <div class="sig-block">
+        <div><strong>${garantNom}</strong></div>
+        <div class="sig-label">Le Garant · "Lu et approuvé, bon pour caution solidaire"</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateSign}</div>
+      </div>
+    </div>` : ''}
+  `;
+}
+
+function liveUpdate(){
+  if(!v('bail-nom') && !v('loc-nom')) return;
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('doc-content').style.display = 'block';
+  document.getElementById('doc-content').innerHTML = buildDoc();
+}
+
+function generateDoc(){
+  docRef = getRef();
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('doc-content').style.display = 'block';
+  document.getElementById('doc-content').innerHTML = buildDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  document.getElementById('preview-box').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function downloadDoc(){
+  const content = document.getElementById('doc-content').innerHTML;
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bail d'habitation — ${docRef}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>body{font-family:'DM Sans',sans-serif;font-weight:300;color:#1a2e1a;padding:3rem;max-width:720px;margin:auto;line-height:1.8;font-size:13px;}.doc-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid #1a2e1a;}.doc-main-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}.doc-subtitle{font-size:11px;color:#5a6b5a;letter-spacing:0.1em;text-transform:uppercase;}.doc-ref{font-size:11px;color:#5a6b5a;margin-top:6px;}.doc-parties{background:#e8e2d0;border-left:3px solid #2d5a27;padding:1rem 1.25rem;margin:1.5rem 0;}.doc-section{margin:1.25rem 0;}.doc-section-title{font-family:'Playfair Display',serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;color:#2d5a27;}.doc-section p{font-size:12.5px;line-height:1.75;margin-bottom:0.3rem;}.doc-signatures{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #c8d4c0;}.sig-line{border-bottom:1px solid #1a2e1a;height:32px;margin:0.5rem 0;}.sig-label{font-size:11px;color:#5a6b5a;}.watermark{display:none;}@media print{body{padding:1.5rem;}}</style></head><body>${content}</body></html>`);
+  win.document.close();
+  setTimeout(()=>win.print(), 500);
+}
+
+document.getElementById('date-sign').valueAsDate = new Date();
+document.getElementById('date-debut').valueAsDate = new Date();
+</script>
+</body>
+</html>
