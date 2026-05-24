@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zelko — Générateur de Bail Commercial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a2e1a;--paper:#f4f1ea;--cream:#e8e2d0;--gold:#2d5a27;--gold-light:#4a7c42;--muted:#5a6b5a;--border:#c8d4c0;--white:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+header{padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--white);}
+.logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;letter-spacing:-0.02em;color:var(--ink);text-decoration:none;}
+.logo span{color:var(--gold);}
+.badge{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:4px 12px;border-radius:20px;}
+.back-link{font-size:13px;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--ink);}
+main{max-width:1100px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+@media(max-width:768px){main{grid-template-columns:1fr;}}
+.panel{background:var(--white);border:1px solid var(--border);border-radius:4px;padding:2rem;}
+.panel-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:500;margin-bottom:0.25rem;}
+.panel-sub{font-size:13px;color:var(--muted);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--cream);}
+.section-label{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin:1.5rem 0 0.75rem;}
+.section-label:first-of-type{margin-top:0;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:3px;background:var(--paper);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);background:var(--white);}
+.field textarea{resize:vertical;min-height:70px;}
+.field select{appearance:none;cursor:pointer;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.checkbox-group{display:flex;flex-direction:column;gap:8px;}
+.checkbox-item{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.checkbox-item input{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;}
+.checkbox-item span{font-size:13px;font-weight:300;}
+.type-toggle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem;}
+.type-btn{padding:8px;border:1px solid var(--border);border-radius:3px;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s;color:var(--muted);}
+.type-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.generate-btn{width:100%;margin-top:1.5rem;padding:13px;background:var(--ink);color:var(--white);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.06em;cursor:pointer;transition:background 0.2s;}
+.generate-btn:hover{background:#2a3d2a;}
+.preview-panel{position:sticky;top:2rem;}
+.preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.preview-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;}
+.download-btn{padding:7px 16px;background:var(--gold);color:var(--white);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:none;}
+.download-btn.visible{display:block;}
+#preview-box{background:var(--white);border:1px solid var(--border);border-radius:4px;min-height:500px;padding:2.5rem;font-size:13px;line-height:1.8;color:var(--ink);position:relative;}
+.empty-state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);}
+.empty-state svg{opacity:0.2;}
+.empty-state p{font-size:13px;text-align:center;max-width:200px;}
+.doc-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--ink);}
+.doc-main-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}
+.doc-subtitle{font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;}
+.doc-ref{font-size:11px;color:var(--muted);margin-top:6px;}
+.doc-parties{background:var(--cream);border-left:3px solid var(--gold);padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 3px 3px 0;font-size:12.5px;}
+.doc-section{margin:1.25rem 0;}
+.doc-section-title{font-family:'Playfair Display',serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;color:var(--gold);}
+.doc-section p{font-size:12.5px;line-height:1.75;}
+.doc-signatures{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);}
+.sig-block{font-size:12px;}
+.sig-line{border-bottom:1px solid var(--ink);height:32px;margin:0.5rem 0;}
+.sig-label{font-size:11px;color:var(--muted);}
+.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-family:'Playfair Display',serif;font-size:4rem;font-weight:600;color:rgba(45,90,39,0.06);pointer-events:none;white-space:nowrap;letter-spacing:0.2em;}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="logo">Zel<span>ko</span></a>
+  <a href="index.html" class="back-link">← Retour aux contrats</a>
+  <div class="badge">Bail commercial</div>
+</header>
+
+<main>
+  <div class="panel">
+    <div class="panel-title">Bail commercial</div>
+    <div class="panel-sub">Générez un bail conforme à la loi du 18 juin 2014 (loi Pinel) et au statut des baux commerciaux.</div>
+
+    <div class="section-label">Type de bail</div>
+    <div class="type-toggle">
+      <button class="type-btn active" id="btn-369" onclick="setType('369')">3-6-9 Commercial</button>
+      <button class="type-btn" id="btn-pro" onclick="setType('pro')">Bail professionnel</button>
+      <button class="type-btn" id="btn-precaire" onclick="setType('precaire')">Bail précaire</button>
+    </div>
+
+    <div class="section-label">Le bailleur (propriétaire)</div>
+    <div class="field"><label>Nom / Raison sociale</label><input type="text" id="bail-nom" placeholder="Ex : SCI Les Lilas" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Qualité</label><select id="bail-qualite" onchange="liveUpdate()"><option value="personne physique">Personne physique</option><option value="SCI">SCI</option><option value="SAS">SAS</option><option value="SARL">SARL</option><option value="SA">SA</option></select></div>
+      <div class="field"><label>Représentant</label><input type="text" id="bail-rep" placeholder="Prénom Nom" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>Adresse</label><input type="text" id="bail-addr" placeholder="12 rue de la Paix, 75001 Paris" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Le preneur (locataire)</div>
+    <div class="field"><label>Nom / Raison sociale</label><input type="text" id="pren-nom" placeholder="Ex : Ma Boutique SAS" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Forme juridique</label><select id="pren-type" onchange="liveUpdate()"><option>SAS</option><option>SARL</option><option>Auto-entrepreneur</option><option>EURL</option><option>Personne physique</option></select></div>
+      <div class="field"><label>Représentant</label><input type="text" id="pren-rep" placeholder="Prénom Nom" oninput="liveUpdate()"></div>
+    </div>
+    <div class="field"><label>SIRET</label><input type="text" id="pren-siret" placeholder="000 000 000 00000" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Le local</div>
+    <div class="field"><label>Adresse du local</label><input type="text" id="local-addr" placeholder="8 rue du Commerce, 75015 Paris" oninput="liveUpdate()"></div>
+    <div class="field"><label>Description du local</label><textarea id="local-desc" placeholder="Ex : Local commercial situé au rez-de-chaussée, composé d'une surface de vente, d'une réserve et de sanitaires..." oninput="liveUpdate()"></textarea></div>
+    <div class="row2">
+      <div class="field"><label>Surface (m²)</label><input type="text" id="local-surface" placeholder="Ex : 85" oninput="liveUpdate()"></div>
+      <div class="field"><label>Activité autorisée</label><input type="text" id="local-activite" placeholder="Ex : commerce de détail de vêtements" oninput="liveUpdate()"></div>
+    </div>
+
+    <div class="section-label">Durée & loyer</div>
+    <div class="row2">
+      <div class="field"><label>Date de prise d'effet</label><input type="date" id="date-debut" oninput="liveUpdate()"></div>
+      <div class="field"><label>Durée</label><select id="duree" onchange="liveUpdate()"><option value="9 ans">9 ans (3-6-9)</option><option value="6 ans">6 ans (professionnel)</option><option value="23 mois">23 mois (précaire)</option><option value="3 ans">3 ans</option></select></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Loyer mensuel HT</label><input type="text" id="loyer" placeholder="Ex : 2 500" oninput="liveUpdate()"></div>
+      <div class="field"><label>Charges mensuelles</label><input type="text" id="charges" placeholder="Ex : 300" oninput="liveUpdate()"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Dépôt de garantie</label><input type="text" id="depot" placeholder="Ex : 5 000" oninput="liveUpdate()"></div>
+      <div class="field"><label>Indice de révision</label><select id="indice" onchange="liveUpdate()"><option value="ILC (Indice des Loyers Commerciaux)">ILC — Commerce</option><option value="ILAT (Indice des Loyers des Activités Tertiaires)">ILAT — Tertiaire</option><option value="ICC (Indice du Coût de la Construction)">ICC — Construction</option></select></div>
+    </div>
+
+    <div class="section-label">Clauses optionnelles</div>
+    <div class="checkbox-group">
+      <label class="checkbox-item"><input type="checkbox" id="cl-travaux" onchange="liveUpdate()"><span>Travaux d'aménagement par le preneur</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-cession" onchange="liveUpdate()"><span>Clause de cession du bail</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-sous-loc" onchange="liveUpdate()"><span>Interdiction de sous-location</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-droit-pref" onchange="liveUpdate()"><span>Droit de préférence du preneur</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-charges-detail" onchange="liveUpdate()"><span>Répartition détaillée des charges (loi Pinel)</span></label>
+    </div>
+
+    <div class="field" style="margin-top:1.5rem"><label>Date de signature</label><input type="date" id="date-sign" oninput="liveUpdate()"></div>
+    <button class="generate-btn" onclick="generateDoc()">Générer le bail complet</button>
+  </div>
+
+  <div class="preview-panel">
+    <div class="preview-header">
+      <div class="preview-title">Aperçu du document</div>
+      <button class="download-btn" id="dl-btn" onclick="downloadDoc()">Télécharger PDF</button>
+    </div>
+    <div id="preview-box">
+      <div class="empty-state" id="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <p>Remplissez le formulaire pour voir votre bail apparaître ici</p>
+      </div>
+      <div id="doc-content" style="display:none"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+let bailType = '369';
+function v(id){return document.getElementById(id)?.value||'';}
+function c(id){return document.getElementById(id)?.checked||false;}
+function fmt(str,fb){return str.trim()||fb;}
+function fmtDate(id){const r=v(id);if(!r)return '[date]';return new Date(r).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});}
+function getRef(){const d=new Date();return `BAIL-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${Math.floor(Math.random()*900+100)}`;}
+let docRef=getRef();
+
+function setType(type){
+  bailType=type;
+  ['369','pro','precaire'].forEach(t=>{
+    document.getElementById(`btn-${t}`).classList.toggle('active',t===type);
+  });
+  if(type==='369') document.getElementById('duree').value='9 ans';
+  if(type==='pro') document.getElementById('duree').value='6 ans';
+  if(type==='precaire') document.getElementById('duree').value='23 mois';
+  liveUpdate();
+}
+
+function getTypeLabel(){
+  if(bailType==='369') return 'Bail Commercial (Statut 3-6-9)';
+  if(bailType==='pro') return 'Bail Professionnel';
+  return 'Bail Précaire / Dérogatoire';
+}
+
+function buildDoc(){
+  const bailNom=fmt(v('bail-nom'),'[Bailleur]');
+  const bailQualite=v('bail-qualite');
+  const bailRep=fmt(v('bail-rep'),'[Représentant bailleur]');
+  const bailAddr=fmt(v('bail-addr'),'[Adresse bailleur]');
+  const prenNom=fmt(v('pren-nom'),'[Preneur]');
+  const prenType=v('pren-type');
+  const prenRep=fmt(v('pren-rep'),'[Représentant preneur]');
+  const prenSiret=v('pren-siret');
+  const localAddr=fmt(v('local-addr'),'[Adresse du local]');
+  const localDesc=fmt(v('local-desc'),'[Description du local]');
+  const localSurface=fmt(v('local-surface'),'[Surface]');
+  const localActivite=fmt(v('local-activite'),'[Activité autorisée]');
+  const dateDebut=fmtDate('date-debut');
+  const duree=v('duree')||'9 ans';
+  const loyer=fmt(v('loyer'),'[Loyer]');
+  const charges=fmt(v('charges'),'[Charges]');
+  const depot=fmt(v('depot'),'[Dépôt]');
+  const indice=v('indice')||'ILC (Indice des Loyers Commerciaux)';
+  const dateSign=fmtDate('date-sign');
+  const is369=bailType==='369';
+  const isPro=bailType==='pro';
+  const isPrecaire=bailType==='precaire';
+
+  return `
+    <div class="watermark">ZELKO</div>
+    <div class="doc-header">
+      <div class="doc-main-title">${getTypeLabel()}</div>
+      <div class="doc-subtitle">Commercial Lease · Droit français</div>
+      <div class="doc-ref">Réf. ${docRef} · ${is369 ? 'Art. L145-1 et s. Code de commerce' : isPro ? 'Art. 57-A Loi du 23 déc. 1986' : 'Art. L145-5 Code de commerce'}</div>
+    </div>
+
+    <div class="doc-parties">
+      <strong>Entre les soussignés :</strong><br><br>
+      <strong>${bailNom}</strong>, ${bailQualite}, dont l'adresse est ${bailAddr}, représenté(e) par ${bailRep}, ci-après dénommé le <strong>« Bailleur »</strong><br><br>
+      <strong>Et :</strong><br><br>
+      <strong>${prenNom}</strong>, ${prenType}${prenSiret ? `, SIRET ${prenSiret}` : ''}, représenté(e) par ${prenRep}, ci-après dénommé le <strong>« Preneur »</strong>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 1 — Désignation des locaux</div>
+      <p>Le Bailleur donne à bail au Preneur, qui accepte, les locaux situés au <strong>${localAddr}</strong>. Ces locaux se composent de : ${localDesc}. La surface totale est de <strong>${localSurface} m²</strong> (surface pondérée selon les règles applicables).</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 2 — Destination des lieux</div>
+      <p>Les locaux sont loués exclusivement pour l'exercice de l'activité suivante : <strong>${localActivite}</strong>. Toute modification de l'activité ou extension à d'autres activités devra faire l'objet d'un accord préalable écrit du Bailleur, sous peine de résiliation du bail.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 3 — Durée du bail</div>
+      <p>${is369
+        ? `Le présent bail est consenti pour une durée de <strong>${duree}</strong> à compter du <strong>${dateDebut}</strong>, conformément aux dispositions des articles L145-1 et suivants du Code de commerce. Le Preneur pourra donner congé à l'expiration de chaque période triennale, sous réserve d'un préavis de 6 mois par acte extrajudiciaire.`
+        : isPro
+        ? `Le présent bail professionnel est consenti pour une durée de <strong>${duree}</strong> à compter du <strong>${dateDebut}</strong>, conformément à l'article 57-A de la loi du 23 décembre 1986. À l'expiration, le bail se renouvellera par tacite reconduction pour la même durée, sauf congé donné 6 mois à l'avance.`
+        : `Le présent bail précaire est consenti pour une durée de <strong>${duree}</strong> à compter du <strong>${dateDebut}</strong>, conformément à l'article L145-5 du Code de commerce. À l'issue de cette période, le bail prendra fin de plein droit sans qu'il soit nécessaire de donner congé. Les parties reconnaissent expressément déroger au statut des baux commerciaux.`
+      }</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 4 — Loyer</div>
+      <p>Le loyer annuel de base est fixé à <strong>${loyer} € HT</strong> par mois, soit <strong>${loyer ? parseInt(loyer.replace(/\s/g,''))*12 : '[Loyer annuel]'} € HT par an</strong>, payable mensuellement et d'avance le premier de chaque mois. Les charges récupérables s'élèvent à <strong>${charges} € HT</strong> par mois.</p>
+      <p>Le loyer sera révisé annuellement à la date anniversaire du bail, en fonction de la variation de l'<strong>${indice}</strong>. En cas de variation négative de l'indice, le loyer restera inchangé.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 5 — Dépôt de garantie</div>
+      <p>À la signature des présentes, le Preneur verse au Bailleur la somme de <strong>${depot} €</strong> à titre de dépôt de garantie. Cette somme sera restituée au Preneur dans un délai de 2 mois après la restitution des clés, déduction faite des sommes dues au titre du bail et des éventuelles dégradations constatées.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 6 — État des lieux</div>
+      <p>Un état des lieux contradictoire sera établi à l'entrée dans les lieux, en présence des deux parties ou de leurs représentants. Cet état des lieux sera annexé au présent bail et en fera partie intégrante. Un état des lieux de sortie sera également établi dans les mêmes conditions lors de la restitution des locaux.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 7 — Entretien & réparations</div>
+      <p>Le Preneur prendra les locaux dans l'état où ils se trouvent lors de l'entrée en jouissance et s'obligera à les entretenir en bon état de réparations locatives pendant toute la durée du bail. Les grosses réparations au sens de l'article 606 du Code civil resteront à la charge du Bailleur, sauf stipulation contraire conforme à la loi Pinel.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 8 — Assurances</div>
+      <p>Le Preneur s'engage à contracter et maintenir en vigueur, pendant toute la durée du bail, une assurance multirisque professionnelle couvrant notamment sa responsabilité civile, les dommages aux locaux et les pertes d'exploitation. Le Preneur devra justifier de ces assurances à première demande du Bailleur.</p>
+    </div>
+
+    ${c('cl-travaux') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article 9 — Travaux d'aménagement</div>
+      <p>Le Preneur est autorisé à effectuer des travaux d'aménagement intérieurs à ses frais, sous réserve d'obtenir l'accord préalable écrit du Bailleur pour tous travaux affectant le gros œuvre ou les façades. À l'expiration du bail, les aménagements réalisés par le Preneur resteront acquis au Bailleur, sauf accord contraire.</p>
+    </div>` : ''}
+
+    ${c('cl-sous-loc') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Sous-location</div>
+      <p>Toute sous-location totale ou partielle des lieux loués est expressément interdite sans l'accord préalable et écrit du Bailleur. Toute cession du droit au bail devra également faire l'objet d'un agrément du Bailleur, conformément aux dispositions de l'article L145-31 du Code de commerce.</p>
+    </div>` : ''}
+
+    ${c('cl-cession') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Cession du bail</div>
+      <p>Le Preneur pourra céder le présent bail à l'acquéreur de son fonds de commerce, conformément aux dispositions de l'article L145-16 du Code de commerce. Le cédant et le cessionnaire seront tenus solidairement du paiement des loyers pendant 3 ans à compter de la cession.</p>
+    </div>` : ''}
+
+    ${c('cl-droit-pref') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Droit de préférence</div>
+      <p>En cas de mise en vente du local, le Bailleur s'engage à notifier au Preneur par lettre recommandée avec accusé de réception le prix et les conditions de la vente envisagée. Le Preneur disposera d'un délai d'un mois pour exercer son droit de préférence aux mêmes conditions, conformément à l'article L145-46-1 du Code de commerce.</p>
+    </div>` : ''}
+
+    ${c('cl-charges-detail') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Répartition des charges (Loi Pinel)</div>
+      <p>Conformément au décret du 3 novembre 2014 (loi Pinel), sont à la charge du Preneur : les dépenses d'eau, gaz, électricité, l'entretien courant des locaux, les menues réparations. Restent à la charge du Bailleur : les honoraires de gestion, les travaux relevant de l'article 606 du Code civil, la vétusté des équipements et les mises aux normes imposées par la loi.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">Droit applicable & juridiction</div>
+      <p>Le présent bail est soumis au droit français, notamment aux dispositions des articles L145-1 et suivants du Code de commerce. Tout litige sera soumis au Tribunal judiciaire compétent du lieu de situation des locaux.</p>
+    </div>
+
+    <div class="doc-signatures">
+      <div class="sig-block">
+        <div><strong>${bailNom}</strong></div>
+        <div class="sig-label">Le Bailleur · ${bailRep}</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateSign}</div>
+      </div>
+      <div class="sig-block">
+        <div><strong>${prenNom}</strong></div>
+        <div class="sig-label">Le Preneur · ${prenRep}</div>
+        <div class="sig-line"></div>
+        <div class="sig-label">Signature · ${dateSign}</div>
+      </div>
+    </div>
+  `;
+}
+
+function liveUpdate(){
+  if(!v('bail-nom')&&!v('pren-nom'))return;
+  document.getElementById('empty-state').style.display='none';
+  document.getElementById('doc-content').style.display='block';
+  document.getElementById('doc-content').innerHTML=buildDoc();
+}
+
+function generateDoc(){
+  docRef=getRef();
+  document.getElementById('empty-state').style.display='none';
+  document.getElementById('doc-content').style.display='block';
+  document.getElementById('doc-content').innerHTML=buildDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  document.getElementById('preview-box').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function downloadDoc(){
+  const content=document.getElementById('doc-content').innerHTML;
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bail Commercial — ${docRef}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>body{font-family:'DM Sans',sans-serif;font-weight:300;color:#1a2e1a;padding:3rem;max-width:720px;margin:auto;line-height:1.8;font-size:13px;}.doc-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid #1a2e1a;}.doc-main-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;}.doc-subtitle{font-size:11px;color:#5a6b5a;letter-spacing:0.1em;text-transform:uppercase;}.doc-ref{font-size:11px;color:#5a6b5a;margin-top:6px;}.doc-parties{background:#e8e2d0;border-left:3px solid #2d5a27;padding:1rem 1.25rem;margin:1.5rem 0;}.doc-section{margin:1.25rem 0;}.doc-section-title{font-family:'Playfair Display',serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;color:#2d5a27;}.doc-signatures{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #c8d4c0;}.sig-line{border-bottom:1px solid #1a2e1a;height:32px;margin:0.5rem 0;}.sig-label{font-size:11px;color:#5a6b5a;}.watermark{display:none;}@media print{body{padding:1.5rem;}}</style></head><body>${content}</body></html>`);
+  win.document.close();
+  setTimeout(()=>win.print(),500);
+}
+
+document.getElementById('date-sign').valueAsDate=new Date();
+document.getElementById('date-debut').valueAsDate=new Date();
+</script>
+</body>
+</html>
