@@ -109,7 +109,7 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
   <div class="preview-panel">
     <div class="preview-header">
       <div class="preview-title">Aperçu du document</div>
-      <button class="download-btn" id="dl-btn" onclick="downloadDoc()">Télécharger PDF</button>
+      <button class="download-btn" id="dl-btn" onclick="goToPayment()">Télécharger PDF — 11,99€</button>
     </div>
     <div id="preview-box">
       <div class="empty-state" id="empty-state">
@@ -280,6 +280,10 @@ function downloadDoc(){
 }
 
 document.getElementById('date-maj').valueAsDate=new Date();
+
+function goToPayment() {
+  window.location.href = 'https://buy.stripe.com/test_dRmeVdguW34w8BndcCaEE02';
+}
 </script>
 </body>
 </html>
