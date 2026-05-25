@@ -311,43 +311,46 @@ function goToPayment() {
 }
 
 function restoreFormData() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('paid') !== 'true') return;
+  
   const raw = localStorage.getItem('zelko_cgv');
   if (!raw) return;
   const d = JSON.parse(raw);
-  if (!d.paid) return;
-  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  
+  const set = (id, val) => { const el = document.getElementById(id); if(el && val) el.value = val; };
   const check = (id, val) => { const el = document.getElementById(id); if(el) el.checked = val; };
-  set('nom', d.nom);
-  set('forme', d.forme);
-  set('capital', d.capital);
-  set('siege', d.siege);
-  set('siret', d.siret);
-  set('tva', d.tva);
-  set('email', d.email);
-  set('type-vente', d.type_vente);
-  set('activite', d.activite);
-  set('site', d.site);
-  set('delai', d.delai);
-  set('retractation', d.retractation);
-  set('paiement', d.paiement);
-  set('date-maj', d.date_maj);
-  check('cl-garantie', d.cl_garantie);
-  check('cl-donnees', d.cl_donnees);
-  check('cl-force', d.cl_force);
-  check('cl-prop', d.cl_prop);
-  check('cl-reserve-prop', d.cl_reserve_prop);
-  check('cl-mediation', d.cl_mediation);
-  check('cl-modif-prix', d.cl_modif_prix);
-  generateDoc();
-  document.getElementById('dl-btn').classList.add('visible');
-  const btn = document.getElementById('dl-btn');
-  btn.textContent = 'Télécharger PDF';
-  btn.onclick = downloadDoc;
-  localStorage.removeItem('zelko_cgv');
-  const msg = document.createElement('div');
-  msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;';
-  msg.textContent = '✅ Paiement confirmé — votre contrat est prêt à télécharger !';
-  document.querySelector('.preview-panel').insertBefore(msg, document.querySelector('.preview-header'));
+  
+  // Restore all fields
+  Object.keys(d).forEach(k => {
+    if (k === 'paid') return;
+    const id = k.replace(/_/g, '-');
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = d[k];
+    else el.value = d[k];
+  });
+  
+  // Generate doc and show download
+  liveUpdate();
+  setTimeout(() => {
+    generateDoc();
+    const btn = document.getElementById('dl-btn');
+    btn.classList.add('visible');
+    btn.textContent = 'Télécharger PDF';
+    btn.onclick = downloadDoc;
+    
+    // Success message
+    const msg = document.createElement('div');
+    msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:12px 16px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;font-weight:500;';
+    msg.textContent = '✅ Paiement confirmé — cliquez sur Télécharger PDF pour récupérer votre contrat !';
+    const header = document.querySelector('.preview-header');
+    if (header) header.parentNode.insertBefore(msg, header);
+    
+    // Clean URL
+    window.history.replaceState({}, '', window.location.pathname);
+    localStorage.removeItem('zelko_cgv');
+  }, 300);
 }
 </script>
 </body>

@@ -388,51 +388,46 @@ function goToPayment() {
 }
 
 function restoreFormData() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('paid') !== 'true') return;
+  
   const raw = localStorage.getItem('zelko_travail');
   if (!raw) return;
   const d = JSON.parse(raw);
-  if (!d.paid) return;
-  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  
+  const set = (id, val) => { const el = document.getElementById(id); if(el && val) el.value = val; };
   const check = (id, val) => { const el = document.getElementById(id); if(el) el.checked = val; };
-  set('emp-nom', d.emp_nom);
-  set('emp-forme', d.emp_forme);
-  set('emp-siret', d.emp_siret);
-  set('emp-addr', d.emp_addr);
-  set('emp-rep', d.emp_rep);
-  set('sal-prenom', d.sal_prenom);
-  set('sal-nom', d.sal_nom);
-  set('sal-naissance', d.sal_naissance);
-  set('sal-nat', d.sal_nat);
-  set('sal-addr', d.sal_addr);
-  set('poste', d.poste);
-  set('missions', d.missions);
-  set('lieu', d.lieu);
-  set('duree-hebdo', d.duree_hebdo);
-  set('date-debut', d.date_debut);
-  set('date-fin', d.date_fin);
-  set('motif-cdd', d.motif_cdd);
-  set('salaire', d.salaire);
-  set('essai', d.essai);
-  set('convention', d.convention);
-  set('date-sign', d.date_sign);
-  check('cl-teletravail', d.cl_teletravail);
-  check('cl-conf', d.cl_conf);
-  check('cl-mob', d.cl_mob);
-  check('cl-nc', d.cl_nc);
-  check('cl-objectifs', d.cl_objectifs);
-  check('cl-dedit', d.cl_dedit);
-  check('cl-patrimoine', d.cl_patrimoine);
-  check('cl-rupture-conv', d.cl_rupture_conv);
-  generateDoc();
-  document.getElementById('dl-btn').classList.add('visible');
-  const btn = document.getElementById('dl-btn');
-  btn.textContent = 'Télécharger PDF';
-  btn.onclick = downloadDoc;
-  localStorage.removeItem('zelko_travail');
-  const msg = document.createElement('div');
-  msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;';
-  msg.textContent = '✅ Paiement confirmé — votre contrat est prêt à télécharger !';
-  document.querySelector('.preview-panel').insertBefore(msg, document.querySelector('.preview-header'));
+  
+  // Restore all fields
+  Object.keys(d).forEach(k => {
+    if (k === 'paid') return;
+    const id = k.replace(/_/g, '-');
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = d[k];
+    else el.value = d[k];
+  });
+  
+  // Generate doc and show download
+  liveUpdate();
+  setTimeout(() => {
+    generateDoc();
+    const btn = document.getElementById('dl-btn');
+    btn.classList.add('visible');
+    btn.textContent = 'Télécharger PDF';
+    btn.onclick = downloadDoc;
+    
+    // Success message
+    const msg = document.createElement('div');
+    msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:12px 16px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;font-weight:500;';
+    msg.textContent = '✅ Paiement confirmé — cliquez sur Télécharger PDF pour récupérer votre contrat !';
+    const header = document.querySelector('.preview-header');
+    if (header) header.parentNode.insertBefore(msg, header);
+    
+    // Clean URL
+    window.history.replaceState({}, '', window.location.pathname);
+    localStorage.removeItem('zelko_travail');
+  }, 300);
 }
 </script>
 </body>

@@ -495,64 +495,46 @@ function goToPayment() {
 }
 
 function restoreFormData() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('paid') !== 'true') return;
+  
   const raw = localStorage.getItem('zelko_bail_hab');
   if (!raw) return;
   const d = JSON.parse(raw);
-  if (!d.paid) return;
-  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  
+  const set = (id, val) => { const el = document.getElementById(id); if(el && val) el.value = val; };
   const check = (id, val) => { const el = document.getElementById(id); if(el) el.checked = val; };
-  set('bail-nom', d.bail_nom);
-  set('bail-qualite', d.bail_qualite);
-  set('bail-rep', d.bail_rep);
-  set('bail-addr', d.bail_addr);
-  set('bail-contact', d.bail_contact);
-  set('loc-prenom', d.loc_prenom);
-  set('loc-nom', d.loc_nom);
-  set('loc-naissance', d.loc_naissance);
-  set('loc-lieu-naissance', d.loc_lieu_naissance);
-  set('loc-addr', d.loc_addr);
-  set('garant-nom', d.garant_nom);
-  set('garant-addr', d.garant_addr);
-  set('garant-type', d.garant_type);
-  set('bien-addr', d.bien_addr);
-  set('bien-desc', d.bien_desc);
-  set('bien-surface', d.bien_surface);
-  set('bien-pieces', d.bien_pieces);
-  set('bien-etage', d.bien_etage);
-  set('bien-type', d.bien_type);
-  set('bien-chauffage', d.bien_chauffage);
-  set('bien-dpe', d.bien_dpe);
-  set('date-debut', d.date_debut);
-  set('duree', d.duree);
-  set('loyer', d.loyer);
-  set('charges', d.charges);
-  set('depot', d.depot);
-  set('paiement', d.paiement);
-  set('date-paiement', d.date_paiement);
-  set('charges-mode', d.charges_mode);
-  set('charges-detail', d.charges_detail);
-  set('mobilier', d.mobilier);
-  set('date-sign', d.date_sign);
-  check('cl-animaux', d.cl_animaux);
-  check('cl-no-animaux', d.cl_no_animaux);
-  check('cl-colocation', d.cl_colocation);
-  check('cl-travaux-loc', d.cl_travaux_loc);
-  check('cl-resiliation-anticipee', d.cl_resiliation_anticipee);
-  check('cl-indexation', d.cl_indexation);
-  check('cl-sous-location', d.cl_sous_location);
-  check('cl-assurance', d.cl_assurance);
-  check('cl-clause-resolutoire', d.cl_clause_resolutoire);
-  check('cl-entretien', d.cl_entretien);
-  generateDoc();
-  document.getElementById('dl-btn').classList.add('visible');
-  const btn = document.getElementById('dl-btn');
-  btn.textContent = 'Télécharger PDF';
-  btn.onclick = downloadDoc;
-  localStorage.removeItem('zelko_bail_hab');
-  const msg = document.createElement('div');
-  msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;';
-  msg.textContent = '✅ Paiement confirmé — votre contrat est prêt à télécharger !';
-  document.querySelector('.preview-panel').insertBefore(msg, document.querySelector('.preview-header'));
+  
+  // Restore all fields
+  Object.keys(d).forEach(k => {
+    if (k === 'paid') return;
+    const id = k.replace(/_/g, '-');
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = d[k];
+    else el.value = d[k];
+  });
+  
+  // Generate doc and show download
+  liveUpdate();
+  setTimeout(() => {
+    generateDoc();
+    const btn = document.getElementById('dl-btn');
+    btn.classList.add('visible');
+    btn.textContent = 'Télécharger PDF';
+    btn.onclick = downloadDoc;
+    
+    // Success message
+    const msg = document.createElement('div');
+    msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:12px 16px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;font-weight:500;';
+    msg.textContent = '✅ Paiement confirmé — cliquez sur Télécharger PDF pour récupérer votre contrat !';
+    const header = document.querySelector('.preview-header');
+    if (header) header.parentNode.insertBefore(msg, header);
+    
+    // Clean URL
+    window.history.replaceState({}, '', window.location.pathname);
+    localStorage.removeItem('zelko_bail_hab');
+  }, 300);
 }
 </script>
 </body>
