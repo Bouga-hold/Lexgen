@@ -233,53 +233,53 @@ function buildDoc() {
 
     ${c('cl-exclu') ? `
     <div class="doc-section">
-      <div class="doc-section-title">Article ${c('cl-conf') ? 9 : 8} — Exclusivité</div>
+      <div class="doc-section-title">Exclusivité</div>
       <p>Pendant la durée de la mission, le Prestataire s'engage à ne pas exercer de mission similaire pour le compte de concurrents directs du Client, tels que définis d'un commun accord entre les parties.</p>
     </div>` : ''}
 
     ${c('cl-penalite') ? `
     <div class="doc-section">
-      <div class="doc-section-title">${art()} — Pénalités de retard</div>
+      <div class="doc-section-title">Pénalités de retard de paiement</div>
       <p>En cas de retard de paiement, des pénalités seront automatiquement applicables au taux de 3 fois le taux d'intérêt légal en vigueur, conformément à l'article L441-10 du Code de commerce. Une indemnité forfaitaire de 40 € sera également due pour frais de recouvrement.</p>
     </div>` : ''}
 
     <div class="doc-section">
-      <div class="doc-section-title">Résiliation</div>
+      <div class="doc-section-title">Résiliation anticipée</div>
       <p>Chaque partie peut résilier le présent contrat avec un préavis de 15 jours par lettre recommandée avec accusé de réception. Les prestations réalisées jusqu'à la date de résiliation seront facturées au prorata.</p>
     </div>
 
     ${c('cl-reversibilite') ? `
     <div class="doc-section">
-      <div class="doc-section-title">${art()} — Réversibilité</div>
+      <div class="doc-section-title">Réversibilité</div>
       <p>À l'expiration ou en cas de résiliation du présent contrat, le Prestataire s'engage à restituer au Client, dans un délai de 30 jours, l'ensemble des données, fichiers, codes sources et documents lui appartenant, dans un format standard et exploitable. Le Prestataire s'engage à supprimer toute copie de ces données de ses systèmes et à en certifier la suppression par écrit à première demande.</p>
     </div>` : ''}
 
     ${c('cl-sous-traitance') ? `
     <div class="doc-section">
-      <div class="doc-section-title">${art()} — Sous-traitance</div>
+      <div class="doc-section-title">Sous-traitance</div>
       <p>Le Prestataire est autorisé à faire appel à des sous-traitants pour l'exécution de tout ou partie de la mission, sous réserve d'en informer préalablement le Client et de s'assurer que lesdits sous-traitants respectent des obligations au moins équivalentes à celles prévues au présent contrat, notamment en matière de confidentialité. Le Prestataire demeure seul responsable vis-à-vis du Client de la bonne exécution de la mission.</p>
     </div>` : ''}
 
     ${c('cl-reference') ? `
     <div class="doc-section">
-      <div class="doc-section-title">${art()} — Référence commerciale</div>
+      <div class="doc-section-title">Référence commerciale</div>
       <p>Le Client autorise le Prestataire à mentionner son nom et son logo à titre de référence commerciale dans ses supports de communication (site internet, portfolio, présentations commerciales), sans autre contrepartie. Cette autorisation est révocable à tout moment par simple notification écrite du Client au Prestataire.</p>
     </div>` : ''}
 
     ${c('cl-garantie-livrable') ? `
     <div class="doc-section">
-      <div class="doc-section-title">${art()} — Garantie des livrables</div>
+      <div class="doc-section-title">Garantie des livrables</div>
       <p>Le Prestataire garantit que les livrables sont exempts de vices cachés rendant leur utilisation impossible ou diminuant leur valeur au point que le Client ne les aurait pas acceptés s'il en avait eu connaissance. En cas de vice constaté dans un délai de 3 mois suivant la livraison, le Prestataire s'engage à corriger les défauts à ses frais dans un délai raisonnable, ou à rembourser tout ou partie de la prestation si la correction s'avère impossible.</p>
     </div>` : ''}
 
     ${c('cl-force-majeure') ? `
     <div class="doc-section">
-      <div class="doc-section-title">${art()} — Force majeure</div>
+      <div class="doc-section-title">Force majeure</div>
       <p>Aucune partie ne pourra être tenue responsable de l'inexécution de ses obligations en cas de survenance d'un événement de force majeure au sens de l'article 1218 du Code civil (catastrophe naturelle, pandémie, grève générale, décision gouvernementale, etc.). La partie concernée devra notifier l'autre dans les 48 heures. Si l'événement de force majeure dure plus de 30 jours, chaque partie pourra résilier le contrat sans indemnité, les prestations réalisées restant dues.</p>
     </div>` : ''}
 
     <div class="doc-section">
-      <div class="doc-section-title">${art()} — Droit applicable & juridiction</div>
+      <div class="doc-section-title">Droit applicable & juridiction</div>
       <p>Le présent contrat est soumis au droit français. Tout litige sera soumis, à défaut d'accord amiable, à la compétence exclusive des tribunaux de Paris.</p>
     </div>
 
