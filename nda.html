@@ -414,7 +414,7 @@ main {
   <div class="preview-panel">
     <div class="preview-header">
       <div class="preview-title">Aperçu du document</div>
-      <button class="download-btn" id="dl-btn" onclick="downloadDoc()">Télécharger PDF</button>
+      <button class="download-btn" id="dl-btn" onclick="goToPayment()">Télécharger PDF — 7,99€</button>
     </div>
     <div id="preview-box">
       <div class="empty-state" id="empty-state">
@@ -589,6 +589,10 @@ function downloadDoc() {
 
 // Set today's date
 document.getElementById('date-sign').valueAsDate = new Date();
+
+function goToPayment() {
+  window.location.href = 'https://buy.stripe.com/test_dRmbJ11A25cE18V1tUaEE00';
+}
 </script>
 </body>
 </html>
