@@ -218,36 +218,36 @@ function buildDoc(){
 
     ${c('cl-force') ? `
     <div class="doc-section">
-      <div class="doc-section-title">Force majeure</div>
+      <div class="doc-section-title">${art()} — Force majeure</div>
       <p>Aucune partie ne pourra être tenue responsable de l'inexécution de ses obligations en cas de force majeure au sens de l'article 1218 du Code civil (catastrophes naturelles, pandémies, grèves, décisions gouvernementales…). La partie concernée devra en informer l'autre dans les 48 heures.</p>
     </div>` : ''}
 
     ${c('cl-prop') ? `
     <div class="doc-section">
-      <div class="doc-section-title">Propriété intellectuelle</div>
+      <div class="doc-section-title">${art()} — Propriété intellectuelle</div>
       <p>L'ensemble des éléments du site ${site} (textes, images, logos, base de données) est protégé par le droit de la propriété intellectuelle et demeure la propriété exclusive de ${nom}. Toute reproduction, même partielle, est strictement interdite sans autorisation préalable écrite.</p>
     </div>` : ''}
 
     ${c('cl-reserve-prop') ? `
     <div class="doc-section">
-      <div class="doc-section-title">Réserve de propriété</div>
+      <div class="doc-section-title">${art()} — Réserve de propriété</div>
       <p>Le Vendeur conserve la propriété des biens vendus jusqu'au paiement intégral du prix en principal et accessoires. Le transfert de risque intervient néanmoins dès la livraison. En cas de non-paiement, le Vendeur se réserve le droit de revendiquer les marchandises et d'en obtenir la restitution, les acomptes versés restant acquis à titre de dommages et intérêts.</p>
     </div>` : ''}
 
     ${c('cl-mediation') ? `
     <div class="doc-section">
-      <div class="doc-section-title">Médiation préalable obligatoire</div>
+      <div class="doc-section-title">${art()} — Médiation préalable obligatoire</div>
       <p>En cas de litige relatif à l'interprétation ou à l'exécution des présentes CGV, les parties s'engagent à recourir à une médiation avant toute saisine judiciaire. La partie souhaitant engager une médiation en informera l'autre par lettre recommandée avec accusé de réception. Les parties disposeront d'un délai de 30 jours pour désigner un médiateur et engager la procédure. À défaut d'accord à l'issue de la médiation, les tribunaux compétents pourront être saisis.</p>
     </div>` : ''}
 
     ${c('cl-modif-prix') ? `
     <div class="doc-section">
-      <div class="doc-section-title">Modification des prix</div>
+      <div class="doc-section-title">${art()} — Modification des prix</div>
       <p>Le Vendeur se réserve le droit de modifier ses tarifs à tout moment. Toute modification tarifaire sera communiquée au Client par email ou via le site internet avec un préavis minimum de 30 jours. Les commandes passées avant l'entrée en vigueur des nouveaux tarifs seront honorées au prix en vigueur au moment de leur validation.</p>
     </div>` : ''}
 
     <div class="doc-section">
-      <div class="doc-section-title">Droit applicable & litiges</div>
+      <div class="doc-section-title">${art()} — Droit applicable & litiges</div>
       <p>Les présentes CGV sont soumises au droit français. En cas de litige, le Client peut recourir au service de médiation compétent ou saisir les tribunaux français. Pour les litiges de consommation, la plateforme européenne de règlement en ligne des litiges est accessible sur ec.europa.eu/consumers/odr.</p>
     </div>
   `;
