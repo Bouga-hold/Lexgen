@@ -428,7 +428,92 @@ document.getElementById('date-sign').valueAsDate=new Date();
 document.getElementById('date-debut').valueAsDate=new Date();
 
 function goToPayment() {
+  const formData = {
+    bail_nom: v('bail-nom'),
+    bail_qualite: v('bail-qualite'),
+    bail_rep: v('bail-rep'),
+    bail_addr: v('bail-addr'),
+    pren_nom: v('pren-nom'),
+    pren_type: v('pren-type'),
+    pren_rep: v('pren-rep'),
+    pren_siret: v('pren-siret'),
+    local_addr: v('local-addr'),
+    local_desc: v('local-desc'),
+    local_surface: v('local-surface'),
+    local_activite: v('local-activite'),
+    local_activite_large: v('local-activite-large'),
+    local_etat: v('local-etat'),
+    date_debut: v('date-debut'),
+    duree: v('duree'),
+    loyer_p1: v('loyer-p1'),
+    loyer_p2: v('loyer-p2'),
+    charges: v('charges'),
+    indice: v('indice'),
+    garantie_montant: v('garantie-montant'),
+    date_sign: v('date-sign'),
+    cl_renonciation_assurance: c('cl-renonciation-assurance'),
+    cl_renonciation_imprevision: c('cl-renonciation-imprevision'),
+    cl_cession_bail: c('cl-cession-bail'),
+    cl_solidarite_cession: c('cl-solidarite-cession'),
+    cl_plafond_indexation: c('cl-plafond-indexation'),
+    cl_location_gerance: c('cl-location-gerance'),
+    cl_charges_detail: c('cl-charges-detail'),
+    cl_travaux: c('cl-travaux'),
+    cl_penalites_pro: c('cl-penalites-pro'),
+    paid: true
+  };
+  localStorage.setItem('zelko_bail_com', JSON.stringify(formData));
   window.location.href = 'https://buy.stripe.com/test_5kQ7sLa6ygVmeZL3C2aEE04';
+}
+
+function restoreFormData() {
+  const raw = localStorage.getItem('zelko_bail_com');
+  if (!raw) return;
+  const d = JSON.parse(raw);
+  if (!d.paid) return;
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  const check = (id, val) => { const el = document.getElementById(id); if(el) el.checked = val; };
+  set('bail-nom', d.bail_nom);
+  set('bail-qualite', d.bail_qualite);
+  set('bail-rep', d.bail_rep);
+  set('bail-addr', d.bail_addr);
+  set('pren-nom', d.pren_nom);
+  set('pren-type', d.pren_type);
+  set('pren-rep', d.pren_rep);
+  set('pren-siret', d.pren_siret);
+  set('local-addr', d.local_addr);
+  set('local-desc', d.local_desc);
+  set('local-surface', d.local_surface);
+  set('local-activite', d.local_activite);
+  set('local-activite-large', d.local_activite_large);
+  set('local-etat', d.local_etat);
+  set('date-debut', d.date_debut);
+  set('duree', d.duree);
+  set('loyer-p1', d.loyer_p1);
+  set('loyer-p2', d.loyer_p2);
+  set('charges', d.charges);
+  set('indice', d.indice);
+  set('garantie-montant', d.garantie_montant);
+  set('date-sign', d.date_sign);
+  check('cl-renonciation-assurance', d.cl_renonciation_assurance);
+  check('cl-renonciation-imprevision', d.cl_renonciation_imprevision);
+  check('cl-cession-bail', d.cl_cession_bail);
+  check('cl-solidarite-cession', d.cl_solidarite_cession);
+  check('cl-plafond-indexation', d.cl_plafond_indexation);
+  check('cl-location-gerance', d.cl_location_gerance);
+  check('cl-charges-detail', d.cl_charges_detail);
+  check('cl-travaux', d.cl_travaux);
+  check('cl-penalites-pro', d.cl_penalites_pro);
+  generateDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  const btn = document.getElementById('dl-btn');
+  btn.textContent = 'Télécharger PDF';
+  btn.onclick = downloadDoc;
+  localStorage.removeItem('zelko_bail_com');
+  const msg = document.createElement('div');
+  msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;';
+  msg.textContent = '✅ Paiement confirmé — votre contrat est prêt à télécharger !';
+  document.querySelector('.preview-panel').insertBefore(msg, document.querySelector('.preview-header'));
 }
 </script>
 </body>

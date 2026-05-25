@@ -346,7 +346,80 @@ document.getElementById('date-sign').valueAsDate = new Date();
 document.getElementById('date-debut').valueAsDate = new Date();
 
 function goToPayment() {
+  const formData = {
+    p1_name: v('p1-name'),
+    p1_type: v('p1-type'),
+    p1_siret: v('p1-siret'),
+    p1_addr: v('p1-addr'),
+    p2_name: v('p2-name'),
+    p2_type: v('p2-type'),
+    p2_rep: v('p2-rep'),
+    p2_addr: v('p2-addr'),
+    mission: v('mission'),
+    livrables: v('livrables'),
+    date_debut: v('date-debut'),
+    date_fin: v('date-fin'),
+    montant: v('montant'),
+    facturation: v('facturation'),
+    paiement: v('paiement'),
+    date_sign: v('date-sign'),
+    cl_pi: c('cl-pi'),
+    cl_conf: c('cl-conf'),
+    cl_exclu: c('cl-exclu'),
+    cl_penalite: c('cl-penalite'),
+    cl_reversibilite: c('cl-reversibilite'),
+    cl_sous_traitance: c('cl-sous-traitance'),
+    cl_reference: c('cl-reference'),
+    cl_garantie_livrable: c('cl-garantie-livrable'),
+    cl_force_majeure: c('cl-force-majeure'),
+    paid: true
+  };
+  localStorage.setItem('zelko_prestation', JSON.stringify(formData));
   window.location.href = 'https://buy.stripe.com/test_dRmeVd4Me5cE3h3a0qaEE01';
+}
+
+function restoreFormData() {
+  const raw = localStorage.getItem('zelko_prestation');
+  if (!raw) return;
+  const d = JSON.parse(raw);
+  if (!d.paid) return;
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  const check = (id, val) => { const el = document.getElementById(id); if(el) el.checked = val; };
+  set('p1-name', d.p1_name);
+  set('p1-type', d.p1_type);
+  set('p1-siret', d.p1_siret);
+  set('p1-addr', d.p1_addr);
+  set('p2-name', d.p2_name);
+  set('p2-type', d.p2_type);
+  set('p2-rep', d.p2_rep);
+  set('p2-addr', d.p2_addr);
+  set('mission', d.mission);
+  set('livrables', d.livrables);
+  set('date-debut', d.date_debut);
+  set('date-fin', d.date_fin);
+  set('montant', d.montant);
+  set('facturation', d.facturation);
+  set('paiement', d.paiement);
+  set('date-sign', d.date_sign);
+  check('cl-pi', d.cl_pi);
+  check('cl-conf', d.cl_conf);
+  check('cl-exclu', d.cl_exclu);
+  check('cl-penalite', d.cl_penalite);
+  check('cl-reversibilite', d.cl_reversibilite);
+  check('cl-sous-traitance', d.cl_sous_traitance);
+  check('cl-reference', d.cl_reference);
+  check('cl-garantie-livrable', d.cl_garantie_livrable);
+  check('cl-force-majeure', d.cl_force_majeure);
+  generateDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  const btn = document.getElementById('dl-btn');
+  btn.textContent = 'Télécharger PDF';
+  btn.onclick = downloadDoc;
+  localStorage.removeItem('zelko_prestation');
+  const msg = document.createElement('div');
+  msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;';
+  msg.textContent = '✅ Paiement confirmé — votre contrat est prêt à télécharger !';
+  document.querySelector('.preview-panel').insertBefore(msg, document.querySelector('.preview-header'));
 }
 </script>
 </body>

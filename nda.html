@@ -589,9 +589,67 @@ function downloadDoc() {
 
 // Set today's date
 document.getElementById('date-sign').valueAsDate = new Date();
+restoreFormData();
 
 function goToPayment() {
+  // Save all form data to localStorage before redirecting
+  const formData = {
+    p1_name: v('p1-name'),
+    p1_type: v('p1-type'),
+    p1_rep: v('p1-rep'),
+    p1_addr: v('p1-addr'),
+    p2_name: v('p2-name'),
+    p2_type: v('p2-type'),
+    p2_rep: v('p2-rep'),
+    p2_addr: v('p2-addr'),
+    objet: v('objet'),
+    duree: v('duree'),
+    date_sign: v('date-sign'),
+    cl_penalite: c('cl-penalite'),
+    cl_retour: c('cl-retour'),
+    cl_non_solicitation: c('cl-non-solicitation'),
+    cl_exclusions: c('cl-exclusions'),
+    cl_duree_diff: c('cl-duree-diff'),
+    cl_audit: c('cl-audit'),
+    paid: true
+  };
+  localStorage.setItem('zelko_nda', JSON.stringify(formData));
   window.location.href = 'https://buy.stripe.com/test_dRmbJ11A25cE18V1tUaEE00';
+}
+
+function restoreFormData() {
+  const raw = localStorage.getItem('zelko_nda');
+  if (!raw) return;
+  const d = JSON.parse(raw);
+  if (!d.paid) return;
+  
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  const check = (id, val) => { const el = document.getElementById(id); if(el) el.checked = val; };
+  
+  set('p1-name', d.p1_name); set('p1-type', d.p1_type); set('p1-rep', d.p1_rep); set('p1-addr', d.p1_addr);
+  set('p2-name', d.p2_name); set('p2-type', d.p2_type); set('p2-rep', d.p2_rep); set('p2-addr', d.p2_addr);
+  set('objet', d.objet); set('duree', d.duree); set('date-sign', d.date_sign);
+  check('cl-penalite', d.cl_penalite); check('cl-retour', d.cl_retour);
+  check('cl-non-solicitation', d.cl_non_solicitation); check('cl-exclusions', d.cl_exclusions);
+  check('cl-duree-diff', d.cl_duree_diff); check('cl-audit', d.cl_audit);
+  
+  // Show doc and download button
+  generateDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  
+  // Change button to direct download
+  const btn = document.getElementById('dl-btn');
+  btn.textContent = 'Télécharger PDF';
+  btn.onclick = downloadDoc;
+  
+  // Clear storage
+  localStorage.removeItem('zelko_nda');
+  
+  // Show success message
+  const msg = document.createElement('div');
+  msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;';
+  msg.textContent = '✅ Paiement confirmé — votre contrat est prêt à télécharger !';
+  document.querySelector('.preview-panel').insertBefore(msg, document.querySelector('.preview-header'));
 }
 </script>
 </body>

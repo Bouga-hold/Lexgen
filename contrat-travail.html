@@ -351,7 +351,88 @@ document.getElementById('date-sign').valueAsDate=new Date();
 document.getElementById('date-debut').valueAsDate=new Date();
 
 function goToPayment() {
+  const formData = {
+    emp_nom: v('emp-nom'),
+    emp_forme: v('emp-forme'),
+    emp_siret: v('emp-siret'),
+    emp_addr: v('emp-addr'),
+    emp_rep: v('emp-rep'),
+    sal_prenom: v('sal-prenom'),
+    sal_nom: v('sal-nom'),
+    sal_naissance: v('sal-naissance'),
+    sal_nat: v('sal-nat'),
+    sal_addr: v('sal-addr'),
+    poste: v('poste'),
+    missions: v('missions'),
+    lieu: v('lieu'),
+    duree_hebdo: v('duree-hebdo'),
+    date_debut: v('date-debut'),
+    date_fin: v('date-fin'),
+    motif_cdd: v('motif-cdd'),
+    salaire: v('salaire'),
+    essai: v('essai'),
+    convention: v('convention'),
+    date_sign: v('date-sign'),
+    cl_teletravail: c('cl-teletravail'),
+    cl_conf: c('cl-conf'),
+    cl_mob: c('cl-mob'),
+    cl_nc: c('cl-nc'),
+    cl_objectifs: c('cl-objectifs'),
+    cl_dedit: c('cl-dedit'),
+    cl_patrimoine: c('cl-patrimoine'),
+    cl_rupture_conv: c('cl-rupture-conv'),
+    paid: true
+  };
+  localStorage.setItem('zelko_travail', JSON.stringify(formData));
   window.location.href = 'https://buy.stripe.com/test_cNi4gzguWdJadVH8WmaEE05';
+}
+
+function restoreFormData() {
+  const raw = localStorage.getItem('zelko_travail');
+  if (!raw) return;
+  const d = JSON.parse(raw);
+  if (!d.paid) return;
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  const check = (id, val) => { const el = document.getElementById(id); if(el) el.checked = val; };
+  set('emp-nom', d.emp_nom);
+  set('emp-forme', d.emp_forme);
+  set('emp-siret', d.emp_siret);
+  set('emp-addr', d.emp_addr);
+  set('emp-rep', d.emp_rep);
+  set('sal-prenom', d.sal_prenom);
+  set('sal-nom', d.sal_nom);
+  set('sal-naissance', d.sal_naissance);
+  set('sal-nat', d.sal_nat);
+  set('sal-addr', d.sal_addr);
+  set('poste', d.poste);
+  set('missions', d.missions);
+  set('lieu', d.lieu);
+  set('duree-hebdo', d.duree_hebdo);
+  set('date-debut', d.date_debut);
+  set('date-fin', d.date_fin);
+  set('motif-cdd', d.motif_cdd);
+  set('salaire', d.salaire);
+  set('essai', d.essai);
+  set('convention', d.convention);
+  set('date-sign', d.date_sign);
+  check('cl-teletravail', d.cl_teletravail);
+  check('cl-conf', d.cl_conf);
+  check('cl-mob', d.cl_mob);
+  check('cl-nc', d.cl_nc);
+  check('cl-objectifs', d.cl_objectifs);
+  check('cl-dedit', d.cl_dedit);
+  check('cl-patrimoine', d.cl_patrimoine);
+  check('cl-rupture-conv', d.cl_rupture_conv);
+  generateDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  const btn = document.getElementById('dl-btn');
+  btn.textContent = 'Télécharger PDF';
+  btn.onclick = downloadDoc;
+  localStorage.removeItem('zelko_travail');
+  const msg = document.createElement('div');
+  msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;';
+  msg.textContent = '✅ Paiement confirmé — votre contrat est prêt à télécharger !';
+  document.querySelector('.preview-panel').insertBefore(msg, document.querySelector('.preview-header'));
 }
 </script>
 </body>

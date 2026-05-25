@@ -282,7 +282,72 @@ function downloadDoc(){
 document.getElementById('date-maj').valueAsDate=new Date();
 
 function goToPayment() {
+  const formData = {
+    nom: v('nom'),
+    forme: v('forme'),
+    capital: v('capital'),
+    siege: v('siege'),
+    siret: v('siret'),
+    tva: v('tva'),
+    email: v('email'),
+    type_vente: v('type-vente'),
+    activite: v('activite'),
+    site: v('site'),
+    delai: v('delai'),
+    retractation: v('retractation'),
+    paiement: v('paiement'),
+    date_maj: v('date-maj'),
+    cl_garantie: c('cl-garantie'),
+    cl_donnees: c('cl-donnees'),
+    cl_force: c('cl-force'),
+    cl_prop: c('cl-prop'),
+    cl_reserve_prop: c('cl-reserve-prop'),
+    cl_mediation: c('cl-mediation'),
+    cl_modif_prix: c('cl-modif-prix'),
+    paid: true
+  };
+  localStorage.setItem('zelko_cgv', JSON.stringify(formData));
   window.location.href = 'https://buy.stripe.com/test_dRmeVdguW34w8BndcCaEE02';
+}
+
+function restoreFormData() {
+  const raw = localStorage.getItem('zelko_cgv');
+  if (!raw) return;
+  const d = JSON.parse(raw);
+  if (!d.paid) return;
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  const check = (id, val) => { const el = document.getElementById(id); if(el) el.checked = val; };
+  set('nom', d.nom);
+  set('forme', d.forme);
+  set('capital', d.capital);
+  set('siege', d.siege);
+  set('siret', d.siret);
+  set('tva', d.tva);
+  set('email', d.email);
+  set('type-vente', d.type_vente);
+  set('activite', d.activite);
+  set('site', d.site);
+  set('delai', d.delai);
+  set('retractation', d.retractation);
+  set('paiement', d.paiement);
+  set('date-maj', d.date_maj);
+  check('cl-garantie', d.cl_garantie);
+  check('cl-donnees', d.cl_donnees);
+  check('cl-force', d.cl_force);
+  check('cl-prop', d.cl_prop);
+  check('cl-reserve-prop', d.cl_reserve_prop);
+  check('cl-mediation', d.cl_mediation);
+  check('cl-modif-prix', d.cl_modif_prix);
+  generateDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  const btn = document.getElementById('dl-btn');
+  btn.textContent = 'Télécharger PDF';
+  btn.onclick = downloadDoc;
+  localStorage.removeItem('zelko_cgv');
+  const msg = document.createElement('div');
+  msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;';
+  msg.textContent = '✅ Paiement confirmé — votre contrat est prêt à télécharger !';
+  document.querySelector('.preview-panel').insertBefore(msg, document.querySelector('.preview-header'));
 }
 </script>
 </body>

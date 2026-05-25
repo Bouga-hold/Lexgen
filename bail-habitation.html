@@ -445,7 +445,114 @@ document.getElementById('date-sign').valueAsDate = new Date();
 document.getElementById('date-debut').valueAsDate = new Date();
 
 function goToPayment() {
+  const formData = {
+    bail_nom: v('bail-nom'),
+    bail_qualite: v('bail-qualite'),
+    bail_rep: v('bail-rep'),
+    bail_addr: v('bail-addr'),
+    bail_contact: v('bail-contact'),
+    loc_prenom: v('loc-prenom'),
+    loc_nom: v('loc-nom'),
+    loc_naissance: v('loc-naissance'),
+    loc_lieu_naissance: v('loc-lieu-naissance'),
+    loc_addr: v('loc-addr'),
+    garant_nom: v('garant-nom'),
+    garant_addr: v('garant-addr'),
+    garant_type: v('garant-type'),
+    bien_addr: v('bien-addr'),
+    bien_desc: v('bien-desc'),
+    bien_surface: v('bien-surface'),
+    bien_pieces: v('bien-pieces'),
+    bien_etage: v('bien-etage'),
+    bien_type: v('bien-type'),
+    bien_chauffage: v('bien-chauffage'),
+    bien_dpe: v('bien-dpe'),
+    date_debut: v('date-debut'),
+    duree: v('duree'),
+    loyer: v('loyer'),
+    charges: v('charges'),
+    depot: v('depot'),
+    paiement: v('paiement'),
+    date_paiement: v('date-paiement'),
+    charges_mode: v('charges-mode'),
+    charges_detail: v('charges-detail'),
+    mobilier: v('mobilier'),
+    date_sign: v('date-sign'),
+    cl_animaux: c('cl-animaux'),
+    cl_no_animaux: c('cl-no-animaux'),
+    cl_colocation: c('cl-colocation'),
+    cl_travaux_loc: c('cl-travaux-loc'),
+    cl_resiliation_anticipee: c('cl-resiliation-anticipee'),
+    cl_indexation: c('cl-indexation'),
+    cl_sous_location: c('cl-sous-location'),
+    cl_assurance: c('cl-assurance'),
+    cl_clause_resolutoire: c('cl-clause-resolutoire'),
+    cl_entretien: c('cl-entretien'),
+    paid: true
+  };
+  localStorage.setItem('zelko_bail_hab', JSON.stringify(formData));
   window.location.href = 'https://buy.stripe.com/test_cNifZhceGawYbNz1tUaEE03';
+}
+
+function restoreFormData() {
+  const raw = localStorage.getItem('zelko_bail_hab');
+  if (!raw) return;
+  const d = JSON.parse(raw);
+  if (!d.paid) return;
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  const check = (id, val) => { const el = document.getElementById(id); if(el) el.checked = val; };
+  set('bail-nom', d.bail_nom);
+  set('bail-qualite', d.bail_qualite);
+  set('bail-rep', d.bail_rep);
+  set('bail-addr', d.bail_addr);
+  set('bail-contact', d.bail_contact);
+  set('loc-prenom', d.loc_prenom);
+  set('loc-nom', d.loc_nom);
+  set('loc-naissance', d.loc_naissance);
+  set('loc-lieu-naissance', d.loc_lieu_naissance);
+  set('loc-addr', d.loc_addr);
+  set('garant-nom', d.garant_nom);
+  set('garant-addr', d.garant_addr);
+  set('garant-type', d.garant_type);
+  set('bien-addr', d.bien_addr);
+  set('bien-desc', d.bien_desc);
+  set('bien-surface', d.bien_surface);
+  set('bien-pieces', d.bien_pieces);
+  set('bien-etage', d.bien_etage);
+  set('bien-type', d.bien_type);
+  set('bien-chauffage', d.bien_chauffage);
+  set('bien-dpe', d.bien_dpe);
+  set('date-debut', d.date_debut);
+  set('duree', d.duree);
+  set('loyer', d.loyer);
+  set('charges', d.charges);
+  set('depot', d.depot);
+  set('paiement', d.paiement);
+  set('date-paiement', d.date_paiement);
+  set('charges-mode', d.charges_mode);
+  set('charges-detail', d.charges_detail);
+  set('mobilier', d.mobilier);
+  set('date-sign', d.date_sign);
+  check('cl-animaux', d.cl_animaux);
+  check('cl-no-animaux', d.cl_no_animaux);
+  check('cl-colocation', d.cl_colocation);
+  check('cl-travaux-loc', d.cl_travaux_loc);
+  check('cl-resiliation-anticipee', d.cl_resiliation_anticipee);
+  check('cl-indexation', d.cl_indexation);
+  check('cl-sous-location', d.cl_sous_location);
+  check('cl-assurance', d.cl_assurance);
+  check('cl-clause-resolutoire', d.cl_clause_resolutoire);
+  check('cl-entretien', d.cl_entretien);
+  generateDoc();
+  document.getElementById('dl-btn').classList.add('visible');
+  const btn = document.getElementById('dl-btn');
+  btn.textContent = 'Télécharger PDF';
+  btn.onclick = downloadDoc;
+  localStorage.removeItem('zelko_bail_hab');
+  const msg = document.createElement('div');
+  msg.style.cssText = 'background:#dff0d8;color:#2d6b27;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:1rem;text-align:center;';
+  msg.textContent = '✅ Paiement confirmé — votre contrat est prêt à télécharger !';
+  document.querySelector('.preview-panel').insertBefore(msg, document.querySelector('.preview-header'));
 }
 </script>
 </body>
