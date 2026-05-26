@@ -66,6 +66,7 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
 .sig-label{font-size:11px;color:var(--muted);}
 .watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-family:'Playfair Display',serif;font-size:4rem;font-weight:600;color:rgba(45,90,39,0.05);pointer-events:none;white-space:nowrap;letter-spacing:0.2em;}
 .info-note{font-size:11px;color:var(--muted);background:var(--cream);padding:6px 10px;border-radius:3px;margin-top:4px;line-height:1.5;}
+.clause-badge{font-size:9px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;background:rgba(45,90,39,0.1);color:var(--gold);padding:1px 6px;border-radius:10px;margin-left:4px;vertical-align:middle;}
 </style>
 </head>
 <body>
@@ -114,6 +115,7 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
       <div class="field"><label>Représentant</label><input type="text" id="pren-rep" placeholder="Prénom Nom" oninput="liveUpdate()"></div>
     </div>
     <div class="field"><label>SIRET</label><input type="text" id="pren-siret" placeholder="000 000 000 00000" oninput="liveUpdate()"></div>
+    <div class="field"><label>Siège social / Adresse</label><input type="text" id="pren-addr" placeholder="8 avenue des Champs, 75008 Paris" oninput="liveUpdate()"></div>
 
     <!-- LOCAL -->
     <div class="section-label">Le local</div>
@@ -147,7 +149,8 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
 
     <div class="row2">
       <div class="field"><label>Charges mensuelles HT</label><input type="text" id="charges" placeholder="Ex : 300" oninput="liveUpdate()"></div>
-      <div class="field"><label>Indice de révision</label><select id="indice" onchange="liveUpdate()"><option value="ILC (Indice des Loyers Commerciaux)">ILC — Commerce</option><option value="ILAT (Indice des Loyers des Activités Tertiaires)">ILAT — Tertiaire</option><option value="ICC (Indice du Coût de la Construction)">ICC — Construction</option></select></div>
+      <div class="field"><label>Indice de révision</label><select id="indice" onchange="liveUpdate()"><option value="ILC (Indice des Loyers Commerciaux)">ILC — Commerce (recommandé)</option><option value="ILAT (Indice des Loyers des Activités Tertiaires)">ILAT — Tertiaire</option><option value="ICC (Indice du Coût de la Construction)">ICC — Construction (⚠️ interdit pour révision triennale)</option></select></div>
+      <div id="icc-warning" class="info-note" style="display:none;color:#b45309">⚠️ L'ICC est interdit pour la révision triennale légale depuis la loi Pinel (sept. 2014). Il reste utilisable pour une clause d'échelle mobile (indexation annuelle contractuelle), mais ILC ou ILAT sont fortement recommandés.</div>
     </div>
 
     <!-- GARANTIE -->
@@ -171,6 +174,9 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
       <label class="checkbox-item"><input type="checkbox" id="cl-charges-detail" onchange="liveUpdate()"><span>Répartition détaillée des charges (loi Pinel)</span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-travaux" onchange="liveUpdate()"><span>Travaux d'aménagement par le preneur</span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-penalites-pro" onchange="liveUpdate()"><span>Pénalités bailleur non-professionnel (bail pro uniquement)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-droit-preference" onchange="liveUpdate()"><span>Droit de préférence du preneur en cas de vente (L145-46-1) <span class="clause-badge">Recommandé</span></span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-etat-travaux" onchange="liveUpdate()"><span>État prévisionnel des travaux bailleur (obligation loi Pinel) <span class="clause-badge">Recommandé</span></span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-annexe-env" onchange="liveUpdate()"><span>Annexe environnementale (obligatoire si surface > 500 m²)</span></label>
     </div>
 
     <div class="field" style="margin-top:1.5rem"><label>Date de signature</label><input type="date" id="date-sign" oninput="liveUpdate()"></div>
@@ -211,6 +217,10 @@ function setType(type){
   if(type==='precaire') document.getElementById('duree').value='23 mois';
   liveUpdate();
 }
+
+document.getElementById('indice').addEventListener('change', function(){
+  document.getElementById('icc-warning').style.display = this.value.includes('ICC') ? 'block' : 'none';
+});
 
 function setFerme(type){
   fermeType=type;
@@ -261,6 +271,8 @@ function buildDoc(){
   const isPrecaire=bailType==='precaire';
   const isFerme=fermeType==='ferme';
   const isGAPD=garantieType==='gapd';
+  const prenAddr=fmt(v('pren-addr'),'[Adresse preneur]');
+  const localSurfaceNum=parseInt((v('local-surface')||'0').replace(/\s/g,''))||0;
 
   let artNum=1;
   const art=()=>{ const n=artNum; artNum++; return `Article ${n}`; };
@@ -277,7 +289,7 @@ function buildDoc(){
       <strong>Entre les soussignés :</strong><br><br>
       <strong>${bailNom}</strong>, ${bailQualite}, dont l'adresse est ${bailAddr}, représenté(e) par ${bailRep}, ci-après dénommé le <strong>« Bailleur »</strong><br><br>
       <strong>Et :</strong><br><br>
-      <strong>${prenNom}</strong>, ${prenType}${prenSiret?`, SIRET ${prenSiret}`:''}, représenté(e) par ${prenRep}, ci-après dénommé le <strong>« Preneur »</strong>
+      <strong>${prenNom}</strong>, ${prenType}${prenSiret?`, SIRET ${prenSiret}`:''}, dont le siège social est situé au ${prenAddr}, représenté(e) par ${prenRep}, ci-après dénommé le <strong>« Preneur »</strong>
     </div>
 
     <div class="doc-section">
@@ -320,7 +332,7 @@ function buildDoc(){
       <div class="doc-section-title">Article 6 — ${isGAPD?'Garantie Autonome à Première Demande (GAPD)':'Dépôt de garantie'}</div>
       <p>${isGAPD
         ? `À la signature des présentes, le Preneur remet au Bailleur une <strong>Garantie Autonome à Première Demande (GAPD)</strong> d'un montant de <strong>${garantieMontant} €</strong>, émise par un établissement bancaire ou une compagnie d'assurance agréée. Cette garantie est indépendante du contrat principal et pourra être appelée par le Bailleur sur première demande écrite, sans que le Preneur puisse s'y opposer par quelque exception que ce soit, notamment tirée du contrat de bail. La GAPD sera reconstituée dans un délai de 30 jours si elle est appelée. Elle sera libérée dans un délai de 2 mois après la restitution des clés et la régularisation de toutes les sommes dues.`
-        : `À la signature des présentes, le Preneur verse au Bailleur la somme de <strong>${garantieMontant} €</strong> à titre de dépôt de garantie, correspondant à ${garantieMontant && loyerP2 ? Math.round(parseInt(garantieMontant.replace(/\s/g,''))/parseInt(loyerP2.replace(/\s/g,''))) : '[X]'} mois de loyer HT. Cette somme sera restituée dans un délai de 2 mois après la restitution des clés, déduction faite des sommes éventuellement dues par le Preneur.`
+        : `À la signature des présentes, le Preneur verse au Bailleur la somme de <strong>${garantieMontant} €</strong> à titre de dépôt de garantie, correspondant à ${garantieMontant && loyerP2 ? Math.round(parseInt(garantieMontant.replace(/\s/g,''))/parseInt(loyerP2.replace(/\s/g,''))) : '[X]'} mois de loyer HT. Cette somme sera restituée dans un délai de 2 mois après la restitution des clés, déduction faite des sommes éventuellement dues par le Preneur. ${garantieMontant && loyerP2 && Math.round(parseInt(garantieMontant.replace(/\s/g,''))/parseInt(loyerP2.replace(/\s/g,'')))>2 ? '<strong>Conformément à l\'article L145-16-1 du Code de commerce, ce dépôt de garantie excédant 2 mois de loyer HT est productif d\'intérêts au taux légal au profit du Preneur.</strong>' : ''}`
       }</p>
     </div>
 
@@ -376,8 +388,35 @@ function buildDoc(){
     </div>`:''}
 
     <div class="doc-section">
-      <div class="doc-section-title">Droit applicable & juridiction</div>
-      <p>Le présent bail est soumis au droit français. Tout litige sera soumis, à défaut d'accord amiable, au Tribunal judiciaire compétent du lieu de situation des locaux loués.</p>
+      <div class="doc-section-title">${art()} — Indemnité d'éviction & renouvellement</div>
+      <p>${is369 ? `Conformément à l'article L145-14 du Code de commerce, le Preneur bénéficie d'un <strong>droit au renouvellement du bail</strong> à son expiration. Si le Bailleur refuse le renouvellement sans offrir un local de remplacement équivalent, il devra verser au Preneur une <strong>indemnité d'éviction</strong> destinée à couvrir le préjudice causé par ce refus, notamment la valeur marchande du fonds de commerce, les frais normaux de déménagement et de réinstallation, les frais et droits de mutation. Le Bailleur dispose d'un droit de repentir dans un délai de 15 jours suivant la décision judiciaire fixant l'indemnité.` : isPro ? `Le présent bail professionnel ne confère pas au Preneur de droit au renouvellement. À l'expiration du bail, le Preneur ne peut prétendre à aucune indemnité d'éviction.` : `Le présent bail précaire ne confère pas au Preneur de droit au renouvellement ni à indemnité d'éviction, les parties ayant expressément dérogé au statut des baux commerciaux.`}</p>
+    </div>
+
+    ${is369 && c('cl-droit-preference') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Droit de préférence du Preneur</div>
+      <p>Conformément à l'article L145-46-1 du Code de commerce (loi Pinel), en cas de vente des locaux loués, le Bailleur devra en informer le Preneur en premier par lettre recommandée avec accusé de réception, en précisant le prix et les conditions de la vente envisagée. Le Preneur disposera d'un délai d'<strong>un mois</strong> pour exercer son droit de préférence et se substituer à l'acquéreur pressenti, aux mêmes prix et conditions. Ce droit de préférence ne s'applique pas en cas de cession globale d'un ensemble immobilier comprenant les locaux loués, de cession à un conjoint ou à un ascendant ou descendant du bailleur.</p>
+    </div>` : ''}
+
+    ${c('cl-etat-travaux') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — État prévisionnel des travaux</div>
+      <p>Conformément à l'article L145-40-2 du Code de commerce issu de la loi Pinel du 18 juin 2014, le Bailleur remet au Preneur, en annexe au présent bail, un <strong>état prévisionnel des travaux</strong> qu'il envisage de réaliser dans les trois années suivantes sur l'immeuble, ainsi qu'un récapitulatif des travaux réalisés dans les trois années précédentes. Cet état sera mis à jour tous les trois ans et communiqué au Preneur lors de chaque révision triennale. En l'absence d'état prévisionnel, les dispositions de l'article 606 du Code civil s'appliquent dans leurs strictes limites légales.</p>
+    </div>` : ''}
+
+    ${c('cl-annexe-env') && localSurfaceNum >= 500 ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Annexe environnementale</div>
+      <p>Conformément aux articles L125-9 et R125-1 du Code de l'environnement, et compte tenu de la superficie des locaux (${localSurface} m² ≥ 500 m²), une <strong>annexe environnementale</strong> est obligatoirement jointe au présent bail. Cette annexe précise les informations relatives aux consommations d'énergie et de fluides des locaux loués, les objectifs d'amélioration de la performance énergétique convenus entre les parties, ainsi que les modalités de suivi et de reporting. Les parties s'engagent à se communiquer mutuellement les données de consommation et à œuvrer conjointement à la réduction de l'empreinte environnementale des locaux.</p>
+    </div>` : c('cl-annexe-env') && localSurfaceNum < 500 && localSurfaceNum > 0 ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Charte environnementale (volontaire)</div>
+      <p>Bien que la surface des locaux (${localSurface} m²) soit inférieure au seuil légal de 500 m², les parties conviennent volontairement d'adopter de bonnes pratiques environnementales : suivi des consommations d'énergie et d'eau, recours prioritaire à des matériaux durables pour les travaux d'aménagement, tri sélectif et gestion responsable des déchets.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Droit applicable & juridiction</div>
+      <p>Le présent bail est soumis au droit français et notamment aux dispositions des articles L145-1 et suivants du Code de commerce${is369 ? ' (statut des baux commerciaux)' : isPro ? ' (bail professionnel, art. 57-A loi 1986)' : ' (bail précaire, art. L145-5)'}. En cas de litige, les parties s'engagent à rechercher une solution amiable avant toute action judiciaire. À défaut, le Tribunal judiciaire compétent du lieu de situation des locaux sera saisi.</p>
     </div>
 
     <div class="doc-signatures">
@@ -460,6 +499,10 @@ function goToPayment() {
     cl_charges_detail: c('cl-charges-detail'),
     cl_travaux: c('cl-travaux'),
     cl_penalites_pro: c('cl-penalites-pro'),
+    cl_droit_preference: c('cl-droit-preference'),
+    cl_etat_travaux: c('cl-etat-travaux'),
+    cl_annexe_env: c('cl-annexe-env'),
+    pren_addr: v('pren-addr'),
     paid: true
   };
   localStorage.setItem('zelko_bail_com', JSON.stringify(formData));
