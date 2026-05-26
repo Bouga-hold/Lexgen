@@ -275,7 +275,49 @@ main {
 }
 .sig-label { font-size: 11px; color: var(--muted); }
 
-/* Watermark */
+/* Toggle unilatéral / bilatéral */
+.toggle-type {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+.type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 12px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--paper);
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'DM Sans', sans-serif;
+  text-align: center;
+}
+.type-btn:hover { border-color: var(--gold); background: var(--white); }
+.type-btn.active { border-color: var(--gold); background: var(--white); box-shadow: 0 0 0 2px rgba(45,90,39,0.12); }
+.type-icon { font-size: 1.2rem; }
+.type-label { font-size: 13px; font-weight: 500; color: var(--ink); }
+.type-desc { font-size: 11px; color: var(--muted); }
+.type-btn.active .type-label { color: var(--gold); }
+
+/* Badge clauses recommandées */
+.clause-badge {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(45,90,39,0.1);
+  color: var(--gold);
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+
 .watermark {
   position: absolute;
   top: 50%;
@@ -305,6 +347,21 @@ main {
     <div class="panel-title">Générer un NDA</div>
     <div class="panel-sub">Remplissez les champs — votre accord de confidentialité est généré instantanément.</div>
 
+    <div class="section-label">Type d'accord</div>
+    <div class="toggle-type">
+      <button class="type-btn active" id="btn-unilateral" onclick="setType('unilateral')">
+        <span class="type-icon">→</span>
+        <span class="type-label">Unilatéral</span>
+        <span class="type-desc">Une seule partie divulgue</span>
+      </button>
+      <button class="type-btn" id="btn-bilateral" onclick="setType('bilateral')">
+        <span class="type-icon">⇄</span>
+        <span class="type-label">Bilatéral</span>
+        <span class="type-desc">Échange mutuel d'informations</span>
+      </button>
+    </div>
+    <input type="hidden" id="accord-type" value="unilateral">
+
     <div class="section-label">Partie divulgatrice</div>
     <div class="field">
       <label>Nom / Raison sociale</label>
@@ -331,7 +388,7 @@ main {
       <input type="text" id="p1-addr" placeholder="12 rue de la Paix, 75001 Paris" oninput="liveUpdate()">
     </div>
 
-    <div class="section-label">Partie réceptrice</div>
+    <div class="section-label" id="label-p2">Partie réceptrice</div>
     <div class="field">
       <label>Nom / Raison sociale</label>
       <input type="text" id="p2-name" placeholder="Ex : Beta Technologies" oninput="liveUpdate()">
@@ -356,8 +413,23 @@ main {
       <label>Siège social / Adresse</label>
       <input type="text" id="p2-addr" placeholder="8 avenue des Champs, 69000 Lyon" oninput="liveUpdate()">
     </div>
+    <div class="field">
+      <label>Personnes autorisées à accéder aux informations <span style="color:var(--muted);font-weight:300">(optionnel)</span></label>
+      <input type="text" id="p2-destinataires" placeholder="Ex : directeur technique, responsable commercial" oninput="liveUpdate()">
+    </div>
 
-    <div class="section-label">Objet & durée</div>
+    <div class="section-label">Contexte</div>
+    <div class="field">
+      <label>Cadre de la divulgation</label>
+      <select id="contexte" onchange="liveUpdate()">
+        <option value="pourparlers">Pourparlers / négociations précontractuelles</option>
+        <option value="partenariat">Relation de partenariat en cours</option>
+        <option value="prestation">Contrat de prestation de services</option>
+        <option value="investissement">Discussion avec un investisseur</option>
+        <option value="emploi">Recrutement / entretien avec un candidat</option>
+        <option value="autre">Autre contexte professionnel</option>
+      </select>
+    </div>
     <div class="field">
       <label>Objet de la divulgation</label>
       <textarea id="objet" placeholder="Ex : Échanges relatifs à un projet de partenariat commercial portant sur le développement d'une application SaaS..." oninput="liveUpdate()"></textarea>
@@ -405,6 +477,14 @@ main {
         <input type="checkbox" id="cl-audit" onchange="liveUpdate()">
         <span>Droit d'audit de conformité</span>
       </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="cl-collaborateurs" onchange="liveUpdate()">
+        <span>Extension aux collaborateurs & sous-traitants <span class="clause-badge">Recommandé</span></span>
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="cl-obligation-resultat" onchange="liveUpdate()">
+        <span>Qualification obligatoire de résultat <span class="clause-badge">Recommandé</span></span>
+      </label>
     </div>
 
     <button class="generate-btn" onclick="generateDoc()">Générer le contrat complet</button>
@@ -442,8 +522,11 @@ function getRef() {
 let docRef = getRef();
 
 function buildDoc() {
-  const p1 = fmt(v('p1-name'), '[Partie Divulgatrice]');
-  const p2 = fmt(v('p2-name'), '[Partie Réceptrice]');
+  const type = v('accord-type') || 'unilateral';
+  const isBilateral = type === 'bilateral';
+
+  const p1 = fmt(v('p1-name'), '[Partie A]');
+  const p2 = fmt(v('p2-name'), '[Partie B]');
   const p1t = v('p1-type');
   const p2t = v('p2-type');
   const p1r = fmt(v('p1-rep'), '[Représentant]');
@@ -456,85 +539,152 @@ function buildDoc() {
   const dateStr = dateRaw
     ? new Date(dateRaw).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})
     : '[date]';
+  const destinataires = v('p2-destinataires');
+  const contexteVal = v('contexte') || 'pourparlers';
+  const contexteMap = {
+    pourparlers: 'des pourparlers et négociations précontractuelles',
+    partenariat: 'une relation de partenariat commercial',
+    prestation: 'un contrat de prestation de services',
+    investissement: 'une discussion avec un investisseur',
+    emploi: 'un processus de recrutement',
+    autre: 'une relation professionnelle'
+  };
+  const contexteLabel = contexteMap[contexteVal] || contexteMap.autre;
 
   const penalite = c('cl-penalite');
   const retour = c('cl-retour');
   const nonSol = c('cl-non-solicitation');
+  const exclusions = c('cl-exclusions');
+  const dureeDiff = c('cl-duree-diff');
+  const audit = c('cl-audit');
+  const collaborateurs = c('cl-collaborateurs');
+  const obligationResultat = c('cl-obligation-resultat');
+
+  // Numérotation dynamique des articles optionnels
+  let artNum = 5;
+  const nextArt = () => ++artNum;
+
+  const partiesBlock = isBilateral
+    ? `<strong>Entre les soussignés :</strong><br><br>
+       <strong>${p1}</strong>, ${p1t}, dont le siège social est situé au ${p1a}, représentée par ${p1r}, ci-après dénommée la <strong>« Partie A »</strong><br><br>
+       <strong>Et :</strong><br><br>
+       <strong>${p2}</strong>, ${p2t}, dont le siège social est situé au ${p2a}, représentée par ${p2r}, ci-après dénommée la <strong>« Partie B »</strong><br><br>
+       <em style="font-size:11px;color:var(--muted)">Les Parties A et B sont ci-après collectivement désignées « les Parties » et individuellement « la Partie ».</em>`
+    : `<strong>Entre les soussignés :</strong><br><br>
+       <strong>${p1}</strong>, ${p1t}, dont le siège social est situé au ${p1a}, représentée par ${p1r}, ci-après dénommée la <strong>« Partie Divulgatrice »</strong><br><br>
+       <strong>Et :</strong><br><br>
+       <strong>${p2}</strong>, ${p2t}, dont le siège social est situé au ${p2a}, représentée par ${p2r}, ci-après dénommée la <strong>« Partie Réceptrice »</strong>`;
+
+  const art3obligations = isBilateral
+    ? `<p>Chacune des Parties, en sa qualité de réceptrice des informations de l'autre Partie, s'engage à : (i) garder strictement confidentielles les informations reçues ; (ii) ne pas les divulguer à des tiers sans accord préalable écrit de l'autre Partie ; (iii) n'utiliser ces informations qu'aux fins définies à l'article 1 ; (iv) limiter l'accès aux seuls collaborateurs qui en ont strictement besoin, lesquels sont soumis aux mêmes obligations de confidentialité.</p>
+     <p>L'obligation de confidentialité est une <strong>obligation de résultat</strong> : chaque Partie s'engage à atteindre l'objectif de confidentialité défini, sans qu'il soit nécessaire de démontrer un préjudice pour engager sa responsabilité en cas de manquement.</p>`
+    : `<p>La Partie Réceptrice s'engage à : (i) garder strictement confidentielles les informations reçues ; (ii) ne pas les divulguer à des tiers sans accord préalable écrit ; (iii) n'utiliser ces informations qu'aux fins définies à l'article 1 ; (iv) limiter l'accès aux seuls collaborateurs qui en ont strictement besoin, lesquels sont soumis aux mêmes obligations.${obligationResultat ? '' : ''}</p>
+     ${obligationResultat ? `<p>La présente obligation de confidentialité est qualifiée d'<strong>obligation de résultat</strong> au sens du droit commun des obligations. La Partie Divulgatrice n'aura pas à démontrer l'existence d'un préjudice pour engager la responsabilité contractuelle de la Partie Réceptrice — la seule preuve de la divulgation ou de l'utilisation non autorisée sera suffisante.</p>` : ''}`;
+
+  const collaborateursClause = collaborateurs ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${nextArt()} — Extension aux collaborateurs et sous-traitants</div>
+      <p>La Partie Réceptrice s'engage à ce que ses salariés, dirigeants, conseils, sous-traitants et tout tiers avec lequel elle serait amenée à travailler dans le cadre des activités visées à l'article 1 soient soumis aux mêmes obligations de confidentialité que celles prévues au présent accord, préalablement à toute communication d'informations confidentielles.${destinataires ? ` Sont notamment habilités à accéder aux informations confidentielles : <strong>${destinataires}</strong>.` : ''}</p>
+      <p>La Partie Réceptrice demeure solidairement responsable de tout manquement commis par ces tiers comme si ce manquement lui était directement imputable.</p>
+    </div>` : '';
+
+  const articlePenalite = penalite ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${nextArt()} — Clause pénale</div>
+      <p>En cas de violation des obligations du présent accord, la partie défaillante sera redevable d'une indemnité forfaitaire d'un montant de <strong>10 000 € (dix mille euros)</strong> par infraction constatée, exigible après mise en demeure restée sans effet dans un délai de huit (8) jours. Cette clause pénale s'applique de plein droit, sans préjudice du droit pour la partie lésée de réclamer des dommages et intérêts complémentaires en réparation de son préjudice réel et justifié.</p>
+    </div>` : '';
+
+  const articleRetour = retour ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${nextArt()} — Restitution des documents</div>
+      <p>À la demande ${isBilateral ? "de l'une des Parties" : "de la Partie Divulgatrice"} ou à l'expiration du présent accord, ${isBilateral ? "chaque Partie" : "la Partie Réceptrice"} s'engage à restituer ou à détruire l'intégralité des documents, supports et données confidentiels en sa possession, et à en certifier la destruction par écrit dans un délai de dix (10) jours ouvrés.</p>
+    </div>` : '';
+
+  const articleNonSol = nonSol ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${nextArt()} — Non-sollicitation</div>
+      <p>Pendant la durée du présent accord et pour une période de <strong>12 mois</strong> suivant son expiration ou sa résiliation, chaque Partie s'interdit de solliciter, recruter ou embaucher directement ou indirectement tout collaborateur de l'autre Partie ayant été impliqué dans les échanges visés à l'article 1, sauf accord écrit préalable de l'autre Partie.</p>
+    </div>` : '';
+
+  const articleAudit = audit ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${nextArt()} — Droit d'audit</div>
+      <p>${isBilateral ? "Chaque Partie" : "La Partie Divulgatrice"} se réserve le droit de procéder, à ses frais et après notification préalable de dix (10) jours ouvrés, à un audit ou à une vérification des mesures de sécurité et de confidentialité mises en place par ${isBilateral ? "l'autre Partie" : "la Partie Réceptrice"}. ${isBilateral ? "La Partie auditée" : "La Partie Réceptrice"} s'engage à coopérer de bonne foi et à fournir tout document ou information nécessaire à cet audit.</p>
+    </div>` : '';
+
+  const articleDureeDiff = dureeDiff ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${nextArt()} — Durée différenciée</div>
+      <p>Par dérogation à l'article 5, les informations relatives aux <strong>secrets de fabrication, savoir-faire techniques et données clients</strong> demeurent soumises à l'obligation de confidentialité <strong>sans limitation de durée</strong>, au-delà de la durée générale prévue, aussi longtemps qu'elles présentent un caractère non public et une valeur économique pour leur détenteur.</p>
+    </div>` : '';
+
+  const articleExclusions = exclusions ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Article ${nextArt()} — Exclusions détaillées</div>
+      <p>Les obligations du présent accord ne s'appliquent pas aux informations qui : (i) appartiennent ou sont tombées dans le domaine public sans faute de la partie réceptrice ; (ii) étaient connues de la partie réceptrice avant leur communication, ainsi qu'elle peut en justifier par écrit ; (iii) ont été développées indépendamment par la partie réceptrice sans utilisation des informations confidentielles ; (iv) ont été reçues légitimement et sans restriction d'un tiers habilité à les communiquer ; (v) dont la divulgation est exigée par la loi, un règlement ou une décision de justice — auquel cas la partie réceptrice en avertit sans délai la partie divulgatrice pour lui permettre de s'y opposer.</p>
+    </div>` : '';
 
   return `
-    <div class="watermark">LEXGEN</div>
+    <div class="watermark">ZELKO</div>
     <div class="doc-header">
       <div class="doc-main-title">Accord de Confidentialité</div>
-      <div class="doc-subtitle">Non-Disclosure Agreement · NDA</div>
+      <div class="doc-subtitle">${isBilateral ? 'NDA Bilatéral · Mutual Non-Disclosure Agreement' : 'NDA Unilatéral · Non-Disclosure Agreement'}</div>
       <div class="doc-ref">Réf. ${docRef} · Droit français applicable</div>
     </div>
 
-    <div class="doc-parties">
-      <strong>Entre les soussignés :</strong><br><br>
-      <strong>${p1}</strong>, ${p1t}, dont le siège social est situé au ${p1a}, représentée par ${p1r}, ci-après dénommée la <strong>« Partie Divulgatrice »</strong><br><br>
-      <strong>Et :</strong><br><br>
-      <strong>${p2}</strong>, ${p2t}, dont le siège social est situé au ${p2a}, représentée par ${p2r}, ci-après dénommée la <strong>« Partie Réceptrice »</strong>
-    </div>
+    <div class="doc-parties">${partiesBlock}</div>
 
     <div class="doc-section">
       <div class="doc-section-title">Article 1 — Objet</div>
-      <p>Le présent accord a pour objet de définir les conditions dans lesquelles la Partie Divulgatrice communique à la Partie Réceptrice des informations confidentielles dans le cadre de : ${obj}</p>
+      <p>Le présent accord a pour objet de définir les conditions dans lesquelles ${isBilateral ? 'les Parties s\'échangent mutuellement' : 'la Partie Divulgatrice communique à la Partie Réceptrice'} des informations confidentielles dans le cadre de ${contexteLabel} portant sur : ${obj}</p>
+      <p style="font-size:11px;color:var(--muted);margin-top:6px">Le présent accord est distinct de l'obligation légale de confidentialité précontractuelle prévue à l'article 1112-2 du Code civil, qu'il complète sans s'y substituer.</p>
     </div>
 
     <div class="doc-section">
       <div class="doc-section-title">Article 2 — Définition des informations confidentielles</div>
-      <p>Sont considérées comme confidentielles toutes les informations, données, documents, savoir-faire, procédés techniques, financiers ou commerciaux, transmis sous quelque forme que ce soit (orale, écrite, électronique), et ce qu'ils soient ou non expressément désignés comme confidentiels.</p>
+      <p>Sont considérées comme confidentielles toutes les informations, données, documents, savoir-faire, procédés techniques, financiers ou commerciaux, transmis sous quelque forme que ce soit (orale, écrite, électronique, numérique), qu'ils soient ou non expressément désignés comme confidentiels, dès lors qu'ils ne sont pas accessibles au public et présentent une valeur économique pour ${isBilateral ? 'leur émetteur' : 'la Partie Divulgatrice'}.</p>
     </div>
 
     <div class="doc-section">
-      <div class="doc-section-title">Article 3 — Obligations de la Partie Réceptrice</div>
-      <p>La Partie Réceptrice s'engage à : (i) garder strictement confidentielles les informations reçues ; (ii) ne pas les divulguer à des tiers sans accord préalable écrit ; (iii) n'utiliser ces informations qu'aux fins définies à l'article 1 ; (iv) limiter l'accès aux seuls collaborateurs qui en ont strictement besoin, lesquels sont soumis aux mêmes obligations.</p>
+      <div class="doc-section-title">Article 3 — Obligations ${isBilateral ? 'des Parties' : 'de la Partie Réceptrice'}</div>
+      ${art3obligations}
+      ${!isBilateral && !obligationResultat && destinataires ? `<p>Sont notamment habilités à accéder aux informations confidentielles au sein de la Partie Réceptrice : <strong>${destinataires}</strong>.</p>` : ''}
     </div>
 
     <div class="doc-section">
       <div class="doc-section-title">Article 4 — Exclusions</div>
-      <p>Les obligations du présent accord ne s'appliquent pas aux informations : (i) appartenant au domaine public antérieurement à leur divulgation ; (ii) connues de la Partie Réceptrice avant leur communication ; (iii) reçues légitimement d'un tiers autorisé ; (iv) dont la divulgation est requise par la loi ou une décision judiciaire.</p>
+      <p>Les obligations du présent accord ne s'appliquent pas aux informations : (i) appartenant au domaine public antérieurement à leur divulgation ; (ii) connues de la partie réceptrice avant leur communication ; (iii) reçues légitimement d'un tiers autorisé ; (iv) dont la divulgation est requise par la loi ou une décision judiciaire.</p>
     </div>
 
     <div class="doc-section">
       <div class="doc-section-title">Article 5 — Durée</div>
-      <p>Le présent accord prend effet à la date de signature et s'applique pour une durée de <strong>${dur}</strong> à compter de cette date. À l'issue de cette période, les obligations de confidentialité demeurent applicables pour toute information dont la divulgation causerait un préjudice à la Partie Divulgatrice.</p>
+      <p>Le présent accord prend effet à la date de signature et s'applique pour une durée de <strong>${dur}</strong> à compter de cette date. À l'issue de cette période, les obligations de confidentialité demeurent applicables pour toute information dont la divulgation causerait un préjudice à ${isBilateral ? "l'autre Partie" : "la Partie Divulgatrice"}.</p>
     </div>
 
-    ${penalite ? `
-    <div class="doc-section">
-      <div class="doc-section-title">Article 6 — Clause pénale</div>
-      <p>En cas de violation des obligations du présent accord, la Partie Réceptrice sera redevable d'une indemnité forfaitaire d'un montant de 10 000 € (dix mille euros) par infraction constatée, sans préjudice du droit pour la Partie Divulgatrice de réclamer des dommages et intérêts complémentaires en réparation de son préjudice réel.</p>
-    </div>` : ''}
-
-    ${retour ? `
-    <div class="doc-section">
-      <div class="doc-section-title">Article ${penalite ? 7 : 6} — Restitution des documents</div>
-      <p>À la demande de la Partie Divulgatrice ou à l'expiration du présent accord, la Partie Réceptrice s'engage à restituer ou à détruire l'intégralité des documents, supports et données confidentiels en sa possession, et à en certifier la destruction par écrit.</p>
-    </div>` : ''}
-
-    ${nonSol ? `
-    <div class="doc-section">
-      <div class="doc-section-title">Article ${penalite && retour ? 8 : penalite || retour ? 7 : 6} — Non-sollicitation</div>
-      <p>Pendant la durée du présent accord et pour une période de 12 mois suivant son expiration, chaque Partie s'interdit de solliciter ou d'embaucher directement ou indirectement tout collaborateur de l'autre Partie ayant été impliqué dans les échanges visés à l'article 1.</p>
-    </div>` : ''}
+    ${collaborateursClause}
+    ${articlePenalite}
+    ${articleRetour}
+    ${articleNonSol}
+    ${articleAudit}
+    ${articleDureeDiff}
+    ${articleExclusions}
 
     <div class="doc-section">
       <div class="doc-section-title">Droit applicable & juridiction</div>
-      <p>Le présent accord est soumis au droit français. Tout litige relatif à son interprétation ou à son exécution sera soumis, à défaut d'accord amiable, à la compétence exclusive des tribunaux de Paris.</p>
+      <p>Le présent accord est soumis au droit français (art. 1103 du Code civil). Tout litige relatif à son interprétation ou à son exécution sera soumis, à défaut d'accord amiable, à la compétence exclusive des tribunaux de Paris.</p>
     </div>
 
     <div class="doc-signatures">
       <div class="sig-block">
         <div><strong>${p1}</strong></div>
-        <div class="sig-label">Partie Divulgatrice</div>
+        <div class="sig-label">${isBilateral ? 'Partie A' : 'Partie Divulgatrice'}</div>
         <div class="sig-line"></div>
         <div class="sig-label">Signature · ${dateStr}</div>
         <div style="margin-top:6px;font-size:11px;color:var(--muted)">${p1r}</div>
       </div>
       <div class="sig-block">
         <div><strong>${p2}</strong></div>
-        <div class="sig-label">Partie Réceptrice</div>
+        <div class="sig-label">${isBilateral ? 'Partie B' : 'Partie Réceptrice'}</div>
         <div class="sig-line"></div>
         <div class="sig-label">Signature · ${dateStr}</div>
         <div style="margin-top:6px;font-size:11px;color:var(--muted)">${p2r}</div>
@@ -542,6 +692,17 @@ function buildDoc() {
     </div>
   `;
 }
+
+function setType(type) {
+  document.getElementById('accord-type').value = type;
+  document.getElementById('btn-unilateral').classList.toggle('active', type === 'unilateral');
+  document.getElementById('btn-bilateral').classList.toggle('active', type === 'bilateral');
+  // Mettre à jour le label "Partie réceptrice" / "Partie B"
+  const label = document.getElementById('label-p2');
+  if (label) label.textContent = type === 'bilateral' ? 'Partie B' : 'Partie réceptrice';
+  liveUpdate();
+}
+
 
 function liveUpdate() {
   const p1 = v('p1-name');
@@ -594,6 +755,7 @@ restoreFormData();
 function goToPayment() {
   // Save all form data to localStorage before redirecting
   const formData = {
+    accord_type: v('accord-type'),
     p1_name: v('p1-name'),
     p1_type: v('p1-type'),
     p1_rep: v('p1-rep'),
@@ -602,6 +764,8 @@ function goToPayment() {
     p2_type: v('p2-type'),
     p2_rep: v('p2-rep'),
     p2_addr: v('p2-addr'),
+    p2_destinataires: v('p2-destinataires'),
+    contexte: v('contexte'),
     objet: v('objet'),
     duree: v('duree'),
     date_sign: v('date-sign'),
@@ -611,6 +775,8 @@ function goToPayment() {
     cl_exclusions: c('cl-exclusions'),
     cl_duree_diff: c('cl-duree-diff'),
     cl_audit: c('cl-audit'),
+    cl_collaborateurs: c('cl-collaborateurs'),
+    cl_obligation_resultat: c('cl-obligation-resultat'),
     paid: true
   };
   localStorage.setItem('zelko_nda', JSON.stringify(formData));
