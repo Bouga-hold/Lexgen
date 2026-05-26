@@ -34,6 +34,14 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
 .checkbox-item{display:flex;align-items:flex-start;gap:8px;cursor:pointer;}
 .checkbox-item input{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;margin-top:2px;flex-shrink:0;}
 .checkbox-item span{font-size:13px;font-weight:300;line-height:1.5;}
+.perspective-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.5rem;}
+.perspective-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 8px;border:1px solid var(--border);border-radius:4px;background:var(--paper);cursor:pointer;transition:all 0.18s;font-family:'DM Sans',sans-serif;text-align:center;}
+.perspective-btn:hover{border-color:var(--gold);background:var(--white);}
+.perspective-btn.active{border-color:var(--gold);background:var(--white);box-shadow:0 0 0 2px rgba(45,90,39,0.15);}
+.perspective-icon{font-size:1.4rem;}
+.perspective-label{font-size:13px;font-weight:500;color:var(--ink);}
+.perspective-desc{font-size:11px;color:var(--muted);}
+.perspective-btn.active .perspective-label{color:var(--gold);}
 .type-toggle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem;}
 .type-btn{padding:8px;border:1px solid var(--border);border-radius:3px;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s;color:var(--muted);}
 .type-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
@@ -80,6 +88,23 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
   <div class="panel">
     <div class="panel-title">Bail commercial</div>
     <div class="panel-sub">Conforme à la loi Pinel du 18 juin 2014 et aux articles L145-1 et suivants du Code de commerce.</div>
+
+    <div class="section-label">Vous êtes</div>
+    <div class="perspective-toggle">
+      <button class="perspective-btn active" id="btn-bailleur" onclick="setPerspective('bailleur')">
+        <span class="perspective-icon">🏢</span>
+        <span class="perspective-label">Le Bailleur</span>
+        <span class="perspective-desc">Propriétaire du local</span>
+      </button>
+      <button class="perspective-btn" id="btn-preneur" onclick="setPerspective('preneur')">
+        <span class="perspective-icon">🛍️</span>
+        <span class="perspective-label">Le Preneur</span>
+        <span class="perspective-desc">Locataire commerçant</span>
+      </button>
+    </div>
+    <div id="perspective-note-bailleur" class="info-note" style="margin-bottom:1rem">Mode <strong>Bailleur</strong> : clauses protectrices activées par défaut (délai 15j, renonciation art.1223, nantissement DG, intuitu personae).</div>
+    <div id="perspective-note-preneur" class="info-note" style="display:none;margin-bottom:1rem">Mode <strong>Preneur</strong> : clauses protectrices activées par défaut (droit de préférence, indemnité d'éviction, clause Covid, non-concurrence réduite).</div>
+    <input type="hidden" id="perspective" value="bailleur">
 
     <!-- TYPE DE BAIL -->
     <div class="section-label">Type de bail</div>
@@ -142,10 +167,33 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
       </select></div>
     </div>
 
-    <!-- PALIER DE LOYER -->
-    <div class="field"><label>Loyer mensuel HT — Année 1 à 3 (palier bas)</label><input type="text" id="loyer-p1" placeholder="Ex : 1 800" oninput="liveUpdate()"></div>
-    <div class="field"><label>Loyer mensuel HT — Année 4 à 9 (loyer normal)</label><input type="text" id="loyer-p2" placeholder="Ex : 2 500" oninput="liveUpdate()"></div>
-    <div class="info-note">Le palier de loyer permet d'accompagner le preneur pendant la phase de démarrage.</div>
+    <!-- MODE DE LOYER -->
+    <div class="section-label">Structure du loyer</div>
+    <div class="sub-toggle">
+      <button class="sub-btn active" id="btn-loyer-fixe" onclick="setLoyerMode('fixe')">Loyer fixe (palier)</button>
+      <button class="sub-btn" id="btn-loyer-ca" onclick="setLoyerMode('ca')">LMG + % CA (centres commerciaux)</button>
+    </div>
+
+    <!-- PALIER DE LOYER (mode fixe) -->
+    <div id="bloc-loyer-fixe">
+      <div class="field"><label>Loyer mensuel HT — Année 1 à 3 (palier bas)</label><input type="text" id="loyer-p1" placeholder="Ex : 1 800" oninput="liveUpdate()"></div>
+      <div class="field"><label>Loyer mensuel HT — Année 4 à 9 (loyer normal)</label><input type="text" id="loyer-p2" placeholder="Ex : 2 500" oninput="liveUpdate()"></div>
+      <div class="info-note">Le palier de loyer permet d'accompagner le preneur pendant la phase de démarrage.</div>
+    </div>
+
+    <!-- LMG + % CA (mode centre commercial) -->
+    <div id="bloc-loyer-ca" style="display:none">
+      <div class="row2">
+        <div class="field"><label>Loyer Minimum Garanti (LMG) annuel HT (€)</label><input type="text" id="lmg-annuel" placeholder="Ex : 48 000" oninput="liveUpdate()"></div>
+        <div class="field"><label>Taux % sur CA HT</label><input type="text" id="taux-ca" placeholder="Ex : 8" oninput="liveUpdate()"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Surface GLA (m²) — base charges</label><input type="text" id="local-surface-gla" placeholder="Ex : 85" oninput="liveUpdate()"></div>
+        <div class="field"><label>Surface de vente (m²)</label><input type="text" id="local-surface-vente" placeholder="Ex : 64" oninput="liveUpdate()"></div>
+      </div>
+      <div class="field"><label>Fonds d'Animation et de Promotion (FAP) annuel HT (€)</label><input type="text" id="fap-montant" placeholder="Ex : 2 863" oninput="liveUpdate()"></div>
+      <div class="info-note">Structure standard des centres commerciaux. Le loyer variable = différence positive entre (% × CA) et le LMG. Le FAP est indexé sur l'ILC.</div>
+    </div>
 
     <div class="row2">
       <div class="field"><label>Charges mensuelles HT</label><input type="text" id="charges" placeholder="Ex : 300" oninput="liveUpdate()"></div>
@@ -177,8 +225,19 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
       <label class="checkbox-item"><input type="checkbox" id="cl-droit-preference" onchange="liveUpdate()"><span>Droit de préférence du preneur en cas de vente (L145-46-1) <span class="clause-badge">Recommandé</span></span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-etat-travaux" onchange="liveUpdate()"><span>État prévisionnel des travaux bailleur (obligation loi Pinel) <span class="clause-badge">Recommandé</span></span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-annexe-env" onchange="liveUpdate()"><span>Annexe environnementale (obligatoire si surface > 500 m²)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-condition-suspensive" onchange="liveUpdate()"><span>Bail sous condition suspensive <span class="clause-badge">Recommandé si local occupé</span></span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-renonciation-1223" onchange="liveUpdate()"><span>Renonciation art. 1223 C.civ (pas de réduction unilatérale du loyer) <span class="clause-badge">Recommandé</span></span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-intuitu-personae" onchange="liveUpdate()"><span>Clause intuitu personae (dérogations personnelles au preneur)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-delai-15j" onchange="liveUpdate()"><span>Délai de mise en demeure réduit à 15 jours (vs 1 mois légal) <span class="clause-badge">Bailleur</span></span></label>
+      <div id="note-delai-15j" class="info-note" style="margin-left:23px;margin-top:-4px">⚠️ Clause favorable au Bailleur. En mode Preneur, le délai légal de 1 mois s'applique.</div>
+      <label class="checkbox-item"><input type="checkbox" id="cl-covid" onchange="liveUpdate()"><span>Clause Covid / fermeture administrative — renégociation de bonne foi <span class="clause-badge">Preneur</span></span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-non-concurrence-reduite" onchange="liveUpdate()"><span>Non-concurrence réduite à 500 m (vs 5 km standard) <span class="clause-badge">Preneur</span></span></label>
     </div>
 
+    <div id="bloc-condition-suspensive" style="display:none;margin-top:0.5rem">
+      <div class="field"><label>Description de la condition suspensive</label><input type="text" id="condition-desc" placeholder="Ex : libération du local par l'occupant actuel" oninput="liveUpdate()"></div>
+      <div class="field"><label>Date limite de réalisation de la condition</label><input type="date" id="condition-date" oninput="liveUpdate()"></div>
+    </div>
     <div class="field" style="margin-top:1.5rem"><label>Date de signature</label><input type="date" id="date-sign" oninput="liveUpdate()"></div>
     <button class="generate-btn" onclick="generateDoc()">Générer le bail complet</button>
   </div>
@@ -200,7 +259,7 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
 </main>
 
 <script>
-let bailType='369', fermeType='libre', garantieType='dg';
+let bailType='369', fermeType='libre', garantieType='dg', loyerMode='fixe', perspective='bailleur';
 function v(id){return document.getElementById(id)?.value||'';}
 function c(id){return document.getElementById(id)?.checked||false;}
 function fmt(str,fb){return str.trim()||fb;}
@@ -218,6 +277,11 @@ function setType(type){
   liveUpdate();
 }
 
+document.getElementById('cl-condition-suspensive').addEventListener('change', function(){
+  document.getElementById('bloc-condition-suspensive').style.display = this.checked ? 'block' : 'none';
+  liveUpdate();
+});
+
 document.getElementById('indice').addEventListener('change', function(){
   document.getElementById('icc-warning').style.display = this.value.includes('ICC') ? 'block' : 'none';
 });
@@ -226,6 +290,46 @@ function setFerme(type){
   fermeType=type;
   document.getElementById('btn-libre').classList.toggle('active',type==='libre');
   document.getElementById('btn-ferme').classList.toggle('active',type==='ferme');
+  liveUpdate();
+}
+
+function setPerspective(p) {
+  perspective = p;
+  document.getElementById('perspective').value = p;
+  document.getElementById('btn-bailleur').classList.toggle('active', p === 'bailleur');
+  document.getElementById('btn-preneur').classList.toggle('active', p === 'preneur');
+  document.getElementById('perspective-note-bailleur').style.display = p === 'bailleur' ? 'block' : 'none';
+  document.getElementById('perspective-note-preneur').style.display = p === 'preneur' ? 'block' : 'none';
+
+  const isBailleur = p === 'bailleur';
+
+  // Clauses côté Bailleur : activées par défaut
+  const clBailleur = ['cl-renonciation-assurance','cl-renonciation-1223','cl-delai-15j','cl-intuitu-personae','cl-solidarite-cession','cl-charges-detail'];
+  // Clauses côté Preneur : activées par défaut
+  const clPreneur  = ['cl-droit-preference','cl-etat-travaux','cl-cession-bail','cl-renonciation-imprevision'];
+
+  clBailleur.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = isBailleur;
+  });
+  clPreneur.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = !isBailleur;
+  });
+
+  // Délai de mise en demeure : 15j bailleur, 1 mois preneur (note visuelle)
+  const delai15Note = document.getElementById('note-delai-15j');
+  if (delai15Note) delai15Note.style.display = isBailleur ? 'block' : 'none';
+
+  liveUpdate();
+}
+
+function setLoyerMode(mode){
+  document.getElementById('btn-loyer-fixe').classList.toggle('active', mode==='fixe');
+  document.getElementById('btn-loyer-ca').classList.toggle('active', mode==='ca');
+  document.getElementById('bloc-loyer-fixe').style.display = mode==='fixe' ? 'block' : 'none';
+  document.getElementById('bloc-loyer-ca').style.display = mode==='ca' ? 'block' : 'none';
+  loyerMode = mode;
   liveUpdate();
 }
 
@@ -271,6 +375,16 @@ function buildDoc(){
   const isPrecaire=bailType==='precaire';
   const isFerme=fermeType==='ferme';
   const isGAPD=garantieType==='gapd';
+  const isBailleur = perspective === 'bailleur';
+  const isPreneur = perspective === 'preneur';
+  const isLoyerCA = loyerMode === 'ca';
+  const lmgAnnuel = fmt(v('lmg-annuel'), '[LMG]');
+  const tauxCA = fmt(v('taux-ca'), '8');
+  const surfaceGLA = fmt(v('local-surface-gla'), v('local-surface') || '[Surface GLA]');
+  const surfaceVente = v('local-surface-vente');
+  const fapMontant = v('fap-montant');
+  const conditionDesc = v('condition-desc');
+  const conditionDate = v('condition-date') ? new Date(v('condition-date')).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : '[date limite]';
   const prenAddr=fmt(v('pren-addr'),'[Adresse preneur]');
   const localSurfaceNum=parseInt((v('local-surface')||'0').replace(/\s/g,''))||0;
 
@@ -281,9 +395,16 @@ function buildDoc(){
     <div class="watermark">ZELKO</div>
     <div class="doc-header">
       <div class="doc-main-title">${getTypeLabel()}</div>
-      <div class="doc-subtitle">Commercial Lease · Droit français</div>
+      <div class="doc-subtitle">Commercial Lease · Droit français · ${isBailleur ? "Rédaction Bailleur" : "Rédaction Preneur"}</div>
       <div class="doc-ref">Réf. ${docRef} · ${is369?'Art. L145-1 et s. Code de commerce':isPro?'Art. 57-A Loi 23 déc. 1986':'Art. L145-5 Code de commerce'}</div>
     </div>
+
+    ${c('cl-condition-suspensive') ? `
+    <div class="doc-section" style="border:2px solid var(--gold);padding:1rem;border-radius:4px;margin-bottom:1.5rem">
+      <div class="doc-section-title" style="color:var(--gold)">Bail sous condition suspensive</div>
+      <p>Le présent bail est consenti et accepté <strong>sous la condition suspensive déterminante</strong> suivante, sans laquelle les Parties n'auraient pas contracté : <strong>${conditionDesc || '[description de la condition]'}</strong>.</p>
+      <p>Cette condition devra être réalisée au plus tard le <strong>${conditionDate}</strong>. Le Bailleur informera le Preneur de sa réalisation par lettre recommandée avec accusé de réception. Dans l'hypothèse où la condition ne serait pas réalisée à cette date, et à défaut d'accord des Parties sur la prorogation du délai, le présent bail sera nul et de nul effet, chacune des Parties étant libérée de tout engagement sans indemnité d'aucune sorte.</p>
+    </div>` : ''}
 
     <div class="doc-parties">
       <strong>Entre les soussignés :</strong><br><br>
@@ -294,7 +415,8 @@ function buildDoc(){
 
     <div class="doc-section">
       <div class="doc-section-title">Article 1 — Désignation des locaux</div>
-      <p>Le Bailleur donne à bail au Preneur, qui accepte, les locaux situés au <strong>${localAddr}</strong>. Ces locaux se composent de : ${localDesc}. La surface totale est de <strong>${localSurface} m²</strong>.</p>
+      <p>Le Bailleur donne à bail au Preneur, qui accepte, les locaux situés au <strong>${localAddr}</strong>. Ces locaux se composent de : ${localDesc}.</p>
+      ${isLoyerCA ? `<p>• <strong>Surface GLA :</strong> <strong>${surfaceGLA} m²</strong> (Gross Leasable Area — base de calcul des charges et du loyer)${surfaceVente ? ` · <strong>Surface de vente :</strong> ${surfaceVente} m²` : ''}</p>` : `<p>• <strong>Surface totale :</strong> <strong>${localSurface} m²</strong></p>`}
       <p><strong>État du local :</strong> Le Preneur reconnaît prendre les locaux en <strong>${localEtat}</strong>, tel que constaté à l'état des lieux d'entrée établi contradictoirement entre les parties préalablement à la remise des clés, lequel est annexé au présent bail. Le Preneur déclare avoir visité les locaux et les accepter dans cet état, sans recours contre le Bailleur pour quelque cause que ce soit, sauf vices cachés.</p>
     </div>
 
@@ -316,11 +438,22 @@ function buildDoc(){
     </div>
 
     <div class="doc-section">
-      <div class="doc-section-title">Article 4 — Loyer & palier</div>
+      <div class="doc-section-title">Article 4 — Loyer & conditions financières</div>
+      ${isLoyerCA ? `
+      <p><strong>4.1 — Loyer à double composante</strong> (usage centres commerciaux)</p>
+      <p>Le loyer est indivisible et unique, composé de deux éléments :</p>
+      <p>• <strong>Loyer Minimum Garanti (LMG) :</strong> <strong>${lmgAnnuel} € HT/an</strong> (soit ${lmgAnnuel ? Math.round(parseInt(lmgAnnuel.replace(/\s/g,''))/12) : '[mensuel]'} € HT/mois), indexé annuellement sur l'${indice} au 1er janvier de chaque année.</p>
+      <p>• <strong>Loyer variable additionnel :</strong> différence positive entre <strong>${tauxCA}% du chiffre d'affaires HT annuel</strong> réalisé par le Preneur dans les Locaux et le LMG de l'exercice considéré. Le loyer variable est déterminé à l'expiration de chaque exercice annuel après communication du CA certifié.</p>
+      <p>Le Preneur réglera le LMG trimestriellement et d'avance, le premier jour de chaque trimestre civil (1er janvier, 1er avril, 1er juillet, 1er octobre). Le loyer variable additionnel sera facturé en régularisation dans les six mois suivant l'expiration de chaque année civile.</p>
+      <p><strong>Chiffre charnière</strong> (seuil de déclenchement du loyer variable) = LMG ÷ ${tauxCA}% = <strong>${lmgAnnuel && tauxCA ? Math.round(parseInt(lmgAnnuel.replace(/\s/g,'')) / (parseFloat(tauxCA)/100)).toLocaleString('fr-FR') + ' €' : '[CA seuil]'} HT/an</strong>.</p>
+      <p><strong>4.2 — Loyer de renouvellement :</strong> lors du renouvellement, le LMG sera fixé à la valeur la plus élevée entre la valeur locative du marché et le loyer total facturé au cours des 12 derniers mois précédant le renouvellement.</p>
+      <p style="font-size:11px;color:var(--muted)">Le présent article constitue une condition essentielle et nécessaire à l'économie générale du bail sans laquelle il n'aurait pas été consenti (art. 1103 et 1193 C.civ).</p>
+      ` : `
       <p>Le loyer est fixé selon les paliers suivants :</p>
-      <p>• <strong>Années 1 à 3</strong> : <strong>${loyerP1} € HT/mois</strong> (soit ${loyerP1?parseInt(loyerP1.replace(/\s/g,''))*12:'[annuel]'} € HT/an) — palier d'accompagnage au démarrage.</p>
+      <p>• <strong>Années 1 à 3</strong> : <strong>${loyerP1} € HT/mois</strong> (soit ${loyerP1?parseInt(loyerP1.replace(/\s/g,''))*12:'[annuel]'} € HT/an) — palier d'accompagnement au démarrage.</p>
       <p>• <strong>Années 4 à ${duree.replace(' ans','')} </strong> : <strong>${loyerP2} € HT/mois</strong> (soit ${loyerP2?parseInt(loyerP2.replace(/\s/g,''))*12:'[annuel]'} € HT/an) — loyer définitif.</p>
-      <p>Les charges récupérables s'élèvent à <strong>${charges} € HT/mois</strong>. Le loyer est payable mensuellement et d'avance le premier de chaque mois. La TVA sera ajoutée si applicable.</p>
+      `}
+      <p>Les charges récupérables s'élèvent à <strong>${charges} € HT/mois</strong>. La TVA sera ajoutée conformément à la réglementation en vigueur.</p>
     </div>
 
     <div class="doc-section">
@@ -332,7 +465,7 @@ function buildDoc(){
       <div class="doc-section-title">Article 6 — ${isGAPD?'Garantie Autonome à Première Demande (GAPD)':'Dépôt de garantie'}</div>
       <p>${isGAPD
         ? `À la signature des présentes, le Preneur remet au Bailleur une <strong>Garantie Autonome à Première Demande (GAPD)</strong> d'un montant de <strong>${garantieMontant} €</strong>, émise par un établissement bancaire ou une compagnie d'assurance agréée. Cette garantie est indépendante du contrat principal et pourra être appelée par le Bailleur sur première demande écrite, sans que le Preneur puisse s'y opposer par quelque exception que ce soit, notamment tirée du contrat de bail. La GAPD sera reconstituée dans un délai de 30 jours si elle est appelée. Elle sera libérée dans un délai de 2 mois après la restitution des clés et la régularisation de toutes les sommes dues.`
-        : `À la signature des présentes, le Preneur verse au Bailleur la somme de <strong>${garantieMontant} €</strong> à titre de dépôt de garantie, correspondant à ${garantieMontant && loyerP2 ? Math.round(parseInt(garantieMontant.replace(/\s/g,''))/parseInt(loyerP2.replace(/\s/g,''))) : '[X]'} mois de loyer HT. Cette somme sera restituée dans un délai de 2 mois après la restitution des clés, déduction faite des sommes éventuellement dues par le Preneur. ${garantieMontant && loyerP2 && Math.round(parseInt(garantieMontant.replace(/\s/g,''))/parseInt(loyerP2.replace(/\s/g,'')))>2 ? '<strong>Conformément à l\'article L145-16-1 du Code de commerce, ce dépôt de garantie excédant 2 mois de loyer HT est productif d\'intérêts au taux légal au profit du Preneur.</strong>' : ''}`
+        : `À la signature des présentes, le Preneur verse au Bailleur la somme de <strong>${garantieMontant} €</strong> à titre de dépôt de garantie, remis au Bailleur <strong>à titre de nantissement</strong> au sens des articles 2333 et suivants du Code civil, correspondant à ${garantieMontant && loyerP2 ? Math.round(parseInt(garantieMontant.replace(/\s/g,''))/parseInt(loyerP2.replace(/\s/g,''))) : '[X]'} mois de loyer HT. Cette somme sera restituée dans un délai de 2 mois après la restitution des clés, déduction faite des sommes éventuellement dues par le Preneur. En cas de procédure collective ouverte à l'encontre du Preneur, le Bailleur est fondé à compenser le montant de ce dépôt de garantie avec toutes sommes dues au titre de la période antérieure au jugement d'ouverture. ${garantieMontant && loyerP2 && Math.round(parseInt(garantieMontant.replace(/\s/g,''))/parseInt(loyerP2.replace(/\s/g,'')))>2 ? '<strong>Conformément à l\'article L145-16-1 du Code de commerce, ce dépôt de garantie excédant 2 mois de loyer HT est productif d\'intérêts au taux légal au profit du Preneur.</strong>' : ''}`
       }</p>
     </div>
 
@@ -414,6 +547,50 @@ function buildDoc(){
       <p>Bien que la surface des locaux (${localSurface} m²) soit inférieure au seuil légal de 500 m², les parties conviennent volontairement d'adopter de bonnes pratiques environnementales : suivi des consommations d'énergie et d'eau, recours prioritaire à des matériaux durables pour les travaux d'aménagement, tri sélectif et gestion responsable des déchets.</p>
     </div>` : ''}
 
+    ${isLoyerCA && fapMontant ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Fonds d'Animation et de Promotion (FAP)</div>
+      <p>Le Preneur s'engage à contribuer au Fonds d'Animation et de Promotion mis en place par le Bailleur pour assurer la promotion, l'animation et la publicité collective du Centre. Cette contribution constitue une condition essentielle du bail sans laquelle le Bailleur n'aurait pas contracté.</p>
+      <p>Le montant annuel forfaitaire de la contribution est fixé à <strong>${fapMontant} € HT</strong>, indexé annuellement sur la variation de l'${indice} publié par l'INSEE selon la même formule que l'indexation du loyer.</p>
+      <p>La contribution est payable par quart, d'avance, le premier jour de chaque trimestre civil, dans les mêmes conditions que le loyer. Le Bailleur établit chaque année un programme et un budget des opérations d'animation ; le Preneur peut consulter annuellement l'état des dépenses exposées. Le non-paiement de la contribution pourra entraîner la résiliation du bail dans les conditions de la clause résolutoire.</p>
+    </div>` : ''}
+
+    ${c('cl-renonciation-1223') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Renonciation à la réduction unilatérale du loyer</div>
+      <p>Par dérogation expresse aux dispositions de l'article 1223 du Code civil, le Preneur s'interdit, même après mise en demeure du Bailleur, de réduire unilatéralement le montant du loyer ou de toute autre somme due en vertu du bail. En cas de litige relatif à une exécution prétendument imparfaite du bail, le Preneur reste libre de saisir le juge de sa contestation ; seule une décision de justice exécutoire passée en force de chose jugée sera opposable au Bailleur.</p>
+    </div>` : ''}
+
+    ${c('cl-intuitu-personae') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Clause intuitu personae</div>
+      <p>Les dérogations aux conditions générales du présent bail et notamment les conditions financières particulières stipulées ci-dessus sont consenties <strong>intuitu personae</strong>, au seul bénéfice du Preneur désigné aux présentes. Dans l'hypothèse d'une cession du fonds, d'un changement de contrôle direct ou indirect du Preneur, ou de cessation par ce dernier d'être l'exploitant effectif des locaux, ces dérogations cesseraient de s'appliquer de plein droit et sans notification préalable à compter de la survenance de l'un de ces événements. Les conditions générales du bail 3-6-9 standard s'appliqueraient alors de plein droit.</p>
+    </div>` : ''}
+
+    ${c('cl-delai-15j') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Délai de mise en demeure réduit</div>
+      <p>Par dérogation aux dispositions légales imposant un délai d'un mois, et à la demande du Bailleur, les Parties conviennent que pour l'ensemble des obligations autres que celles pour lesquelles la loi impose expressément l'observation d'un délai d'un mois, le délai de mise en demeure avant mise en œuvre de la clause résolutoire ou exécution forcée est réduit à <strong>quinze (15) jours</strong> à compter de la réception d'une lettre recommandée avec accusé de réception restée infructueuse.</p>
+    </div>` : ''}
+
+    ${c('cl-covid') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Fermeture administrative — Clause de renégociation</div>
+      <p>Dans le cas où des décisions administratives imposeraient la fermeture totale ou partielle du Local (crise sanitaire, mesures d'urgence, etc.), les Parties s'engagent à se rencontrer, à première demande de l'une d'entre elles, pour discuter de bonne foi des modalités financières applicables à la période de fermeture, en tenant compte des dispositifs d'aides étatiques accordés au Preneur.</p>
+      <p>Cette clause a pour seul objet de permettre aux Parties d'engager une discussion et ne préjuge pas de son issue. Elle ne saurait être interprétée comme une possibilité pour le Preneur de s'exonérer de ses obligations de paiement. Tout accord devra être formalisé par avenant dans un délai de 30 jours.</p>
+    </div>` : ''}
+
+    ${c('cl-non-concurrence-reduite') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Non-concurrence</div>
+      <p>À titre exceptionnel et strictement personnel, la distance de non-concurrence est convenue entre les Parties à <strong>500 mètres</strong> à compter de la limite extérieure des locaux loués, par dérogation à la distance de 5 kilomètres prévue par les conditions générales du statut des baux commerciaux. Cette dérogation est accordée en considération de la personne du Preneur et cesse de s'appliquer en cas de cession.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art()} — Imputation des paiements</div>
+      <p>Tout paiement effectué par le Preneur sera imputé par le Bailleur dans l'ordre suivant : (i) frais de recouvrement et de procédure ; (ii) dommages et intérêts ; (iii) intérêts de retard ; (iv) dépôt de garantie et son réajustement ; (v) loyers et indemnités d'occupation, par priorité sur les sommes non contentieuses ; (vi) provisions sur charges. Le Preneur ne pourra imposer une imputation différente.</p>
+    </div>
+
     <div class="doc-section">
       <div class="doc-section-title">${art()} — Droit applicable & juridiction</div>
       <p>Le présent bail est soumis au droit français et notamment aux dispositions des articles L145-1 et suivants du Code de commerce${is369 ? ' (statut des baux commerciaux)' : isPro ? ' (bail professionnel, art. 57-A loi 1986)' : ' (bail précaire, art. L145-5)'}. En cas de litige, les parties s'engagent à rechercher une solution amiable avant toute action judiciaire. À défaut, le Tribunal judiciaire compétent du lieu de situation des locaux sera saisi.</p>
@@ -464,6 +641,8 @@ function downloadDoc(){
 }
 
 document.getElementById('date-sign').valueAsDate=new Date();
+// Init perspective par défaut : bailleur
+setPerspective('bailleur');
 document.getElementById('date-debut').valueAsDate=new Date();
 
 function goToPayment() {
@@ -499,6 +678,21 @@ function goToPayment() {
     cl_charges_detail: c('cl-charges-detail'),
     cl_travaux: c('cl-travaux'),
     cl_penalites_pro: c('cl-penalites-pro'),
+    perspective: perspective,
+    loyer_mode: loyerMode,
+    lmg_annuel: v('lmg-annuel'),
+    taux_ca: v('taux-ca'),
+    local_surface_gla: v('local-surface-gla'),
+    local_surface_vente: v('local-surface-vente'),
+    fap_montant: v('fap-montant'),
+    cl_condition_suspensive: c('cl-condition-suspensive'),
+    condition_desc: v('condition-desc'),
+    condition_date: v('condition-date'),
+    cl_renonciation_1223: c('cl-renonciation-1223'),
+    cl_intuitu_personae: c('cl-intuitu-personae'),
+    cl_delai_15j: c('cl-delai-15j'),
+    cl_covid: c('cl-covid'),
+    cl_non_concurrence_reduite: c('cl-non-concurrence-reduite'),
     cl_droit_preference: c('cl-droit-preference'),
     cl_etat_travaux: c('cl-etat-travaux'),
     cl_annexe_env: c('cl-annexe-env'),
