@@ -110,6 +110,10 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
     <div class="field"><label>Type de vente</label><select id="type-vente" onchange="liveUpdate()"><option value="biens">Vente de produits physiques</option><option value="services">Prestations de services</option><option value="numerique">Produits numériques / digitaux</option><option value="mixte">Mixte (produits + services)</option></select></div>
     <div class="field"><label>Description de l'activité</label><input type="text" id="activite" placeholder="Ex : vente en ligne de vêtements et accessoires de mode" oninput="liveUpdate()"></div>
     <div class="field"><label>Site internet</label><input type="text" id="site" placeholder="www.maboutique.fr" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Seuil livraison offerte (€)</label><input type="text" id="seuil-livraison" placeholder="Ex : 90" oninput="liveUpdate()"></div>
+      <div class="field"><label>Délai réclamation défaut (jours)</label><select id="delai-reclamation" onchange="liveUpdate()"><option value="15">15 jours</option><option value="30">30 jours</option><option value="7">7 jours</option></select></div>
+    </div>
 
     <div class="section-label">Livraison & paiement</div>
     <div class="row2">
@@ -129,6 +133,9 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
       <label class="checkbox-item"><input type="checkbox" id="cl-modif-prix" onchange="liveUpdate()"><span>Clause de modification des prix avec préavis</span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-interop" onchange="liveUpdate()"><span>Interopérabilité contenus numériques (Directive UE 2019/770) <span class="clause-badge">Recommandé si numérique</span></span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-penalites-b2b" onchange="liveUpdate()"><span>Pénalités de retard B2B obligatoires (L441-10 C.com) <span class="clause-badge">Recommandé B2B</span></span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-anti-bots" onchange="liveUpdate()"><span>Interdiction bots & anti-revente <span class="clause-badge">Recommandé</span></span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-retour-detail" onchange="liveUpdate()"><span>Politique de retour détaillée (état, emballage, exclusions hygiène)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-archivage" onchange="liveUpdate()"><span>Archivage des transactions (art. 1348 C.civ) <span class="clause-badge">Recommandé</span></span></label>
     </div>
 
     <div class="field" style="margin-top:1.5rem"><label>Date de mise à jour</label><input type="date" id="date-maj" oninput="liveUpdate()"></div>
@@ -172,6 +179,8 @@ function buildDoc(){
   const typeVente=v('type-vente');
   const clientType=v('client-type')||'b2c';
   const isB2C=clientType==='b2c';
+  const seuilLivraison=v('seuil-livraison');
+  const delaiReclamation=v('delai-reclamation')||'15';
   const delai=v('delai')||'2 à 5 jours ouvrés';
   const retractation=v('retractation')||'14 jours';
   const paiement=v('paiement')||'carte bancaire, virement et PayPal';
@@ -201,56 +210,61 @@ function buildDoc(){
 
     <div class="doc-section">
       <div class="doc-section-title">Article 2 — Commandes</div>
-      <p>Toute commande implique l'acceptation pleine et entière des présentes CGV. Le Client valide sa commande en cliquant sur le bouton de confirmation. La vente est réputée conclue à la date de confirmation de commande par le Vendeur, matérialisée par l'envoi d'un email de confirmation.</p>
+      <p>Toute commande implique l'acceptation pleine et entière des présentes CGV. Le Client valide sa commande en cliquant sur le bouton de confirmation. La vente est réputée conclue à la date de confirmation de commande par le Vendeur, matérialisée par l'envoi d'un email de confirmation. Le Vendeur se réserve le droit de refuser ou d'annuler toute commande en cas de litige relatif au paiement d'une commande antérieure, d'adresse erronée ou de suspicion de fraude.</p>
     </div>
 
     <div class="doc-section">
-      <div class="doc-section-title">Article 3 — Prix</div>
-      <p>Les prix sont indiqués en euros, toutes taxes comprises (TTC). Le Vendeur se réserve le droit de modifier ses prix à tout moment, étant entendu que le prix applicable est celui en vigueur au moment de la validation de la commande. En cas de promotion, les prix promotionnels s'appliquent uniquement pendant la durée indiquée.</p>
+      <div class="doc-section-title">Article 3 — Disponibilité des produits</div>
+      <p>Les offres de produits et de prix sont valables tant qu'elles sont visibles sur le site ${site}. En cas d'indisponibilité d'un produit après validation de la commande (rupture de stock temporaire ou définitive), le Vendeur en informera le Client par email dans les meilleurs délais. La commande sera annulée pour le(s) seul(s) article(s) concerné(s) et le Client ne sera débité que des produits effectivement expédiés. Le Vendeur se réserve le droit de limiter le nombre d'achats par client et/ou par commande pour certaines références, sans préavis.</p>
     </div>
 
     <div class="doc-section">
-      <div class="doc-section-title">Article 4 — Paiement</div>
+      <div class="doc-section-title">Article 4 — Prix</div>
+      <p>Les prix sont indiqués en euros, toutes taxes comprises (TTC). Le Vendeur se réserve le droit de modifier ses prix à tout moment, étant entendu que le prix applicable est celui en vigueur au moment de la validation de la commande. En cas de baisse de prix postérieure à l'achat, le Client n'a aucun droit au remboursement de la différence. En cas de promotion, les prix promotionnels s'appliquent uniquement pendant la durée de l'offre et sur les produits visés. Une seule promotion peut s'appliquer par produit.</p>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">Article 5 — Paiement</div>
       <p>Le règlement s'effectue par ${paiement}. Le paiement est exigible immédiatement à la commande. En cas de paiement par virement, la commande est traitée à réception du virement. Tout retard de paiement entraîne l'application de pénalités au taux légal en vigueur.</p>
     </div>
 
     ${isBiens ? `
     <div class="doc-section">
-      <div class="doc-section-title">Article 5 — Livraison</div>
+      <div class="doc-section-title">Article 6 — Livraison</div>
       <p>Les produits sont livrés à l'adresse indiquée par le Client lors de sa commande. Le délai de livraison est de <strong>${delai}</strong> à compter de la confirmation de commande. En cas de retard, le Client sera informé dans les meilleurs délais. Le Vendeur ne saurait être tenu responsable des retards imputables au transporteur ou à un cas de force majeure.</p>
     </div>` : ''}
 
     ${isServices ? `
     <div class="doc-section">
-      <div class="doc-section-title">Article 5 — Exécution des services</div>
+      <div class="doc-section-title">Article 6 — Exécution des services</div>
       <p>Les services sont exécutés dans les délais convenus au moment de la commande. Le Client s'engage à fournir toutes les informations nécessaires à la bonne exécution du service. Tout retard imputable au Client ne saurait engager la responsabilité du Vendeur.</p>
     </div>` : ''}
 
     ${isNumerique ? `
     <div class="doc-section">
-      <div class="doc-section-title">Article 5 — Accès aux produits numériques</div>
+      <div class="doc-section-title">Article 6 — Accès aux produits numériques</div>
       <p>Les produits numériques sont mis à disposition immédiatement après confirmation du paiement, par téléchargement ou accès à un espace dédié. Le Client est informé que le droit de rétractation ne s'applique pas aux contenus numériques dont l'exécution a commencé avec son accord préalable exprès.</p>
     </div>` : ''}
 
     ${isB2C ? `
     <div class="doc-section">
-      <div class="doc-section-title">Article 6 — Droit de rétractation</div>
+      <div class="doc-section-title">Article 7 — Droit de rétractation</div>
       <p>Conformément à l'article L221-18 du Code de la consommation, le Client dispose d'un délai de <strong>${retractation}</strong> à compter de la réception du bien (ou de la conclusion du contrat pour les services) pour exercer son droit de rétractation, sans avoir à justifier de motifs ni à payer de pénalités. Le remboursement sera effectué dans les 14 jours suivant la réception de la demande de rétractation, via le même moyen de paiement que celui utilisé lors de la commande.${isNumerique ? ' <strong>Exception :</strong> le droit de rétractation ne s\'applique pas aux contenus numériques dont l\'exécution a commencé avec l\'accord préalable et exprès du Client.' : ''}</p>
     </div>` : `
     <div class="doc-section">
-      <div class="doc-section-title">Article 6 — Absence de droit de rétractation (B2B)</div>
+      <div class="doc-section-title">Article 7 — Absence de droit de rétractation (B2B)</div>
       <p>Les présentes CGV s'appliquant à des relations entre professionnels, le droit de rétractation prévu par le Code de la consommation ne s'applique pas. Toute commande validée par le Client est ferme et définitive, sauf accord exprès du Vendeur.</p>
     </div>`}
 
     ${c('cl-garantie') ? `
     <div class="doc-section">
-      <div class="doc-section-title">Article 7 — Garanties légales</div>
+      <div class="doc-section-title">Article 8 — Garanties légales</div>
       <p>Tous les produits bénéficient de la garantie légale de conformité (Art. L217-4 à L217-14 Code de la consommation) et de la garantie contre les vices cachés (Art. 1641 à 1649 Code civil). En cas de défaut de conformité, le Client peut demander le remplacement ou le remboursement du produit dans un délai de 2 ans à compter de la délivrance.</p>
     </div>` : ''}
 
     ${c('cl-donnees') ? `
     <div class="doc-section">
-      <div class="doc-section-title">Article 8 — Données personnelles (RGPD)</div>
+      <div class="doc-section-title">Article 9 — Données personnelles (RGPD)</div>
       <p>Les données personnelles collectées lors de la commande sont traitées par ${nom} en qualité de responsable de traitement, aux fins d'exécution du contrat et de gestion de la relation client. Conformément au Règlement (UE) 2016/679 (RGPD), le Client dispose d'un droit d'accès, de rectification et de suppression de ses données en contactant ${email}.</p>
     </div>` : ''}
 
@@ -296,9 +310,42 @@ function buildDoc(){
       <p>Conformément à l'article L441-10 du Code de commerce, tout retard de paiement entre professionnels donne lieu, de plein droit et sans mise en demeure préalable, à l'application de pénalités de retard au taux de <strong>3 fois le taux d'intérêt légal</strong> en vigueur. Une indemnité forfaitaire de <strong>40 € pour frais de recouvrement</strong> est automatiquement due. Le Vendeur se réserve le droit de réclamer une indemnisation complémentaire si les frais réellement engagés dépassent ce montant.</p>
     </div>` : ''}
 
+    ${c('cl-anti-bots') ? `
     <div class="doc-section">
-      <div class="doc-section-title">Droit applicable & litiges</div>
-      <p>Les présentes CGV sont soumises au droit français. ${isB2C ? `En cas de litige, le Client consommateur peut recourir gratuitement au service de médiation de la consommation. Le Vendeur adhère au service de médiation <strong>CNPM Médiation Consommation</strong> (cnpm-mediation-consommation.eu) — médiateur agréé conformément à l'ordonnance n° 2015-1033 du 20 août 2015. La plateforme européenne de règlement en ligne des litiges est également accessible sur <strong>ec.europa.eu/consumers/odr</strong>. À défaut, les tribunaux français seront compétents.` : `Tout litige entre professionnels relatif à l'interprétation ou à l'exécution des présentes sera soumis, à défaut d'accord amiable dans un délai de 30 jours, à la compétence exclusive des tribunaux de Paris.`}</p>
+      <div class="doc-section-title">Interdiction de revente & bots</div>
+      <p>Le site ${site} est destiné exclusivement à la vente au détail à des consommateurs finaux utilisant les produits à des fins personnelles. Le Vendeur se réserve le droit de refuser ou d'annuler toute commande ne correspondant pas à une vente au détail (quantités ou montants inhabituels, suspicion d'activité de revente). L'utilisation de scripts automatisés, bots ou tout logiciel permettant de passer commande de manière automatisée est strictement interdite et entraîne l'annulation de la commande et la résiliation du compte client.</p>
+    </div>` : ''}
+
+    ${c('cl-retour-detail') && isBiens ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Politique de retour — Conditions d'acceptation</div>
+      <p>Seuls les produits retournés <strong>complets, non utilisés, avec leurs étiquettes d'origine, dans leur emballage d'origine intact</strong> et en état d'être re-commercialisés seront acceptés. Les produits ayant subi la moindre intervention extérieure (lavage en machine, nettoyage avec produits tiers, réparation par un tiers) ne pourront être repris. <strong>Pour des raisons d'hygiène</strong>, les produits suivants ne peuvent faire l'objet d'un retour dès lors que leur emballage a été descellé : semelles, chaussettes, sous-vêtements, et tout produit d'hygiène personnelle. Tout retour non conforme sera refusé et le Client en sera informé par email ; il disposera alors de 30 jours pour récupérer son article à ses frais, faute de quoi il sera considéré comme abandonné.</p>
+    </div>` : ''}
+
+    ${c('cl-archivage') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Archivage des transactions</div>
+      <p>Les registres informatisés, conservés dans les systèmes informatiques du Vendeur et de ses partenaires dans des conditions raisonnables de sécurité, sont considérés comme des preuves des communications, commandes et paiements intervenus entre les parties, conformément à l'article 1348 du Code civil. L'archivage des bons de commande et des factures est effectué sur un support fiable et durable, de manière à en constituer une copie fidèle et durable. Les présentes CGV s'appliquent pour une durée indéterminée jusqu'à leur éventuelle mise à jour, dont la date est indiquée dans le document.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">Divisibilité</div>
+      <p>Si l'une des clauses des présentes CGV était déclarée nulle ou non avenue par un changement de législation, de réglementation ou par une décision de justice, cela ne saurait en aucun cas affecter la validité et l'opposabilité des autres clauses des présentes conditions générales de vente.</p>
+    </div>
+
+    ${seuilLivraison ? `
+    <div class="doc-section">
+      <div class="doc-section-title">Réclamations</div>
+      <p>Pour toute réclamation relative à la réception d'un produit défectueux ou non conforme, le Client doit contacter le service client dans les <strong>${delaiReclamation} jours</strong> suivant la réception de sa commande à l'adresse <strong>${email}</strong>. Passé ce délai, les réclamations ne pourront être prises en compte. La livraison est offerte à partir de <strong>${seuilLivraison} €</strong> d'achats.</p>
+    </div>` : `
+    <div class="doc-section">
+      <div class="doc-section-title">Réclamations</div>
+      <p>Pour toute réclamation relative à la réception d'un produit défectueux ou non conforme, le Client doit contacter le service client dans les <strong>${delaiReclamation} jours</strong> suivant la réception à l'adresse <strong>${email}</strong>. Passé ce délai, les réclamations ne pourront être prises en compte.</p>
+    </div>`}
+
+    <div class="doc-section">
+      <div class="doc-section-title">Droit applicable & médiation</div>
+      <p>Les présentes CGV sont soumises au droit français. ${isB2C ? `Avant toute action judiciaire, le Client consommateur est invité à rechercher une solution amiable en contactant le service client. En l'absence de réponse satisfaisante dans un délai de 60 jours, le Client peut recourir gratuitement au service de médiation de la consommation : <strong>CNPM Médiation Consommation</strong> — cnpm-mediation-consommation.eu — médiateur agréé conformément à l'ordonnance n° 2015-1033 du 20 août 2015. La plateforme européenne de résolution en ligne des litiges est également accessible sur <strong>ec.europa.eu/consumers/odr</strong>. À défaut, les tribunaux français seront compétents.` : `Tout litige entre professionnels sera soumis, à défaut d'accord amiable dans un délai de 30 jours, à la compétence exclusive des tribunaux de Paris.`}</p>
     </div>
   `;
 }
@@ -365,6 +412,11 @@ function goToPayment() {
     cl_modif_prix: c('cl-modif-prix'),
     cl_interop: c('cl-interop'),
     cl_penalites_b2b: c('cl-penalites-b2b'),
+    cl_anti_bots: c('cl-anti-bots'),
+    cl_retour_detail: c('cl-retour-detail'),
+    cl_archivage: c('cl-archivage'),
+    seuil_livraison: v('seuil-livraison'),
+    delai_reclamation: v('delai-reclamation'),
     paid: true
   };
   localStorage.setItem('zelko_cgv', JSON.stringify(formData));
