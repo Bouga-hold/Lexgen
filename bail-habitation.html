@@ -77,10 +77,12 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
     <div class="panel-sub">Conforme à la loi du 6 juillet 1989 et à la loi ALUR du 24 mars 2014.</div>
 
     <div class="section-label">Type de bail</div>
-    <div class="type-toggle">
+    <div class="type-toggle" style="grid-template-columns:1fr 1fr 1fr">
       <button class="type-btn active" id="btn-vide" onclick="setType('vide')">Location vide</button>
       <button class="type-btn" id="btn-meuble" onclick="setType('meuble')">Location meublée</button>
+      <button class="type-btn" id="btn-mobilite" onclick="setType('mobilite')">Bail mobilité</button>
     </div>
+    <div id="mobilite-note" style="display:none" class="info-note">Bail mobilité (loi ELAN 2018) : meublé courte durée, 1 à 10 mois, pour étudiant ou mobilité pro. Aucun dépôt de garantie.</div>
 
     <div class="section-label">Le bailleur</div>
     <div class="field"><label>Nom / Raison sociale</label><input type="text" id="bail-nom" placeholder="Ex : Jean Dupont" oninput="liveUpdate()"></div>
@@ -122,7 +124,22 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
       <div class="field"><label>Chauffage</label><select id="bien-chauffage" onchange="liveUpdate()"><option value="individuel (gaz)">Individuel gaz</option><option value="individuel (électrique)">Individuel électrique</option><option value="collectif">Collectif</option><option value="individuel (fioul)">Individuel fioul</option></select></div>
     </div>
     <div class="field"><label>Numéro de DPE (classe énergétique)</label><input type="text" id="bien-dpe" placeholder="Ex : Classe C — 120 kWh/m²/an" oninput="liveUpdate()"></div>
-    <div class="info-note">Le DPE est obligatoire depuis la loi Climat et Résilience (2021). Un logement classé F ou G est un "passoire thermique".</div>
+    <div class="info-note">Le DPE est obligatoire depuis la loi Climat et Résilience (2021). Un logement classé F ou G est un "passoire thermique". Depuis jan. 2025, un logement G+ ne peut plus être mis en location.</div>
+    <div class="field"><label>Numéro fiscal du logement <span style="color:#e05c2a;font-size:10px">OBLIGATOIRE 2025</span></label><input type="text" id="bien-fiscal" placeholder="Ex : 12345678901234 (espace impots.gouv.fr > Biens immobiliers)" oninput="liveUpdate()"></div>
+
+    <div class="section-label">Zone & encadrement des loyers</div>
+    <div class="field"><label>Zone du logement</label><select id="zone-loyer" onchange="liveUpdate()">
+      <option value="non-tendue">Zone non tendue (loyer libre)</option>
+      <option value="tendue-relocation">Zone tendue — encadrement à la relocation</option>
+      <option value="tendue-strict">Zone tendue — encadrement strict (Paris, Lyon, Bordeaux…)</option>
+    </select></div>
+    <div id="zone-strict-fields" style="display:none">
+      <div class="row2">
+        <div class="field"><label>Loyer de référence (€/m²)</label><input type="text" id="loyer-ref" placeholder="Ex : 26,5" oninput="liveUpdate()"></div>
+        <div class="field"><label>Loyer de référence majoré (€/m²)</label><input type="text" id="loyer-ref-majore" placeholder="Ex : 31,8" oninput="liveUpdate()"></div>
+      </div>
+      <div class="field"><label>Complément de loyer (€) — si applicable</label><input type="text" id="complement-loyer" placeholder="Laisser vide si aucun" oninput="liveUpdate()"></div>
+    </div>
 
     <div class="section-label">Durée & loyer</div>
     <div class="row2">
@@ -132,6 +149,7 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
         <option value="6 ans">6 ans (vide — société)</option>
         <option value="1 an">1 an (meublé)</option>
         <option value="9 mois">9 mois (meublé étudiant)</option>
+        <option value="1 à 10 mois">1 à 10 mois (bail mobilité)</option>
       </select></div>
     </div>
     <div class="row2">
@@ -149,6 +167,13 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
     <div class="field"><label>Mode de récupération des charges</label><select id="charges-mode" onchange="liveUpdate()"><option value="provisions sur charges avec régularisation annuelle">Provisions avec régularisation annuelle</option><option value="forfait de charges non révisable">Forfait de charges (meublé)</option></select></div>
     <div class="field"><label>Charges récupérables incluses</label><textarea id="charges-detail" placeholder="Ex : eau froide et chaude, entretien des parties communes, taxe d'ordures ménagères, ascenseur..." oninput="liveUpdate()"></textarea></div>
 
+    <div class="section-label">Agence immobilière (si applicable)</div>
+    <div class="field"><label>Nom de l'agence (laisser vide si gestion directe)</label><input type="text" id="agence-nom" placeholder="Ex : Agence Martin Immobilier" oninput="liveUpdate()"></div>
+    <div class="row2">
+      <div class="field"><label>Honoraires totaux TTC (€)</label><input type="text" id="agence-honoraires" placeholder="Ex : 800" oninput="liveUpdate()"></div>
+      <div class="field"><label>Part à la charge du locataire (€)</label><input type="text" id="agence-part-loc" placeholder="Ex : 400" oninput="liveUpdate()"></div>
+    </div>
+
     <div class="section-label">Clauses optionnelles</div>
     <div class="checkbox-group">
       <label class="checkbox-item"><input type="checkbox" id="cl-animaux" onchange="liveUpdate()"><span>Autorisation des animaux domestiques</span></label>
@@ -161,6 +186,8 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
       <label class="checkbox-item"><input type="checkbox" id="cl-assurance" onchange="liveUpdate()"><span>Obligation d'assurance habitation renforcée</span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-clause-resolutoire" onchange="liveUpdate()"><span>Clause résolutoire (résiliation automatique en cas d'impayé)</span></label>
       <label class="checkbox-item"><input type="checkbox" id="cl-entretien" onchange="liveUpdate()"><span>Obligations d'entretien détaillées</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-vetuste" onchange="liveUpdate()"><span>Grille de vétusté (partage des réparations selon ancienneté)</span></label>
+      <label class="checkbox-item"><input type="checkbox" id="cl-copro" onchange="liveUpdate()"><span>Règlement de copropriété annexé</span></label>
     </div>
 
     <div id="meuble-section" style="display:none">
@@ -201,8 +228,11 @@ function setType(type){
   bailType = type;
   document.getElementById('btn-vide').classList.toggle('active', type==='vide');
   document.getElementById('btn-meuble').classList.toggle('active', type==='meuble');
-  document.getElementById('meuble-section').style.display = type==='meuble' ? 'block' : 'none';
+  document.getElementById('btn-mobilite').classList.toggle('active', type==='mobilite');
+  document.getElementById('meuble-section').style.display = (type==='meuble'||type==='mobilite') ? 'block' : 'none';
+  document.getElementById('mobilite-note').style.display = type==='mobilite' ? 'block' : 'none';
   if(type==='meuble') document.getElementById('duree').value = '1 an';
+  else if(type==='mobilite') document.getElementById('duree').value = '1 à 10 mois';
   else document.getElementById('duree').value = '3 ans';
   liveUpdate();
 }
@@ -241,6 +271,15 @@ function buildDoc(){
   const mobilier = v('mobilier');
   const dateSign = fmtDate('date-sign');
   const isVide = bailType === 'vide';
+  const isMobilite = bailType === 'mobilite';
+  const bienFiscal = v('bien-fiscal');
+  const zoneLoyer = v('zone-loyer') || 'non-tendue';
+  const loyerRef = v('loyer-ref');
+  const loyerRefMajore = v('loyer-ref-majore');
+  const complementLoyer = v('complement-loyer');
+  const agenceNom = v('agence-nom');
+  const agenceHonoraires = v('agence-honoraires');
+  const agencePartLoc = v('agence-part-loc');
   const isMeuble = bailType === 'meuble';
   const totalLoyer = loyer && charges ? `${parseInt(loyer.replace(/\s/g,'')) + parseInt(charges.replace(/\s/g,''))} €` : '[Total]';
 
@@ -253,8 +292,8 @@ function buildDoc(){
   return `
     <div class="watermark">ZELKO</div>
     <div class="doc-header">
-      <div class="doc-main-title">Contrat de Location ${isMeuble ? 'Meublée' : 'Vide'}</div>
-      <div class="doc-subtitle">${isMeuble ? 'Bail meublé — Loi du 6 juillet 1989 · Art. 25-3 et s.' : 'Bail d\'habitation — Loi du 6 juillet 1989 modifiée par la loi ALUR'}</div>
+      <div class="doc-main-title">Contrat de Location ${isMobilite ? 'Meublée — Bail Mobilité' : isMeuble ? 'Meublée' : 'Vide'}</div>
+      <div class="doc-subtitle">${isMobilite ? 'Bail mobilité — Loi ELAN du 23 nov. 2018 · Art. 25-12 et s.' : isMeuble ? 'Bail meublé — Loi du 6 juillet 1989 · Art. 25-3 et s.' : 'Bail d\'habitation — Loi du 6 juillet 1989 modifiée par la loi ALUR'}</div>
       <div class="doc-ref">Réf. ${docRef} · Usage d'habitation principale</div>
     </div>
 
@@ -271,13 +310,33 @@ function buildDoc(){
       <p>Le Bailleur loue au Locataire, qui accepte, le bien immobilier suivant :</p>
       <p>• <strong>Adresse :</strong> ${bienAddr}</p>
       <p>• <strong>Nature :</strong> ${bienType} à usage d'habitation principale</p>
-      <p>• <strong>Surface habitable :</strong> ${bienSurface} m² (loi Carrez)</p>
+      <p>• <strong>Surface habitable :</strong> ${bienSurface} m² (surface habitable, art. R111-2 CCH — loi Boutin)</p>
+      ${bienFiscal ? `<p>• <strong>Numéro fiscal du logement :</strong> ${bienFiscal}</p>` : '<p>• <strong>Numéro fiscal du logement :</strong> <span style="color:#e05c2a">[À compléter — mention obligatoire depuis 2025]</span></p>'}
       <p>• <strong>Nombre de pièces principales :</strong> ${bienPieces}</p>
       <p>• <strong>Étage :</strong> ${bienEtage}</p>
       <p>• <strong>Chauffage :</strong> ${bienChauffage}</p>
       <p>• <strong>Description :</strong> ${bienDesc}</p>
       <p>• <strong>Diagnostic de Performance Énergétique (DPE) :</strong> ${bienDpe}</p>
     </div>
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Performance énergétique')}</div>
+      <p>Le logement présente la performance énergétique suivante : <strong>${bienDpe}</strong>.</p>
+      <p style="font-size:11px;color:var(--muted)">Rappel légal (loi Climat et Résilience 2021, décret 2023-796) : un logement décent doit respecter, en France métropolitaine, les critères minimaux de performance suivants — depuis le 1er janvier 2025 : classe F minimum ; depuis le 1er janvier 2028 : classe E minimum. Les logements classés F et G ne peuvent faire l'objet d'aucune augmentation de loyer. Tout logement classé G+ (consommation > 450 kWh/m²/an) ne peut plus être mis en location depuis le 1er janvier 2025.</p>
+    </div>
+
+    ${zoneLoyer !== 'non-tendue' ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Encadrement des loyers')}</div>
+      ${zoneLoyer === 'tendue-strict' ? `
+      <p>Le logement est situé dans une zone soumise à l'encadrement des loyers conformément à la loi ALUR et aux arrêtés préfectoraux applicables. Le loyer fixé respecte les plafonds suivants :</p>
+      <p>• <strong>Loyer de référence :</strong> ${loyerRef || '[à compléter]'} €/m²</p>
+      <p>• <strong>Loyer de référence majoré (+20%) :</strong> ${loyerRefMajore || '[à compléter]'} €/m²</p>
+      ${complementLoyer ? `<p>• <strong>Complément de loyer :</strong> ${complementLoyer} € (justificatif joint au bail)</p>` : ''}
+      ` : `
+      <p>Le logement est situé en zone tendue. Conformément à l'article 18 de la loi du 6 juillet 1989, le loyer ne pourra être augmenté lors d'une nouvelle mise en location que dans la limite de la variation de l'Indice de Référence des Loyers (IRL).</p>
+      `}
+    </div>` : ''}
 
     ${isMeuble && mobilier ? `
     <div class="doc-section">
@@ -289,7 +348,7 @@ function buildDoc(){
 
     <div class="doc-section">
       <div class="doc-section-title">${art('Durée du bail')}</div>
-      <p>Le présent bail est consenti pour une durée de <strong>${duree}</strong>, prenant effet le <strong>${dateDebut}</strong>.${isVide ? ` Conformément à l'article 10 de la loi du 6 juillet 1989, le bail se renouvelle tacitement à son expiration pour la même durée, sauf congé donné dans les délais légaux.` : ` À l'issue de cette période, le bail se renouvelle tacitement pour un an, sauf congé donné par l'une ou l'autre des parties dans les délais légaux.`}</p>
+      <p>Le présent bail est consenti pour une durée de <strong>${duree}</strong>, prenant effet le <strong>${dateDebut}</strong>.${isMobilite ? ` Conformément aux articles 25-12 et suivants de la loi ELAN du 23 novembre 2018, ce bail mobilité ne peut être ni renouvelé ni reconduit tacitement. À son terme, un nouveau bail mobilité pourra être conclu avec le même locataire, dans la limite de 10 mois au total.` : isVide ? ` Conformément à l'article 10 de la loi du 6 juillet 1989, le bail se renouvelle tacitement à son expiration pour la même durée, sauf congé donné dans les délais légaux.` : ` À l'issue de cette période, le bail se renouvelle tacitement pour un an, sauf congé donné par l'une ou l'autre des parties dans les délais légaux.`}</p>
       <p><strong>Congé du Locataire :</strong> Le Locataire peut donner congé à tout moment, avec un préavis de ${c('cl-resiliation-anticipee') ? '<strong>1 mois</strong> (zone tendue)' : '<strong>3 mois</strong>'} pour un logement vide${isMeuble ? ', ou <strong>1 mois</strong> pour un logement meublé' : ''}. Le congé est donné par lettre recommandée avec accusé de réception ou acte d'huissier.</p>
       <p><strong>Congé du Bailleur :</strong> Le Bailleur peut donner congé à l'expiration du bail, avec un préavis de <strong>6 mois</strong>, pour l'un des motifs suivants : reprise pour habitation personnelle ou familiale, vente du logement, ou motif légitime et sérieux.</p>
     </div>
@@ -308,11 +367,16 @@ function buildDoc(){
       <p>Le loyer sera révisé chaque année à la date anniversaire du bail, en fonction de la variation de l'<strong>Indice de Référence des Loyers (IRL)</strong> publié par l'INSEE. La révision ne peut excéder la variation de cet indice. En cas d'oubli de révision, le Bailleur peut procéder à un rappel dans la limite d'un an.</p>
     </div>` : ''}
 
+    ${isMobilite ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Dépôt de garantie')}</div>
+      <p>Conformément à l'article 25-14 de la loi ELAN du 23 novembre 2018, <strong>aucun dépôt de garantie ne peut être exigé</strong> dans le cadre d'un bail mobilité. Le Bailleur peut toutefois demander une caution ou une garantie Visale via Action Logement.</p>
+    </div>` : `
     <div class="doc-section">
       <div class="doc-section-title">${art('Dépôt de garantie')}</div>
       <p>À la signature des présentes, le Locataire verse au Bailleur la somme de <strong>${depot} €</strong> à titre de dépôt de garantie, soit <strong>${loyer ? Math.round(parseInt(depot.replace(/\s/g,''))/parseInt(loyer.replace(/\s/g,''))) : '[X]'} mois</strong> de loyer hors charges. Cette somme est conforme au plafond légal (${isVide ? '1 mois' : '2 mois'} de loyer hors charges pour un logement ${isVide ? 'vide' : 'meublé'}).</p>
       <p>Le dépôt de garantie sera restitué dans un délai d'<strong>un mois</strong> (si l'état des lieux de sortie est conforme à l'état des lieux d'entrée) ou de <strong>deux mois</strong> (en cas de différence), déduction faite des sommes dues par le Locataire. Le Bailleur justifiera par écrit toute retenue sur le dépôt.</p>
-    </div>
+    </div>`}
 
     <div class="doc-section">
       <div class="doc-section-title">${art('État des lieux')}</div>
@@ -383,9 +447,32 @@ function buildDoc(){
       <p>Les diagnostics techniques suivants sont annexés au présent bail : Diagnostic de Performance Énergétique (DPE), état des risques naturels, miniers et technologiques (ERNMT), constat de risque d'exposition au plomb (si logement construit avant 1949), état relatif à la présence d'amiante (si applicable), diagnostic bruit (si applicable).</p>
     </div>
 
+    ${agenceNom ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Frais d\'agence')}</div>
+      <p>La location est conclue par l'intermédiaire de <strong>${agenceNom}</strong>. Conformément à la loi ALUR du 24 mars 2014, les honoraires d'agence s'élèvent à <strong>${agenceHonoraires} € TTC</strong>, dont <strong>${agencePartLoc} € TTC à la charge du Locataire</strong> (le solde étant à la charge du Bailleur). La part du locataire ne peut excéder celle du bailleur.</p>
+    </div>` : ''}
+
+    ${c('cl-vetuste') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Grille de vétusté')}</div>
+      <p>Les parties conviennent d'appliquer une grille de vétusté pour l'évaluation des réparations en fin de bail. Cette grille, annexée au présent contrat, permet de déterminer la part des réparations incombant au Locataire en tenant compte de la durée d'occupation et de l'ancienneté des équipements.</p>
+    </div>` : ''}
+
+    ${c('cl-copro') ? `
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Règlement de copropriété')}</div>
+      <p>Un exemplaire du règlement de copropriété applicable à l'immeuble est annexé au présent bail. Le Locataire déclare en avoir pris connaissance et s'engage à le respecter, notamment en ce qui concerne les règles de vie commune, les parties communes et les éventuelles restrictions d'usage.</p>
+    </div>` : ''}
+
+    <div class="doc-section">
+      <div class="doc-section-title">${art('Documents annexes')}</div>
+      <p>Sont annexés au présent bail et en font partie intégrante : (i) le dossier de diagnostics techniques (DPE, état des risques naturels et technologiques, constat de risque d'exposition au plomb si logement antérieur à 1949, état relatif à l'amiante si applicable, diagnostic électricité et gaz si applicable) ; (ii) la notice informative relative aux droits et obligations des parties ; (iii) l'état des lieux d'entrée contradictoire ; (iv) l'attestation d'assurance habitation du Locataire${c('cl-vetuste') ? ' ; (v) la grille de vétusté' : ''}${c('cl-copro') ? ' ; (vi) le règlement de copropriété' : ''}.</p>
+    </div>
+
     <div class="doc-section">
       <div class="doc-section-title">${art('Droit applicable & litiges')}</div>
-      <p>Le présent bail est soumis aux dispositions de la loi du 6 juillet 1989 modifiée et de la loi ALUR du 24 mars 2014. En cas de litige, les parties s'engagent à recourir à la Commission Départementale de Conciliation (CDC) avant toute saisine du Tribunal judiciaire compétent du lieu de situation du logement.</p>
+      <p>Le présent bail est soumis aux dispositions de la loi du 6 juillet 1989 modifiée, de la loi ALUR du 24 mars 2014${isMobilite ? ' et de la loi ELAN du 23 novembre 2018' : ''}. En cas de litige relatif à l'exécution du bail dont la valeur n'excède pas 10 000 €, les parties s'engagent à saisir préalablement la <strong>Commission Paritaire de Médiation Locative (CPML)</strong> compétente dans leur département, conformément à la loi n° 2024-157 du 15 novembre 2024. La saisine est gratuite et dématérialisée ; elle suspend les délais de prescription et constitue un préalable obligatoire à toute action judiciaire. La commission statue dans un délai de deux mois. Au-delà de ce délai ou en cas d'échec, les parties peuvent saisir le Tribunal judiciaire du lieu de situation du logement.</p>
     </div>
 
     <div class="doc-signatures">
@@ -442,6 +529,11 @@ function downloadDoc(){
 }
 
 document.getElementById('date-sign').valueAsDate = new Date();
+
+document.getElementById('zone-loyer').addEventListener('change', function(){
+  document.getElementById('zone-strict-fields').style.display = this.value === 'tendue-strict' ? 'block' : 'none';
+  liveUpdate();
+});
 document.getElementById('date-debut').valueAsDate = new Date();
 
 function goToPayment() {
@@ -488,6 +580,16 @@ function goToPayment() {
     cl_assurance: c('cl-assurance'),
     cl_clause_resolutoire: c('cl-clause-resolutoire'),
     cl_entretien: c('cl-entretien'),
+    cl_vetuste: c('cl-vetuste'),
+    cl_copro: c('cl-copro'),
+    bien_fiscal: v('bien-fiscal'),
+    zone_loyer: v('zone-loyer'),
+    loyer_ref: v('loyer-ref'),
+    loyer_ref_majore: v('loyer-ref-majore'),
+    complement_loyer: v('complement-loyer'),
+    agence_nom: v('agence-nom'),
+    agence_honoraires: v('agence-honoraires'),
+    agence_part_loc: v('agence-part-loc'),
     paid: true
   };
   localStorage.setItem('zelko_bail_hab', JSON.stringify(formData));
