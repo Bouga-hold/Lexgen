@@ -1,0 +1,74 @@
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { Resend } = require('resend');
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).json({ error: `Webhook error: ${err.message}` });
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const { contractType, formData } = session.metadata;
+    const customerEmail = session.customer_details.email;
+    const parsedData = JSON.parse(formData);
+
+    try {
+      const pdfBytes = await generatePDF(contractType, parsedData);
+      const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
+
+      await resend.emails.send({
+        from: 'Zelko <contact@zelko.fr>',
+        to: customerEmail,
+        subject: `Votre document Zelko est prêt`,
+        html: `<p>Bonjour,</p><p>Merci pour votre achat. Votre document est disponible en pièce jointe.</p><p>L'équipe Zelko</p>`,
+        attachments: [{
+          filename: `${contractType}.pdf`,
+          content: pdfBase64,
+        }],
+      });
+    } catch (err) {
+      console.error('Erreur envoi email:', err);
+    }
+  }
+
+  res.status(200).json({ received: true });
+};
+
+async function generatePDF(contractType, data) {
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage([595, 842]);
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  
+  page.drawText(`Contrat: ${contractType}`, {
+    x: 50, y: 780,
+    size: 16, font, color: rgb(0, 0, 0),
+  });
+
+  let y = 740;
+  for (const [key, value] of Object.entries(data)) {
+    if (y < 50) break;
+    page.drawText(`${key}: ${value}`, {
+      x: 50, y,
+      size: 10, font, color: rgb(0.2, 0.2, 0.2),
+    });
+    y -= 20;
+  }
+
+  return await pdfDoc.save();
+}
