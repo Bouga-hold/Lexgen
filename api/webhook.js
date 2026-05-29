@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
 
     try {
       await resend.emails.send({
-        from: 'Zelko <contact@zelko.fr>',
+        from: 'onboarding@resend.dev',
         to: customerEmail,
         subject: 'Votre document Zelko est prêt',
         html: '<p>Bonjour,</p><p>Merci pour votre achat.</p><p>L\'équipe Zelko</p>',
