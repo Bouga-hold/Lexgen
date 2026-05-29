@@ -795,7 +795,7 @@ async function goToPayment() {
     });
     const data = await response.json();
     if (data.url) {
-      window.location.href = data.url;
+      localStorage.setItem("nda_formData", JSON.stringify(formData)); window.location.href = data.url;
     } else {
       alert('Erreur lors de la création du paiement. Veuillez réessayer.');
       btn.textContent = 'Télécharger PDF — 7,99€';
@@ -819,6 +819,21 @@ function restoreFormData() {
   msg.textContent = '✅ Paiement confirmé — votre contrat a été envoyé par email !';
   const header = document.querySelector('.preview-header');
   if (header) header.parentNode.insertBefore(msg, header);
+
+  // Restore form data from localStorage
+  const saved = localStorage.getItem('nda_formData');
+  if (saved) {
+    const data = JSON.parse(saved);
+    Object.entries(data).forEach(([key, value]) => {
+      const el = document.getElementById(key);
+      if (el) {
+        if (el.type === 'checkbox') el.checked = value;
+        else el.value = value;
+      }
+    });
+    localStorage.removeItem('nda_formData');
+    setTimeout(() => generateDoc(), 100);
+  }
 
   window.history.replaceState({}, '', window.location.pathname);
 }
