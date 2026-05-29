@@ -3,17 +3,27 @@ const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+async function getRawBody(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', chunk => chunks.push(chunk));
+    req.on('end', () => resolve(Buffer.concat(chunks)));
+    req.on('error', reject);
+  });
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const sig = req.headers['stripe-signature'];
-  let event;
+  const rawBody = await getRawBody(req);
 
+  let event;
   try {
     event = stripe.webhooks.constructEvent(
-      req.body,
+      rawBody,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
@@ -30,7 +40,7 @@ module.exports = async (req, res) => {
         from: 'Zelko <contact@zelko.fr>',
         to: customerEmail,
         subject: 'Votre document Zelko est prêt',
-        html: '<p>Bonjour,</p><p>Merci pour votre achat. Votre document est disponible sur zelko.fr.</p><p>L\'équipe Zelko</p>',
+        html: '<p>Bonjour,</p><p>Merci pour votre achat.</p><p>L\'équipe Zelko</p>',
       });
     } catch (err) {
       console.error('Erreur envoi email:', err);
@@ -38,10 +48,4 @@ module.exports = async (req, res) => {
   }
 
   res.status(200).json({ received: true });
-};
-
-module.exports.config = {
-  api: {
-    bodyParser: false,
-  },
 };
