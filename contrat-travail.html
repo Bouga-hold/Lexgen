@@ -135,7 +135,14 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
     </div>
 
     <div class="field" style="margin-top:1.5rem"><label>Date de signature</label><input type="date" id="date-sign" oninput="liveUpdate()"></div>
-    <button class="generate-btn" onclick="generateDoc()">Générer le contrat complet</button>
+
+    <div class="section-label" style="margin-top:1.5rem">Clause personnalisée (optionnel)</div>
+    <div class="field">
+      <label for="clause-custom">Ajoutez une clause spécifique à votre situation</label>
+      <textarea id="clause-custom" rows="4" placeholder="Ex : Les parties conviennent que toute modification du présent accord devra faire l'objet d'un avenant écrit signé par les deux parties..." onchange="liveUpdate()" oninput="liveUpdate()"></textarea>
+    </div>
+
+    <button onclick="generateDoc()">Générer le contrat complet</button>
   </div>
 
   <div class="preview-panel">
@@ -386,6 +393,7 @@ async function goToPayment() {
     cl_patrimoine: c('cl-patrimoine'),
     cl_rupture_conv: c('cl-rupture-conv'),
     paid: true
+      clause_custom: document.getElementById(\'clause-custom\')?.value || \'\',
   };
 
   try {

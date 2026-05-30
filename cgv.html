@@ -139,7 +139,14 @@ main{width:100%;max-width:1400px;margin:0 auto;padding:3rem 2rem;display:grid;gr
     </div>
 
     <div class="field" style="margin-top:1.5rem"><label>Date de mise à jour</label><input type="date" id="date-maj" oninput="liveUpdate()"></div>
-    <button class="generate-btn" onclick="generateDoc()">Générer les CGV complètes</button>
+
+    <div class="section-label" style="margin-top:1.5rem">Clause personnalisée (optionnel)</div>
+    <div class="field">
+      <label for="clause-custom">Ajoutez une clause spécifique à votre situation</label>
+      <textarea id="clause-custom" rows="4" placeholder="Ex : Les parties conviennent que toute modification du présent accord devra faire l'objet d'un avenant écrit signé par les deux parties..." onchange="liveUpdate()" oninput="liveUpdate()"></textarea>
+    </div>
+
+    <button onclick="generateDoc()">Générer les CGV complètes</button>
   </div>
 
   <div class="preview-panel">
@@ -422,6 +429,7 @@ async function goToPayment() {
     seuil_livraison: v('seuil-livraison'),
     delai_reclamation: v('delai-reclamation'),
     paid: true
+      clause_custom: document.getElementById(\'clause-custom\')?.value || \'\',
   };
 
   try {

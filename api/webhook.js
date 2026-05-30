@@ -62,6 +62,7 @@ function generateNdaHtml(f) {
     <div class="section"><p class="section-title">Article 5 — Durée</p><p>Le présent accord est conclu pour <strong>${val(f.duree)} an(s)</strong> à compter de sa signature.</p></div>
     <div class="section"><p class="section-title">Article 6 — Droit applicable</p><p>Le présent accord est soumis au droit français. Tout litige relève des tribunaux de Paris.</p></div>
     ${clauses}
+    ${f.clause_custom ? `<div class="section"><p class="section-title">Clause personnalisée</p><p>${f.clause_custom}</p></div>` : ''}
     <p style="margin-top:24px">Fait à __________, le <strong>${today}</strong>, en deux exemplaires.</p>
     <div class="signatures">
       <div class="sig-block"><p class="sig-label">Pour ${val(f.p1_name)}</p><div class="sig-line"></div><p class="sig-label">${val(f.p1_rep)}</p></div>
@@ -95,6 +96,7 @@ function generatePrestationHtml(f) {
     <div class="section"><p class="section-title">Article 6 — Résiliation</p><p>Chaque partie peut résilier le présent contrat avec un préavis de quinze (15) jours par lettre recommandée avec accusé de réception.</p></div>
     <div class="section"><p class="section-title">Article 7 — Droit applicable</p><p>Le présent contrat est soumis au droit français. Tout litige relève des tribunaux de Paris.</p></div>
     ${clauses}
+    ${f.clause_custom ? `<div class="section"><p class="section-title">Clause personnalisée</p><p>${f.clause_custom}</p></div>` : ''}
     <p style="margin-top:24px">Fait à __________, le <strong>${today}</strong>, en deux exemplaires.</p>
     <div class="signatures">
       <div class="sig-block"><p class="sig-label">Le Prestataire — ${val(f.p1_name)}</p><div class="sig-line"></div><p class="sig-label">${val(f.p1_rep)}</p></div>
@@ -130,6 +132,7 @@ function generateCgvHtml(f) {
     <div class="section"><p class="section-title">Article ${isB2C ? 7 : 6} — Responsabilité</p><p>La responsabilité du vendeur ne saurait être engagée pour les dommages indirects ou imprévisibles résultant de l'utilisation des produits ou services.</p></div>
     <div class="section"><p class="section-title">Article ${isB2C ? 8 : 7} — Droit applicable</p><p>Les présentes CGV sont soumises au droit français. Tout litige relève des tribunaux de Paris.</p></div>
     ${clauses}
+    ${f.clause_custom ? `<div class="section"><p class="section-title">Clause personnalisée</p><p>${f.clause_custom}</p></div>` : ''}
     <p style="margin-top:24px">Mise à jour : <strong>${today}</strong></p>`;
   return wrap('Conditions Générales de Vente', `${val(f.nom)} — ${isB2C ? 'B2C' : 'B2B'}`, body);
 }
@@ -161,6 +164,7 @@ function generateBailHabitationHtml(f) {
     <div class="section"><p class="section-title">Article 6 — Résiliation</p><p>Congé du Bailleur : préavis de 6 mois pour reprise ou vente, 3 mois pour motif légitime et sérieux. Congé du Locataire : préavis de ${f.cl_resiliation_anticipee ? '1 mois (zone tendue)' : '3 mois'} pour logement vide${isMeuble ? ', 1 mois pour logement meublé' : ''}.</p></div>
     <div class="section"><p class="section-title">Article 7 — Droit applicable</p><p>Le présent bail est soumis à la loi du 6 juillet 1989 et à la loi ALUR du 24 mars 2014.</p></div>
     ${clauses}
+    ${f.clause_custom ? `<div class="section"><p class="section-title">Clause personnalisée</p><p>${f.clause_custom}</p></div>` : ''}
     <p style="margin-top:24px">Fait à __________, le <strong>${today}</strong>, en deux exemplaires.</p>
     <div class="signatures">
       <div class="sig-block"><p class="sig-label">Le Bailleur — ${val(f.bail_nom)}</p><div class="sig-line"></div><p class="sig-label">Signature précédée de la mention « Lu et approuvé »</p></div>
@@ -193,6 +197,7 @@ function generateBailCommercialHtml(f) {
     <div class="section"><p class="section-title">Article 6 — Charges et taxes</p><p>Répartition des charges selon les dispositions de la loi Pinel du 18 juin 2014. La taxe foncière reste à la charge du Bailleur, sauf stipulation contraire.</p></div>
     <div class="section"><p class="section-title">Article 7 — Droit applicable</p><p>Le présent bail est soumis aux articles L.145-1 et suivants du Code de commerce et à la loi Pinel du 18 juin 2014.</p></div>
     ${clauses}
+    ${f.clause_custom ? `<div class="section"><p class="section-title">Clause personnalisée</p><p>${f.clause_custom}</p></div>` : ''}
     <p style="margin-top:24px">Fait à __________, le <strong>${today}</strong>, en deux exemplaires.</p>
     <div class="signatures">
       <div class="sig-block"><p class="sig-label">Le Bailleur — ${val(f.bail_nom)}</p><div class="sig-line"></div><p class="sig-label">Signature précédée de la mention « Lu et approuvé »</p></div>
@@ -227,6 +232,7 @@ function generateContratTravailHtml(f) {
     <div class="section"><p class="section-title">Article 6 — Convention collective</p><p>Le Salarié relève de la convention collective ${val(f.convention)}.</p></div>
     <div class="section"><p class="section-title">Article 7 — Droit applicable</p><p>Le présent contrat est soumis au droit français du travail, notamment aux articles L.1221-1 et suivants du Code du travail.</p></div>
     ${clauses}
+    ${f.clause_custom ? `<div class="section"><p class="section-title">Clause personnalisée</p><p>${f.clause_custom}</p></div>` : ''}
     <p style="margin-top:24px">Fait à __________, le <strong>${today}</strong>, en deux exemplaires.</p>
     <div class="signatures">
       <div class="sig-block"><p class="sig-label">L'Employeur — ${val(f.emp_nom)}</p><div class="sig-line"></div><p class="sig-label">${val(f.emp_rep)}</p></div>
