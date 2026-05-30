@@ -494,7 +494,7 @@ main {
       <textarea id="clause-custom" rows="4" placeholder="Ex : Les parties conviennent que toute modification du présent accord devra faire l'objet d'un avenant écrit signé par les deux parties..." onchange="liveUpdate()" oninput="liveUpdate()"></textarea>
     </div>
 
-    <button onclick="generateDoc()">Générer le contrat complet</button>
+    <button class="generate-btn" onclick="generateDoc()">Générer le contrat complet</button>
   </div>
 
   <!-- PREVIEW -->
@@ -786,8 +786,8 @@ async function goToPayment() {
     cl_duree_diff: c('cl-duree-diff'),
     cl_audit: c('cl-audit'),
     cl_collaborateurs: c('cl-collaborateurs'),
-    cl_obligation_resultat: c('cl-obligation-resultat')
-      clause_custom: document.getElementById(\'clause-custom\')?.value || \'\',
+    cl_obligation_resultat: c('cl-obligation-resultat'),
+    clause_custom: document.getElementById('clause-custom')?.value || '',
   };
 
   try {

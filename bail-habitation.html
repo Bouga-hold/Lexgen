@@ -601,8 +601,8 @@ async function goToPayment() {
     agence_nom: v('agence-nom'),
     agence_honoraires: v('agence-honoraires'),
     agence_part_loc: v('agence-part-loc'),
-    paid: true
-      clause_custom: document.getElementById(\'clause-custom\')?.value || \'\',
+    paid: true,
+    clause_custom: document.getElementById('clause-custom')?.value || '',
   };
 
   try {

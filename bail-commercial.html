@@ -708,8 +708,8 @@ async function goToPayment() {
     cl_etat_travaux: c('cl-etat-travaux'),
     cl_annexe_env: c('cl-annexe-env'),
     pren_addr: v('pren-addr'),
-    paid: true
-      clause_custom: document.getElementById(\'clause-custom\')?.value || \'\',
+    paid: true,
+    clause_custom: document.getElementById('clause-custom')?.value || '',
   };
 
   try {

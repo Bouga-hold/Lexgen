@@ -392,8 +392,8 @@ async function goToPayment() {
     cl_dedit: c('cl-dedit'),
     cl_patrimoine: c('cl-patrimoine'),
     cl_rupture_conv: c('cl-rupture-conv'),
-    paid: true
-      clause_custom: document.getElementById(\'clause-custom\')?.value || \'\',
+    paid: true,
+    clause_custom: document.getElementById('clause-custom')?.value || '',
   };
 
   try {

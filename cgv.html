@@ -428,8 +428,8 @@ async function goToPayment() {
     cl_archivage: c('cl-archivage'),
     seuil_livraison: v('seuil-livraison'),
     delai_reclamation: v('delai-reclamation'),
-    paid: true
-      clause_custom: document.getElementById(\'clause-custom\')?.value || \'\',
+    paid: true,
+    clause_custom: document.getElementById('clause-custom')?.value || '',
   };
 
   try {

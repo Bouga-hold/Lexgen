@@ -410,8 +410,8 @@ async function goToPayment() {
     cl_force_majeure: c('cl-force-majeure'),
     cl_non_concurrence: c('cl-non-concurrence'),
     cl_resil_ddt: c('cl-resil-ddt'),
-    paid: true
-      clause_custom: document.getElementById(\'clause-custom\')?.value || \'\',
+    paid: true,
+    clause_custom: document.getElementById('clause-custom')?.value || '',
   };
 
   try {
