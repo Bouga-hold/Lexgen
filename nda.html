@@ -494,7 +494,7 @@ main {
   <div class="preview-panel">
     <div class="preview-header">
       <div class="preview-title">Aperçu du document</div>
-      <button class="download-btn" id="dl-btn" onclick="goToPayment()">Télécharger PDF — 7,99€</button>
+      <button class="download-btn" id="dl-btn" onclick="goToPayment()">Télécharger PDF — 4,99€</button>
     </div>
     <div id="preview-box">
       <div class="empty-state" id="empty-state">
@@ -789,21 +789,21 @@ async function goToPayment() {
       body: JSON.stringify({
         contractType: 'nda',
         formData,
-        price: 7.99,
+        price: 4.99,
         productName: 'Accord de confidentialité (NDA)'
       })
     });
     const data = await response.json();
     if (data.url) {
-      localStorage.setItem("nda_formData", JSON.stringify(formData)); window.location.href = data.url;
+      window.location.href = data.url;
     } else {
       alert('Erreur lors de la création du paiement. Veuillez réessayer.');
-      btn.textContent = 'Télécharger PDF — 7,99€';
+      btn.textContent = 'Télécharger PDF — 4,99€';
       btn.disabled = false;
     }
   } catch (err) {
     alert('Erreur réseau. Veuillez réessayer.');
-    btn.textContent = 'Télécharger PDF — 7,99€';
+    btn.textContent = 'Télécharger PDF — 4,99€';
     btn.disabled = false;
   }
 }
@@ -819,21 +819,6 @@ function restoreFormData() {
   msg.textContent = '✅ Paiement confirmé — votre contrat a été envoyé par email !';
   const header = document.querySelector('.preview-header');
   if (header) header.parentNode.insertBefore(msg, header);
-
-  // Restore form data from localStorage
-  const saved = localStorage.getItem('nda_formData');
-  if (saved) {
-    const data = JSON.parse(saved);
-    Object.entries(data).forEach(([key, value]) => {
-      const el = document.getElementById(key);
-      if (el) {
-        if (el.type === 'checkbox') el.checked = value;
-        else el.value = value;
-      }
-    });
-    localStorage.removeItem('nda_formData');
-    setTimeout(() => generateDoc(), 100);
-  }
 
   window.history.replaceState({}, '', window.location.pathname);
 }
