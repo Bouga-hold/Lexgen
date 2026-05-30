@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>À propos — Zelko</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a2e1a;
+  --paper: #f4f1ea;
+  --cream: #e8e2d0;
+  --gold: #2d5a27;
+  --gold-light: #4a7c42;
+  --muted: #5a6b5a;
+  --border: #c8d4c0;
+  --white: #ffffff;
+  --beige: #eaf0e6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.25rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(247,245,240,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.logo span { color: var(--gold); }
+.nav-links { display: flex; align-items: center; gap: 2rem; }
+.nav-links a {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  padding: 8px 20px;
+  background: var(--ink) !important;
+  color: var(--white) !important;
+  border-radius: 3px;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* HERO */
+.hero {
+  padding: 10rem 3rem 6rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.hero-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 4vw, 3.8rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-sub {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--muted);
+  max-width: 460px;
+}
+.hero-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hero-stat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: var(--gold);
+  line-height: 1;
+  min-width: 70px;
+}
+.stat-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* MISSION */
+.mission {
+  background: var(--ink);
+  padding: 6rem 3rem;
+}
+.mission-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.mission-tag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 1rem;
+}
+.mission h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+}
+.mission h2 em { font-style: italic; color: var(--gold-light); }
+.mission p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.6);
+}
+.mission-points {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.mission-point {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.point-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.point-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.point-desc { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+
+/* EQUIPE */
+.equipe {
+  padding: 6rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-tag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+.section-sub {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 500px;
+  margin-bottom: 3rem;
+  line-height: 1.7;
+}
+.equipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.membre-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2rem;
+}
+.membre-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--beige);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 1.25rem;
+}
+.membre-role {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.membre-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.membre-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.membre-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cream);
+}
+.membre-tag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: var(--cream);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+/* VALEURS */
+.valeurs {
+  background: var(--beige);
+  padding: 6rem 3rem;
+  border-top: 1px solid var(--border);
+}
+.valeurs-inner { max-width: 1100px; margin: 0 auto; }
+.valeurs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 3rem;
+}
+.valeur-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.75rem;
+}
+.valeur-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.valeur-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+.valeur-desc { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+/* CTA */
+.cta-section {
+  padding: 6rem 3rem;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.cta-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+.cta-section h2 em { font-style: italic; color: var(--gold); }
+.cta-section p { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 2rem; }
+.btn-primary {
+  padding: 13px 28px;
+  background: var(--ink);
+  color: var(--white);
+  border: none;
+  border-radius: 3px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { opacity: 0.85; }
+
+/* FOOTER */
+.footer-main { background: var(--ink); padding: 4rem 3rem; }
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+.footer-brand .logo-footer {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 1rem;
+  display: block;
+  text-decoration: none;
+}
+.footer-brand .logo-footer span { color: var(--gold-light); }
+.footer-brand p { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; max-width: 260px; }
+.footer-col h4 {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 1.25rem;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 0.6rem; }
+.footer-col ul li a { font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: var(--white); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding: 1.25rem 3rem; background: var(--ink); }
+.footer-bottom-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.footer-bottom-inner span { font-size: 11px; color: rgba(255,255,255,0.25); }
+.footer-legal { display: flex; align-items: center; gap: 1.5rem; }
+.footer-legal a { font-size: 11px; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+.footer-legal a:hover { color: rgba(255,255,255,0.7); }
+.footer-legal-sep { font-size: 11px; color: rgba(255,255,255,0.15); }
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links a:not(.nav-cta) { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 2.5rem; }
+  .mission-inner { grid-template-columns: 1fr; gap: 2.5rem; padding: 0; }
+  .mission { padding: 3rem 1.5rem; }
+  .equipe { padding: 3rem 1.5rem; }
+  .equipe-grid { grid-template-columns: 1fr; }
+  .valeurs { padding: 3rem 1.5rem; }
+  .valeurs-grid { grid-template-columns: 1fr 1fr; }
+  .cta-section { padding: 3rem 1.5rem; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-main { padding: 3rem 1.5rem; }
+  .footer-bottom { padding: 1.25rem 1.5rem; }
+}
+@media (max-width: 480px) {
+  .valeurs-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Zel<span>ko</span></a>
+  <div class="nav-links">
+    <a href="index.html#contrats">Contrats</a>
+    <a href="index.html#comment">Comment ça marche</a>
+    <a href="a-propos.html" style="color: var(--ink); font-weight: 500;">À propos</a>
+    <a href="index.html#contrats" class="nav-cta">Commencer</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-tag">Notre mission</div>
+    <h1>Le droit,<br><em>accessible à tous.</em></h1>
+    <p class="hero-sub">Zelko est né d'un constat simple : rédiger un contrat professionnel prend du temps, coûte cher, et reste trop souvent hors de portée des indépendants et des petites entreprises. Nous avons voulu changer ça.</p>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-stat">
+      <div class="stat-num">6</div>
+      <div class="stat-desc">Types de contrats disponibles, couvrant les situations les plus courantes en droit des affaires</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num">5 min</div>
+      <div class="stat-desc">Temps moyen pour générer un contrat complet, conforme au droit français</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-desc">Des contrats rédigés et vérifiés par des juristes spécialisés en droit des affaires</div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="mission">
+  <div class="mission-inner">
+    <div>
+      <div class="mission-tag">Notre histoire</div>
+      <h2>Pourquoi<br><em>Zelko ?</em></h2>
+      <p>Trop souvent, les entrepreneurs, freelances et petites structures signent des accords à la va-vite, sans contrat — ou paient des honoraires élevés pour des documents standards. Zelko a été créé pour combler ce vide : offrir des contrats professionnels, conformes au droit français, au prix d'un café.</p>
+    </div>
+    <div class="mission-points">
+      <div class="mission-point">
+        <div class="point-icon">⚖️</div>
+        <div>
+          <div class="point-title">Expertise juridique réelle</div>
+          <div class="point-desc">Chaque modèle est rédigé par des juristes spécialisés en droit des affaires, pas par un algorithme. Ils sont mis à jour régulièrement selon l'évolution de la législation.</div>
+        </div>
+      </div>
+      <div class="mission-point">
+        <div class="point-icon">🔒</div>
+        <div>
+          <div class="point-title">Confidentialité absolue</div>
+          <div class="point-desc">Vos données ne sont jamais stockées sur nos serveurs. Le contrat est généré localement dans votre navigateur et vous appartient entièrement.</div>
+        </div>
+      </div>
+      <div class="mission-point">
+        <div class="point-icon">💶</div>
+        <div>
+          <div class="point-title">Prix juste et transparent</div>
+          <div class="point-desc">À partir de 7,99€ par document, sans abonnement, sans frais cachés. Vous payez uniquement ce dont vous avez besoin, quand vous en avez besoin.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPE -->
+<section class="equipe">
+  <div class="section-tag">L'équipe</div>
+  <h2 class="section-title">Des juristes<br>à votre service</h2>
+  <p class="section-sub">Zelko est conçu par une équipe de juristes spécialisés en droit des affaires, convaincus que l'accès au droit ne devrait pas être un privilège.</p>
+
+  <div class="equipe-grid">
+    <div class="membre-card">
+      <div class="membre-avatar">⚖️</div>
+      <div class="membre-role">Fondateur & Juriste</div>
+      <div class="membre-name">Droit des affaires</div>
+      <div class="membre-desc">Juriste spécialisé en droit boursier et gouvernance d'entreprise. À l'origine du projet Zelko, né de la conviction que les contrats professionnels doivent être accessibles à tous.</div>
+      <div class="membre-tags">
+        <span class="membre-tag">Droit des sociétés</span>
+        <span class="membre-tag">Droit boursier</span>
+        <span class="membre-tag">Gouvernance</span>
+      </div>
+    </div>
+
+    <div class="membre-card">
+      <div class="membre-avatar">📋</div>
+      <div class="membre-role">Juriste</div>
+      <div class="membre-name">Droit social</div>
+      <div class="membre-desc">Expert en droit du travail et relations sociales. Responsable des contrats de travail et de la conformité sociale des documents Zelko.</div>
+      <div class="membre-tags">
+        <span class="membre-tag">Droit du travail</span>
+        <span class="membre-tag">CDI / CDD</span>
+        <span class="membre-tag">Relations sociales</span>
+      </div>
+    </div>
+
+    <div class="membre-card">
+      <div class="membre-avatar">🏛️</div>
+      <div class="membre-role">Juriste</div>
+      <div class="membre-name">Droit immobilier</div>
+      <div class="membre-desc">Spécialiste du droit immobilier et des baux. En charge des contrats de bail d'habitation et commercial, conformes aux dernières évolutions législatives.</div>
+      <div class="membre-tags">
+        <span class="membre-tag">Bail commercial</span>
+        <span class="membre-tag">Loi ALUR</span>
+        <span class="membre-tag">Loi Pinel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALEURS -->
+<section class="valeurs">
+  <div class="valeurs-inner">
+    <div class="section-tag">Nos engagements</div>
+    <h2 class="section-title">Ce en quoi<br>nous croyons</h2>
+
+    <div class="valeurs-grid">
+      <div class="valeur-card">
+        <div class="valeur-num">01</div>
+        <div class="valeur-title">Accessibilité</div>
+        <div class="valeur-desc">Le droit ne doit pas être réservé à ceux qui peuvent se payer un avocat. Chaque entrepreneur mérite une protection juridique sérieuse.</div>
+      </div>
+      <div class="valeur-card">
+        <div class="valeur-num">02</div>
+        <div class="valeur-title">Conformité</div>
+        <div class="valeur-desc">Tous nos contrats sont conformes au droit français en vigueur et mis à jour régulièrement selon les évolutions législatives.</div>
+      </div>
+      <div class="valeur-card">
+        <div class="valeur-num">03</div>
+        <div class="valeur-title">Simplicité</div>
+        <div class="valeur-desc">Un formulaire clair, un contrat généré en temps réel. Pas de jargon inutile, pas de processus complexe. En quelques minutes, c'est fait.</div>
+      </div>
+      <div class="valeur-card">
+        <div class="valeur-num">04</div>
+        <div class="valeur-title">Transparence</div>
+        <div class="valeur-desc">Prix fixe, sans surprise. Vous savez exactement ce que vous payez avant de commencer. Aucun abonnement, aucun frais caché.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Prêt à sécuriser<br><em>votre activité ?</em></h2>
+  <p>Choisissez votre contrat parmi notre bibliothèque et générez votre document en quelques minutes.</p>
+  <a href="index.html#contrats" class="btn-primary">Voir les contrats</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer-main">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo-footer">Zel<span>ko</span></a>
+      <p>Générez vos contrats juridiques conformes au droit français en quelques minutes. Rapide, simple et fiable.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contrats</h4>
+      <ul>
+        <li><a href="nda.html">Accord de confidentialité</a></li>
+        <li><a href="prestation.html">Contrat de prestation</a></li>
+        <li><a href="cgv.html">CGV</a></li>
+        <li><a href="contrat-travail.html">Contrat de travail</a></li>
+        <li><a href="bail-habitation.html">Bail d'habitation</a></li>
+        <li><a href="bail-commercial.html">Bail commercial</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>À propos</h4>
+      <ul>
+        <li><a href="a-propos.html">Notre mission</a></li>
+        <li><a href="index.html#comment">Comment ça marche</a></li>
+        <li><a href="cgu.html">CGU</a></li>
+        <li><a href="mentions-legales.html">Mentions légales</a></li>
+        <li><a href="confidentialite.html">Confidentialité</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:contact@zelko.fr">contact@zelko.fr</a></li>
+        <li><a href="cgu.html">Conditions d'utilisation</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <div class="footer-bottom-inner">
+    <span>© 2026 Zelko · Tous droits réservés · Les documents générés sont fournis à titre informatif.</span>
+    <div class="footer-legal">
+      <a href="cgu.html">Conditions générales</a>
+      <span class="footer-legal-sep">·</span>
+      <a href="mentions-legales.html">Mentions légales</a>
+      <span class="footer-legal-sep">·</span>
+      <a href="confidentialite.html">Politique de confidentialité</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
