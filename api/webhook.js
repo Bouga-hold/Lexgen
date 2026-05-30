@@ -14,6 +14,8 @@ async function getRawBody(req) {
 function generateNdaHtml(f) {
   const isBilateral = f.accord_type === 'bilateral';
   const today = f.date_sign || new Date().toLocaleDateString('fr-FR');
+  const divulgatrice = isBilateral ? 'la Partie divulgatrice' : 'la Partie Divulgatrice';
+  const receptrice = isBilateral ? "l'autre Partie" : 'la Partie Réceptrice';
 
   const partiesBlock = isBilateral ? `
     <p><strong>PARTIE 1 :</strong> ${f.p1_name || '___'}, ${f.p1_type || '___'}, représentée par ${f.p1_rep || '___'}, dont le siège est situé ${f.p1_addr || '___'}, ci-après dénommée <strong>« Partie 1 »</strong></p>
@@ -22,9 +24,6 @@ function generateNdaHtml(f) {
     <p><strong>PARTIE DIVULGATRICE :</strong> ${f.p1_name || '___'}, ${f.p1_type || '___'}, représentée par ${f.p1_rep || '___'}, dont le siège est situé ${f.p1_addr || '___'}, ci-après dénommée <strong>« Partie Divulgatrice »</strong></p>
     <p style="margin-top:8px"><strong>PARTIE RÉCEPTRICE :</strong> ${f.p2_name || '___'}, ${f.p2_type || '___'}, représentée par ${f.p2_rep || '___'}, dont le siège est situé ${f.p2_addr || '___'}, ci-après dénommée <strong>« Partie Réceptrice »</strong></p>
   `;
-
-  const divulgatrice = isBilateral ? 'la Partie divulgatrice' : 'la Partie Divulgatrice';
-  const receptrice = isBilateral ? "l'autre Partie" : 'la Partie Réceptrice';
 
   let clausesOptionnelles = '';
   if (f.cl_penalite) clausesOptionnelles += `
@@ -40,17 +39,16 @@ function generateNdaHtml(f) {
   if (f.cl_non_solicitation) clausesOptionnelles += `
     <div style="margin-top:16px">
       <p style="font-weight:600;text-transform:uppercase;font-size:12px;color:#2d5a27;margin-bottom:6px">Article — Non-sollicitation</p>
-      <p>Pendant la durée du présent accord et durant une période de douze (12) mois suivant son expiration, ${receptrice} s'interdit de solliciter, recruter ou débaucher tout collaborateur de ${divulgatrice} avec qui elle aurait été en contact dans le cadre du présent accord.</p>
+      <p>Pendant la durée du présent accord et durant une période de douze (12) mois suivant son expiration, ${receptrice} s'interdit de solliciter ou de recruter tout collaborateur de ${divulgatrice} avec qui elle aurait été en contact dans le cadre du présent accord.</p>
     </div>`;
 
-  return `
-<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <style>
-  body { font-family: Georgia, serif; font-size: 13px; line-height: 1.8; color: #1a2e1a; max-width: 750px; margin: 0 auto; padding: 40px 30px; }
-  h1 { font-size: 20px; text-align: center; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #1a2e1a; padding-bottom: 16px; margin-bottom: 8px; }
+  body { font-family: Georgia, serif; font-size: 13px; line-height: 1.8; color: #1a2e1a; max-width: 700px; margin: 0 auto; padding: 40px 30px; }
+  h1 { font-size: 18px; text-align: center; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #1a2e1a; padding-bottom: 16px; margin-bottom: 8px; }
   .subtitle { text-align: center; font-size: 11px; color: #5a6b5a; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 32px; }
   .parties { background: #f0f4ee; border-left: 3px solid #2d5a27; padding: 16px 20px; margin: 24px 0; border-radius: 0 4px 4px 0; }
   .section { margin-top: 20px; }
@@ -60,11 +58,9 @@ function generateNdaHtml(f) {
   .sig-line { border-bottom: 1px solid #1a2e1a; height: 40px; margin: 8px 0; }
   .sig-label { font-size: 11px; color: #5a6b5a; }
   .footer-note { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e8e2d0; font-size: 11px; color: #5a6b5a; text-align: center; }
-  @media print { body { padding: 20px; } }
 </style>
 </head>
 <body>
-
 <h1>Accord de Confidentialité</h1>
 <p class="subtitle">${isBilateral ? 'Accord Bilatéral' : 'Accord Unilatéral'} — NDA</p>
 
@@ -80,7 +76,7 @@ function generateNdaHtml(f) {
 
 <div class="section">
   <p class="section-title">Article 2 — Définition des informations confidentielles</p>
-  <p>Sont considérées comme confidentielles toutes les informations, données, documents, savoir-faire, procédés techniques, informations financières, commerciales ou stratégiques, communiquées par ${divulgatrice} à ${receptrice}, sous quelque forme que ce soit, dans le cadre du présent accord.</p>
+  <p>Sont considérées comme confidentielles toutes les informations, données, documents, savoir-faire, procédés techniques, informations financières, commerciales ou stratégiques, communiquées par ${divulgatrice} à ${receptrice}, sous quelque forme que ce soit.</p>
 </div>
 
 <div class="section">
@@ -90,17 +86,17 @@ function generateNdaHtml(f) {
 
 <div class="section">
   <p class="section-title">Article 4 — Exclusions</p>
-  <p>Les obligations de confidentialité ne s'appliquent pas aux informations : (i) qui sont ou deviennent publiques sans faute de ${receptrice} ; (ii) que ${receptrice} détenait déjà avant leur communication ; (iii) reçues légitimement d'un tiers sans restriction ; (iv) dont la divulgation est exigée par la loi ou une autorité compétente.</p>
+  <p>Les obligations de confidentialité ne s'appliquent pas aux informations : (i) qui sont ou deviennent publiques sans faute de ${receptrice} ; (ii) que ${receptrice} détenait déjà avant leur communication ; (iii) reçues légitimement d'un tiers sans restriction ; (iv) dont la divulgation est exigée par la loi.</p>
 </div>
 
 <div class="section">
   <p class="section-title">Article 5 — Durée</p>
-  <p>Le présent accord est conclu pour une durée de <strong>${f.duree || '2'} an(s)</strong> à compter de sa signature. Les obligations de confidentialité survivront à l'expiration ou à la résiliation du présent accord.</p>
+  <p>Le présent accord est conclu pour une durée de <strong>${f.duree || '2'} an(s)</strong> à compter de sa signature. Les obligations de confidentialité survivront à l'expiration du présent accord.</p>
 </div>
 
 <div class="section">
-  <p class="section-title">Article 6 — Droit applicable et juridiction compétente</p>
-  <p>Le présent accord est soumis au droit français. Tout litige relatif à son interprétation ou à son exécution sera soumis à la compétence exclusive des tribunaux compétents de Paris, sauf disposition légale contraire.</p>
+  <p class="section-title">Article 6 — Droit applicable et juridiction</p>
+  <p>Le présent accord est soumis au droit français. Tout litige sera soumis à la compétence exclusive des tribunaux de Paris.</p>
 </div>
 
 ${clausesOptionnelles}
@@ -120,10 +116,32 @@ ${clausesOptionnelles}
   </div>
 </div>
 
-<p class="footer-note">Document généré par Zelko · zelko.fr · Pour imprimer en PDF : Fichier → Imprimer → Enregistrer en PDF</p>
-
+<p class="footer-note">Document généré par Zelko · zelko.fr</p>
 </body>
 </html>`;
+}
+
+async function htmlToPdf(html) {
+  const response = await fetch('https://api.pdfshift.io/v3/convert/pdf', {
+    method: 'POST',
+    headers: {
+      'X-API-Key': process.env.PDFSHIFT_API_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      source: html,
+      landscape: false,
+      use_print: false,
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`PDFShift error: ${err}`);
+  }
+
+  const buffer = await response.arrayBuffer();
+  return Buffer.from(buffer);
 }
 
 module.exports = async (req, res) => {
@@ -136,11 +154,7 @@ module.exports = async (req, res) => {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      rawBody,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
+    event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     return res.status(400).json({ error: `Webhook error: ${err.message}` });
   }
@@ -159,40 +173,49 @@ module.exports = async (req, res) => {
 
     let contractHtml = '';
     let contractLabel = 'Votre contrat';
+    let fileName = 'contrat.pdf';
 
     if (contractType === 'nda') {
       contractHtml = generateNdaHtml(formData);
       contractLabel = 'Accord de confidentialité (NDA)';
+      fileName = 'accord-confidentialite-zelko.pdf';
     }
-    // Les autres types de contrats seront ajoutés ici (prestation, cgv, etc.)
-
-    const emailHtml = `
-      <div style="font-family: 'DM Sans', Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1a2e1a;">
-        <div style="background: #1a2e1a; padding: 24px 32px;">
-          <h1 style="color: white; font-size: 22px; margin: 0; font-weight: 400;">Zel<span style="color: #4a7c42;">ko</span></h1>
-        </div>
-        <div style="padding: 32px; background: #f4f1ea; border: 1px solid #c8d4c0;">
-          <p style="font-size: 15px; margin-bottom: 16px;">Bonjour,</p>
-          <p style="font-size: 14px; line-height: 1.7; margin-bottom: 16px;">Merci pour votre achat. Votre <strong>${contractLabel}</strong> est prêt.</p>
-          <p style="font-size: 14px; line-height: 1.7; margin-bottom: 24px;">Vous trouverez votre contrat complet ci-dessous. Pour le sauvegarder en PDF, ouvrez cet email dans un navigateur puis faites <strong>Fichier → Imprimer → Enregistrer en PDF</strong>.</p>
-          <hr style="border: none; border-top: 1px solid #c8d4c0; margin: 24px 0;">
-          ${contractHtml}
-        </div>
-        <div style="padding: 16px 32px; text-align: center;">
-          <p style="font-size: 11px; color: #5a6b5a;">© 2026 Zelko · zelko.fr · contact@zelko.fr</p>
-        </div>
-      </div>
-    `;
 
     try {
+      // Générer le PDF via PDFShift
+      const pdfBuffer = await htmlToPdf(contractHtml);
+      const pdfBase64 = pdfBuffer.toString('base64');
+
+      // Envoyer l'email avec le PDF en pièce jointe
       await resend.emails.send({
         from: 'onboarding@resend.dev',
         to: customerEmail,
         subject: `Votre ${contractLabel} — Zelko`,
-        html: emailHtml,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1a2e1a;">
+            <div style="background: #1a2e1a; padding: 24px 32px;">
+              <h1 style="color: white; font-size: 22px; margin: 0; font-weight: 400; letter-spacing: 0.05em;">ZEL<span style="color: #4a7c42;">KO</span></h1>
+            </div>
+            <div style="padding: 32px; background: #f4f1ea; border: 1px solid #c8d4c0;">
+              <p style="font-size: 15px; margin-bottom: 16px;">Bonjour,</p>
+              <p style="font-size: 14px; line-height: 1.7; margin-bottom: 16px;">Merci pour votre achat. Votre <strong>${contractLabel}</strong> est prêt.</p>
+              <p style="font-size: 14px; line-height: 1.7; margin-bottom: 24px;">Vous trouverez votre contrat en pièce jointe au format PDF, prêt à être imprimé et signé.</p>
+              <p style="font-size: 13px; color: #5a6b5a;">Pour toute question : <a href="mailto:contact@zelko.fr" style="color: #2d5a27;">contact@zelko.fr</a></p>
+            </div>
+            <div style="padding: 16px 32px; text-align: center;">
+              <p style="font-size: 11px; color: #5a6b5a;">© 2026 Zelko · zelko.fr</p>
+            </div>
+          </div>
+        `,
+        attachments: [
+          {
+            filename: fileName,
+            content: pdfBase64,
+          },
+        ],
       });
     } catch (err) {
-      console.error('Erreur envoi email:', err);
+      console.error('Erreur génération PDF ou envoi email:', err);
     }
   }
 
