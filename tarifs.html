@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zelko — Tarifs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a2e1a;
+  --paper:#f4f1ea;
+  --cream:#e8e2d0;
+  --green:#2d5a27;
+  --green-light:#4a7c42;
+  --green-bg:#e8f0e8;
+  --green-dark:#27500a;
+  --muted:#5a6b5a;
+  --border:#c8d4c0;
+  --white:#ffffff;
+  --red-bg:#fde8e0;
+  --amber-bg:#faeeda;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh}
+
+header{padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--white)}
+.logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;letter-spacing:-0.02em;color:var(--ink);text-decoration:none}
+.logo span{color:var(--green)}
+.nav-links{display:flex;gap:1.75rem}
+.nav-link{font-size:0.85rem;color:var(--muted);text-decoration:none}
+.nav-link:hover{color:var(--ink)}
+.btn-primary{font-size:0.85rem;padding:0.5rem 1.3rem;border-radius:6px;border:none;background:var(--green);color:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;text-decoration:none}
+
+.hero{padding:4rem 3rem 3rem;max-width:960px;margin:0 auto;text-align:center}
+.hero-tag{display:inline-block;background:var(--green-bg);color:var(--green);font-size:0.72rem;padding:0.3rem 1rem;border-radius:100px;margin-bottom:1.5rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--border)}
+.hero h1{font-family:'Playfair Display',serif;font-weight:700;font-size:2.6rem;line-height:1.15;color:var(--ink);margin-bottom:0.9rem}
+.hero h1 em{font-style:italic;color:var(--green)}
+.hero-sub{font-size:1rem;color:var(--muted);max-width:500px;margin:0 auto;line-height:1.7}
+
+/* PRICING GRID */
+.pricing-section{padding:3rem;max-width:960px;margin:0 auto}
+.pricing-section-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--ink);margin-bottom:0.4rem}
+.pricing-section-sub{font-size:0.85rem;color:var(--muted);margin-bottom:2rem}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-bottom:3rem}
+
+.pricing-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.75rem;display:flex;flex-direction:column}
+.pricing-card.featured{border:2px solid var(--green)}
+.pricing-card.soon{opacity:0.6}
+
+.pricing-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem}
+.pricing-card-icon{font-size:1.75rem}
+.pricing-badge{font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:4px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase}
+.b-live{background:var(--green);color:var(--white)}
+.b-new{background:var(--green-bg);color:var(--green-dark)}
+.b-soon{background:#f3f4f6;color:#9ca3af;border:1px solid var(--border)}
+
+.pricing-card-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--ink);font-weight:700;margin-bottom:0.15rem}
+.pricing-card-type{font-size:0.75rem;color:var(--muted);margin-bottom:0.9rem}
+.pricing-card-desc{font-size:0.83rem;color:var(--muted);line-height:1.6;margin-bottom:1.25rem;flex:1}
+
+.pricing-amount{margin-bottom:1.25rem}
+.pricing-amount-n{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--ink);line-height:1}
+.pricing-amount-unit{font-size:0.82rem;color:var(--muted);margin-left:0.3rem}
+.pricing-amount-note{font-size:0.75rem;color:var(--muted);margin-top:0.3rem}
+
+.pricing-features{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem}
+.pricing-feature{display:flex;align-items:center;gap:0.6rem;font-size:0.82rem;color:var(--ink)}
+.pricing-feature::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;font-size:0.8rem}
+.pricing-feature.missing{color:var(--muted)}
+.pricing-feature.missing::before{content:'·';color:#ccc}
+
+.btn-tool{display:block;text-align:center;padding:0.75rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;text-decoration:none;transition:all 0.15s;cursor:pointer;border:none}
+.btn-tool-primary{background:var(--green);color:var(--white)}
+.btn-tool-primary:hover{background:var(--green-light)}
+.btn-tool-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-tool-disabled{background:#f3f4f6;color:#9ca3af;cursor:not-allowed}
+
+/* COMPARE TABLE */
+.compare-section{padding:0 3rem 3rem;max-width:960px;margin:0 auto}
+.compare-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--ink);margin-bottom:2rem}
+.compare-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:var(--paper);font-size:0.78rem;font-weight:500;color:var(--muted);padding:1rem;text-align:center;border-bottom:1px solid var(--border);letter-spacing:0.04em;text-transform:uppercase}
+.compare-table th:first-child{text-align:left}
+.compare-table td{font-size:0.85rem;color:var(--ink);padding:0.9rem 1rem;border-bottom:1px solid #f0ece4;text-align:center;vertical-align:middle}
+.compare-table td:first-child{text-align:left;font-weight:400;color:var(--muted)}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table tr:hover td{background:#fafdf8}
+.check{color:var(--green);font-size:1rem}
+.cross{color:#ccc;font-size:1rem}
+
+/* FAQ */
+.faq-section{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3rem}
+.faq-inner{max-width:960px;margin:0 auto}
+.faq-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--ink);margin-bottom:2rem}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.faq-item{}
+.faq-q{font-size:0.9rem;font-weight:500;color:var(--ink);margin-bottom:0.4rem}
+.faq-a{font-size:0.82rem;color:var(--muted);line-height:1.6}
+
+/* GUARANTEE */
+.guarantee{padding:3rem;max-width:960px;margin:0 auto}
+.guarantee-card{background:var(--green);border-radius:14px;padding:2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.guarantee-card h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--white);margin-bottom:0.4rem}
+.guarantee-card p{font-size:0.85rem;color:#a8c8a8;line-height:1.6}
+.guarantee-card p em{font-style:normal;color:#d4edda}
+.btn-white{font-size:0.88rem;padding:0.7rem 1.75rem;border-radius:8px;border:none;background:var(--white);color:var(--green);cursor:pointer;font-family:'Playfair Display',serif;font-weight:600;white-space:nowrap;text-decoration:none;display:inline-block}
+
+footer{background:var(--white);border-top:1px solid var(--border);padding:1.75rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-logo{font-family:'Playfair Display',serif;font-size:1rem;color:var(--ink);font-weight:600}
+.footer-logo span{color:var(--green)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-link{font-size:0.78rem;color:var(--muted);text-decoration:none}
+.footer-link:hover{color:var(--ink)}
+.footer-copy{font-size:0.72rem;color:var(--border)}
+
+@media(max-width:680px){
+  header{padding:1rem 1.25rem}
+  .nav-links{display:none}
+  .hero,.pricing-section,.compare-section,.guarantee{padding-left:1.25rem;padding-right:1.25rem}
+  .faq-section{padding:2rem 1.25rem}
+  .faq-grid{grid-template-columns:1fr}
+  footer{padding:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Zelko<span>.</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="/">Outils</a>
+    <a class="nav-link" href="/tarifs.html">Tarifs</a>
+    <a class="nav-link" href="/a-propos.html">À propos</a>
+  </div>
+  <a href="/lex.html" class="btn-primary">Commencer gratuitement</a>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">Tarifs simples et transparents</div>
+  <h1>Payez uniquement<br><em>ce dont vous avez besoin.</em></h1>
+  <p class="hero-sub">Pas d'abonnement caché, pas de frais surprise. Chaque outil a un prix clair — vous payez à l'usage ou par abonnement mensuel selon le produit.</p>
+</div>
+
+<!-- PRICING CARDS -->
+<div class="pricing-section">
+  <div class="pricing-section-title">Nos outils</div>
+  <div class="pricing-section-sub">Choisissez l'outil adapté à votre besoin.</div>
+  <div class="pricing-grid">
+
+    <!-- LEX -->
+    <div class="pricing-card featured">
+      <div class="pricing-card-top">
+        <div class="pricing-card-icon">📄</div>
+        <span class="pricing-badge b-live">Live</span>
+      </div>
+      <div class="pricing-card-name">Lex</div>
+      <div class="pricing-card-type">Génération de contrats juridiques</div>
+      <div class="pricing-card-desc">Générez vos contrats professionnels conformes au droit français en quelques minutes. NDA, CGV, bail commercial, contrat de travail et plus.</div>
+      <div class="pricing-amount">
+        <span class="pricing-amount-n">dès 7,99€</span>
+        <span class="pricing-amount-unit">/ contrat</span>
+        <div class="pricing-amount-note">Paiement unique · Pas d'abonnement</div>
+      </div>
+      <div class="pricing-features">
+        <div class="pricing-feature">NDA — 7,99€</div>
+        <div class="pricing-feature">Contrat de prestation — 7,99€</div>
+        <div class="pricing-feature">Contrat de travail — 7,99€</div>
+        <div class="pricing-feature">Bail d'habitation — 9,99€</div>
+        <div class="pricing-feature">CGV — 11,99€</div>
+        <div class="pricing-feature">Bail commercial — 24,99€</div>
+        <div class="pricing-feature">PDF téléchargeable immédiatement</div>
+        <div class="pricing-feature">Conforme au droit français</div>
+      </div>
+      <a href="/lex.html" class="btn-tool btn-tool-primary">Choisir un contrat →</a>
+    </div>
+
+    <!-- SCAN -->
+    <div class="pricing-card">
+      <div class="pricing-card-top">
+        <div class="pricing-card-icon">🔍</div>
+        <span class="pricing-badge b-new">Nouveau</span>
+      </div>
+      <div class="pricing-card-name">Scan</div>
+      <div class="pricing-card-type">Audit contractuel par IA</div>
+      <div class="pricing-card-desc">Uploadez n'importe quel contrat. Notre IA analyse les clauses déséquilibrées, identifie les risques et génère un rapport PDF avec des suggestions concrètes.</div>
+      <div class="pricing-amount">
+        <span class="pricing-amount-n">9,99€</span>
+        <span class="pricing-amount-unit">/ audit</span>
+        <div class="pricing-amount-note">Paiement unique · Rapport PDF inclus</div>
+      </div>
+      <div class="pricing-features">
+        <div class="pricing-feature">Analyse IA avancée clause par clause</div>
+        <div class="pricing-feature">Score de risque global</div>
+        <div class="pricing-feature">Rapport PDF téléchargeable</div>
+        <div class="pricing-feature">Suggestions de correction</div>
+        <div class="pricing-feature">Références légales précises</div>
+        <div class="pricing-feature">Contrat non stocké sur nos serveurs</div>
+        <div class="pricing-feature">Prestation, NDA, CGV, bail commercial</div>
+      </div>
+      <a href="https://scan.zelko.fr" class="btn-tool btn-tool-primary">Auditer un contrat →</a>
+    </div>
+
+    <!-- PING -->
+    <div class="pricing-card soon">
+      <div class="pricing-card-top">
+        <div class="pricing-card-icon">🔔</div>
+        <span class="pricing-badge b-soon">Bientôt</span>
+      </div>
+      <div class="pricing-card-name">Ping</div>
+      <div class="pricing-card-type">Relance automatique de factures</div>
+      <div class="pricing-card-desc">Vos factures impayées relancées automatiquement à J+7, J+15 et J+30. Mise en demeure juridique générée automatiquement si nécessaire.</div>
+      <div class="pricing-amount">
+        <span class="pricing-amount-n">12€</span>
+        <span class="pricing-amount-unit">/ mois</span>
+        <div class="pricing-amount-note">Factures illimitées · Annulation à tout moment</div>
+      </div>
+      <div class="pricing-features">
+        <div class="pricing-feature">Relances automatiques J+7, J+15, J+30</div>
+        <div class="pricing-feature">Mise en demeure PDF incluse</div>
+        <div class="pricing-feature">Emails envoyés en votre nom</div>
+        <div class="pricing-feature">Tableau de bord de suivi</div>
+        <div class="pricing-feature missing">Disponible prochainement</div>
+      </div>
+      <button class="btn-tool btn-tool-disabled" disabled>Bientôt disponible</button>
+    </div>
+
+    <!-- FLIK -->
+    <div class="pricing-card soon">
+      <div class="pricing-card-top">
+        <div class="pricing-card-icon">✨</div>
+        <span class="pricing-badge b-soon">Bientôt</span>
+      </div>
+      <div class="pricing-card-name">Flik</div>
+      <div class="pricing-card-type">Fiches produit IA</div>
+      <div class="pricing-card-desc">Photo ou mots-clés → fiche produit SEO optimisée en 10 secondes. Compatible Vinted, Shopify, Amazon, Etsy.</div>
+      <div class="pricing-amount">
+        <span class="pricing-amount-n">19€</span>
+        <span class="pricing-amount-unit">/ mois</span>
+        <div class="pricing-amount-note">Fiches illimitées · 14 jours gratuits</div>
+      </div>
+      <div class="pricing-features">
+        <div class="pricing-feature">Génération en 10 secondes</div>
+        <div class="pricing-feature">Optimisé SEO par plateforme</div>
+        <div class="pricing-feature">Vinted, Shopify, Amazon, Etsy</div>
+        <div class="pricing-feature missing">Disponible prochainement</div>
+      </div>
+      <button class="btn-tool btn-tool-disabled" disabled>Bientôt disponible</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- COMPARE TABLE -->
+<div class="compare-section">
+  <div class="compare-title">Comparatif des outils</div>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Fonctionnalité</th>
+        <th>Lex</th>
+        <th>Scan</th>
+        <th>Ping</th>
+        <th>Flik</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Disponible maintenant</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">·</span></td>
+        <td><span class="cross">·</span></td>
+      </tr>
+      <tr>
+        <td>Paiement à l'usage</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">·</span></td>
+        <td><span class="cross">·</span></td>
+      </tr>
+      <tr>
+        <td>Abonnement mensuel</td>
+        <td><span class="cross">·</span></td>
+        <td><span class="cross">·</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+      </tr>
+      <tr>
+        <td>PDF téléchargeable</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">·</span></td>
+      </tr>
+      <tr>
+        <td>Données non stockées</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">·</span></td>
+        <td><span class="cross">·</span></td>
+      </tr>
+      <tr>
+        <td>Conforme droit français</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">·</span></td>
+      </tr>
+      <tr>
+        <td>IA générative</td>
+        <td><span class="cross">·</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">·</span></td>
+        <td><span class="check">✓</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-title">Questions fréquentes</div>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-q">Les contrats générés sont-ils vraiment juridiquement valides ?</div>
+        <div class="faq-a">Oui. Nos modèles ont été conçus par un juriste spécialisé en droit des affaires et sont régulièrement mis à jour. Ils sont conformes au droit français en vigueur. Pour les contrats à forts enjeux financiers, nous recommandons de les faire relire par un avocat.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Mes données sont-elles stockées sur vos serveurs ?</div>
+        <div class="faq-a">Non. Pour Lex, le contrat est généré directement dans votre navigateur et n'est jamais envoyé sur nos serveurs. Pour Scan, le texte de votre contrat est transmis à l'IA pour analyse puis immédiatement supprimé. Nous ne conservons aucun document.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Puis-je modifier le contrat après l'avoir téléchargé ?</div>
+        <div class="faq-a">Oui. Le PDF téléchargé est un document que vous pouvez modifier avec n'importe quel éditeur PDF ou en le copiant dans Word. Il vous appartient entièrement une fois téléchargé.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Que couvre exactement l'audit Scan ?</div>
+        <div class="faq-a">Scan analyse les clauses déséquilibrées, les protections manquantes, les risques juridiques et les mentions légales obligatoires. Il produit un rapport avec un score global, des alertes par niveau de risque et des suggestions de correction avec les articles de loi applicables.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Comment fonctionne le paiement ?</div>
+        <div class="faq-a">Le paiement est sécurisé via Stripe. Pour Lex et Scan, vous payez à chaque utilisation — pas d'abonnement. Pour Ping et Flik (bientôt), un abonnement mensuel sans engagement avec annulation à tout moment.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Zelko remplace-t-il un avocat ?</div>
+        <div class="faq-a">Non. Zelko est un outil d'assistance juridique conçu pour les situations courantes des indépendants et TPE. Pour les contrats complexes, les litiges ou les situations à forts enjeux, la consultation d'un avocat reste indispensable.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GUARANTEE -->
+<div class="guarantee">
+  <div class="guarantee-card">
+    <div>
+      <h3>Satisfait ou remboursé</h3>
+      <p>Si le document généré ne correspond pas à vos attentes, <em>contactez-nous dans les 24h</em> et nous vous remboursons intégralement. Sans question.</p>
+    </div>
+    <a href="mailto:contact@zelko.fr" class="btn-white">Nous contacter</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Zelko<span>.</span></div>
+  <div class="footer-links">
+    <a href="/a-propos.html" class="footer-link">À propos</a>
+    <a href="/cgu.html" class="footer-link">CGU</a>
+    <a href="/mentions-legales.html" class="footer-link">Mentions légales</a>
+    <a href="/confidentialite.html" class="footer-link">Confidentialité</a>
+    <a href="mailto:contact@zelko.fr" class="footer-link">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Zelko · Tous droits réservés</div>
+</footer>
+
+</body>
+</html>
