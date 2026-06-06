@@ -3,994 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zelko — Contrats juridiques en quelques minutes</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Zelko — La plateforme des entrepreneurs</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --ink: #1a2e1a;
-  --paper: #f4f1ea;
-  --cream: #e8e2d0;
-  --gold: #2d5a27;
-  --gold-light: #4a7c42;
-  --muted: #5a6b5a;
-  --border: #c8d4c0;
-  --white: #ffffff;
-  --beige: #eaf0e6;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 300;
-  min-height: 100vh;
-}
-
-/* NAV */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 1.25rem 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(247,245,240,0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-.logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.6rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  text-decoration: none;
-}
-.logo span { color: var(--gold); }
-.nav-links { display: flex; align-items: center; gap: 2rem; }
-.nav-links a {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--muted);
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--ink); }
-.nav-cta {
-  padding: 8px 20px;
-  background: var(--ink) !important;
-  color: var(--white) !important;
-  border-radius: 3px;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-}
-.nav-cta:hover { opacity: 0.85; }
-
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 8rem 3rem 4rem;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-.hero-left { max-width: 620px; }
-.hero-tag {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-  border: 1px solid var(--gold);
-  padding: 4px 12px;
-  border-radius: 20px;
-  margin-bottom: 1.5rem;
-}
-.hero h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.8rem, 5vw, 4.5rem);
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.5rem;
-  color: var(--ink);
-}
-.hero h1 em {
-  font-style: italic;
-  color: var(--gold);
-}
-.hero-sub {
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--muted);
-  max-width: 480px;
-  margin-bottom: 2.5rem;
-}
-.hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-.btn-primary {
-  padding: 13px 28px;
-  background: var(--ink);
-  color: var(--white);
-  border: none;
-  border-radius: 3px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  transition: opacity 0.2s;
-  display: inline-block;
-}
-.btn-primary:hover { opacity: 0.85; }
-.btn-ghost {
-  padding: 13px 28px;
-  background: transparent;
-  color: var(--ink);
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  cursor: pointer;
-  text-decoration: none;
-  transition: border-color 0.2s;
-  display: inline-block;
-}
-.btn-ghost:hover { border-color: var(--ink); }
-.hero-stats {
-  display: flex;
-  gap: 2.5rem;
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
-}
-.stat-val {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
-  font-weight: 500;
-  color: var(--ink);
-}
-.stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-/* GARANTIES */
-.garanties { display: flex; flex-direction: column; gap: 12px; }
-.garantie-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1.1rem 1.25rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-.garantie-icon {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: var(--cream);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.garantie-body {}
-.garantie-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
-.garantie-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
-.chiffres {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 12px;
-}
-.chiffre-card {
-  background: var(--ink);
-  border-radius: 4px;
-  padding: 1rem;
-  text-align: center;
-}
-.chiffre-val {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.8rem;
-  font-weight: 500;
-  color: var(--white);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.chiffre-label { font-size: 11px; color: rgba(255,255,255,0.5); line-height: 1.4; }
-
-/* CONTRACTS */
-.contracts {
-  padding: 6rem 3rem;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-.section-tag {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1rem;
-}
-.section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
-}
-.section-sub {
-  font-size: 15px;
-  color: var(--muted);
-  max-width: 500px;
-  margin-bottom: 3rem;
-  line-height: 1.7;
-}
-.contracts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-}
-.contract-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1.75rem;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-  position: relative;
-}
-.contract-card.available:hover {
-  border-color: var(--gold);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.07);
-  transform: translateY(-2px);
-}
-.contract-card.soon { cursor: default; }
-.status-badge {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 2px 8px;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-}
-.badge-available { color: #2d6a4f; background: #d8f3dc; }
-.badge-soon { color: var(--muted); background: var(--cream); }
-.contract-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
-.contract-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-.contract-desc {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-.contract-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 12px;
-  color: var(--muted);
-  padding-top: 1rem;
-  border-top: 1px solid var(--cream);
-}
-.contract-price { font-weight: 500; color: var(--ink); }
-
-/* DETAILS SECTION */
-.details {
-  background: var(--white);
-  padding: 6rem 3rem;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-.details-inner { max-width: 1100px; margin: 0 auto; }
-.accordion { margin-top: 3rem; display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
-.acc-item { border-bottom: 1px solid var(--border); }
-.acc-item:last-child { border-bottom: none; }
-.acc-trigger {
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 1.25rem 1.75rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.15s;
-}
-.acc-trigger:hover { background: var(--paper); }
-.acc-trigger.open { background: var(--paper); }
-.acc-icon { font-size: 1.3rem; flex-shrink: 0; }
-.acc-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: var(--ink);
-  flex: 1;
-}
-.acc-chevron {
-  font-size: 12px;
-  color: var(--muted);
-  transition: transform 0.25s;
-  flex-shrink: 0;
-}
-.acc-trigger.open .acc-chevron { transform: rotate(180deg); }
-.acc-body {
-  display: none;
-  padding: 0 1.75rem 1.5rem 4.1rem;
-  border-top: 1px solid var(--cream);
-}
-.acc-body.open { display: block; }
-.acc-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 1.25rem;
-}
-.acc-block-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.4rem;
-}
-.acc-block-text {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.65;
-}
-.acc-articles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--cream);
-}
-.article-tag {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  background: var(--cream);
-  padding: 3px 10px;
-  border-radius: 10px;
-}
-
-/* HOW IT WORKS */
-.how {
-  background: var(--beige);
-  padding: 6rem 3rem;
-  border-top: 1px solid var(--border);
-}
-.how-inner { max-width: 1100px; margin: 0 auto; }
-.how .section-tag { color: var(--gold); }
-.how .section-title { color: var(--ink); }
-.how .section-sub { color: var(--muted); }
-.steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 3rem;
-}
-.step {
-  padding: 2rem;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-}
-.step-num {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1rem;
-}
-.step-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--ink);
-  margin-bottom: 0.5rem;
-}
-.step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
-
-/* FOOTER */
-.footer-main {
-  background: var(--ink);
-  padding: 4rem 3rem;
-}
-.footer-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 3rem;
-}
-.footer-brand .logo-footer {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--white);
-  margin-bottom: 1rem;
-  display: block;
-  text-decoration: none;
-}
-.footer-brand .logo-footer span { color: var(--gold); }
-.footer-brand p {
-  font-size: 13px;
-  color: rgba(255,255,255,0.4);
-  line-height: 1.7;
-  max-width: 260px;
-}
-.footer-col h4 {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1.25rem;
-}
-.footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 0.6rem; }
-.footer-col ul li a {
-  font-size: 13px;
-  color: rgba(255,255,255,0.5);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.footer-col ul li a:hover { color: var(--white); }
-.footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding: 1.25rem 3rem;
-  background: var(--ink);
-}
-.footer-bottom-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.footer-bottom-inner span {
-  font-size: 11px;
-  color: rgba(255,255,255,0.25);
-}
-.footer-legal {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-.footer-legal a {
-  font-size: 11px;
-  color: rgba(255,255,255,0.35);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.footer-legal a:hover { color: rgba(255,255,255,0.7); }
-.footer-legal-sep {
-  font-size: 11px;
-  color: rgba(255,255,255,0.15);
-}
-@media(max-width:900px){
-  .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
-  .footer-main { padding: 3rem 1.5rem; }
-  .footer-bottom { padding: 1.25rem 1.5rem; }
-  .footer-bottom-inner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-}
-
-@media (max-width: 900px) {
-  /* NAV */
-  nav { padding: 1rem 1.5rem; position: fixed; }
-  .nav-links a:not(.nav-cta) { display: none; }
-  .nav-cta { font-size: 12px !important; padding: 7px 14px !important; }
-
-  /* HERO */
-  .hero {
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 6rem 1.5rem 3rem !important;
-    gap: 2.5rem !important;
-    min-height: auto !important;
-  }
-  .hero h1 { font-size: 2.6rem; }
-  .hero-sub { font-size: 14px; }
-  .hero-stats { gap: 1.5rem; }
-  .stat-val { font-size: 1.6rem; }
-  .testimonials { display: flex; flex-direction: column; gap: 12px; }
-
-  /* SECTIONS */
-  .contracts { padding: 3rem 1.5rem; }
-  .contracts-grid { grid-template-columns: 1fr; }
-  .details { padding: 3rem 1.5rem; }
-  .details-inner { padding: 0 !important; }
-  .how { padding: 3rem 1.5rem; }
-  .how-inner { padding: 0 !important; }
-  .steps { grid-template-columns: 1fr; gap: 12px; }
-  .acc-row { grid-template-columns: 1fr; gap: 0.75rem; }
-
-  /* FOOTER */
-  .footer-main { padding: 3rem 1.5rem; }
-  .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
-  .footer-brand { grid-column: 1 / -1; }
-  .footer-bottom { padding: 1.25rem 1.5rem; }
-  .footer-bottom-inner { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-  .footer-legal { flex-wrap: wrap; gap: 1rem; }
-}
-
-@media (max-width: 480px) {
-  .hero h1 { font-size: 2.2rem; }
-  .hero-actions { flex-direction: column; }
-  .hero-actions a { width: 100%; text-align: center; }
-  .hero-stats { flex-wrap: wrap; gap: 1rem; }
-  .footer-inner { grid-template-columns: 1fr; }
-  .nav-cta { font-size: 11px !important; padding: 6px 12px !important; }
-}
+:root{--black:#0c0c0c;--white:#fafaf7;--cream:#f2efe8;--green:#3a8000;--green-light:#eaf3de;--green-dark:#27500a;--border:#e4e0d8;--text:#1a1a1a;--muted:#888}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:var(--white);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:-0.04em;color:var(--black);text-decoration:none}
+.logo b{color:var(--green)}
+.nav-links{display:flex;gap:0.25rem}
+.nav-link{font-size:0.82rem;color:var(--muted);padding:0.4rem 0.9rem;border-radius:6px;cursor:pointer;text-decoration:none}
+.nav-link:hover{background:var(--cream);color:var(--black)}
+.nav-right{display:flex;gap:0.75rem;align-items:center}
+.btn-ghost{font-size:0.82rem;padding:0.45rem 1.1rem;border-radius:8px;border:0.5px solid var(--border);background:transparent;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-primary{font-size:0.82rem;padding:0.45rem 1.2rem;border-radius:8px;border:none;background:var(--black);color:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
+.hero{padding:5rem 2.5rem 4rem;max-width:1100px;margin:0 auto;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--white);border:0.5px solid var(--border);border-radius:100px;padding:0.35rem 1.1rem;font-size:0.72rem;color:var(--muted);margin-bottom:2rem;letter-spacing:0.05em;text-transform:uppercase}
+.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
+.hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:3.2rem;line-height:1.04;letter-spacing:-0.04em;color:var(--black);margin-bottom:1.25rem;max-width:700px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--green)}
+.hero-sub{font-size:1.05rem;color:#666;max-width:500px;margin:0 auto 3rem;line-height:1.7}
+.hero-stats{display:flex;align-items:center;justify-content:center;gap:2.5rem;flex-wrap:wrap;padding:1.5rem 0;border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);margin-top:1rem}
+.hero-stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--black)}
+.hero-stat-l{font-size:0.75rem;color:var(--muted);margin-top:0.2rem}
+.tools-section{padding:3rem 2.5rem;max-width:1100px;margin:0 auto}
+.tools-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.75rem}
+.tools-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:-0.02em;color:var(--black)}
+.tools-count{font-size:0.78rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem}
+.card{background:var(--white);border:0.5px solid var(--border);border-radius:16px;padding:1.5rem;cursor:pointer;transition:all 0.18s;text-decoration:none;display:flex;flex-direction:column;position:relative}
+.card:hover{border-color:#bbb;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.card.featured{border:1.5px solid var(--black)}
+.card.disabled{opacity:0.45;pointer-events:none}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.1rem}
+.card-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ic-green{background:#eaf3de}.ic-amber{background:#faeeda}.ic-blue{background:#e6f1fb}.ic-purple{background:#eeedfe}.ic-red{background:#fde8e0}.ic-teal{background:#e1f5ee}
+.badge{font-size:0.6rem;padding:0.2rem 0.6rem;border-radius:4px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;flex-shrink:0}
+.b-live{background:var(--black);color:var(--white)}
+.b-new{background:var(--green-light);color:var(--green-dark)}
+.b-soon{background:#f2efe8;color:#bbb;border:0.5px solid var(--border)}
+.card-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--black);letter-spacing:-0.02em;margin-bottom:0.15rem}
+.card-by{font-size:0.7rem;color:#bbb;margin-bottom:0.6rem;letter-spacing:0.03em}
+.card-desc{font-size:0.82rem;color:#666;line-height:1.55;flex:1;margin-bottom:1.1rem}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:0.5px solid #f0ece4;margin-top:auto}
+.price{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--black)}
+.price-sub{font-size:0.68rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif}
+.card-arrow{font-size:18px;color:#ddd;transition:all 0.15s}
+.card:hover .card-arrow{color:var(--black)}
+.banner{margin:0 2.5rem;background:var(--black);border-radius:16px;padding:2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.banner h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.25rem;color:var(--white);margin-bottom:0.4rem;letter-spacing:-0.02em}
+.banner p{font-size:0.88rem;color:#666;line-height:1.6}
+.banner p em{font-style:normal;color:#a8e060}
+.btn-white{font-size:0.88rem;padding:0.75rem 1.75rem;border-radius:10px;border:none;background:var(--white);color:var(--black);cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;white-space:nowrap}
+footer{margin-top:4rem;background:var(--white);border-top:0.5px solid var(--border);padding:2rem 2.5rem}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--black)}
+.footer-logo b{color:var(--green)}
+.footer-links{display:flex;gap:2rem;flex-wrap:wrap}
+.footer-link{font-size:0.78rem;color:#bbb;cursor:pointer;text-decoration:none}
+.footer-copy{font-size:0.72rem;color:#ccc}
 </style>
 </head>
 <body>
-
 <nav>
-  <a href="/" class="logo">Zel<span>ko</span></a>
+  <a href="/" class="logo">zelko<b>.</b></a>
   <div class="nav-links">
-    <a href="#contrats">Contrats</a>
-    <a href="#details">Guide</a>
-    <a href="#comment">Comment ça marche</a>
-    <a href="a-propos.html">À propos</a>
+    <a class="nav-link" href="#outils">Outils</a>
+    <a class="nav-link" href="#tarifs">Tarifs</a>
+    <a class="nav-link" href="#">Blog</a>
+    <a class="nav-link" href="#">À propos</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn-ghost">Se connecter</button>
+    <button class="btn-primary">Commencer gratuitement</button>
   </div>
 </nav>
-
-<!-- HERO -->
-<section class="hero" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
-  <div class="hero-left">
-    <div class="hero-tag">Documents juridiques · Droit français</div>
-    <h1>Vos contrats<br>juridiques,<br><em>en quelques minutes.</em></h1>
-    <p class="hero-sub">Zelko génère des contrats professionnels conformes au droit français. Remplissez un formulaire et téléchargez votre PDF en quelques minutes.</p>
-    <div class="hero-actions">
-      <a href="#contrats" class="btn-primary">Choisir un contrat</a>
-      <a href="#comment" class="btn-ghost">Comment ça marche</a>
-    </div>
-
-  </div>
-
-  <div class="garanties">
-    <div class="garantie-card">
-      <div class="garantie-icon">⚖️</div>
-      <div class="garantie-body">
-        <div class="garantie-title">Conformes au droit français</div>
-        <div class="garantie-desc">Nos modèles ont été conçus par un juriste spécialisé en droit des affaires et sont régulièrement mis à jour selon l'évolution de la législation.</div>
-      </div>
-    </div>
-    <div class="garantie-card">
-      <div class="garantie-icon">🔒</div>
-      <div class="garantie-body">
-        <div class="garantie-title">Données sécurisées</div>
-        <div class="garantie-desc">Vos informations ne sont jamais stockées sur nos serveurs. Le document est généré localement dans votre navigateur.</div>
-      </div>
-    </div>
-    <div class="garantie-card">
-      <div class="garantie-icon">⚡</div>
-      <div class="garantie-body">
-        <div class="garantie-title">Généré en temps réel</div>
-        <div class="garantie-desc">Votre contrat se construit au fur et à mesure que vous remplissez le formulaire. Téléchargement immédiat en PDF.</div>
-      </div>
-    </div>
-    <div class="garantie-card">
-      <div class="garantie-icon">💶</div>
-      <div class="garantie-body">
-        <div class="garantie-title">Prix fixe, sans surprise</div>
-        <div class="garantie-desc">À partir de 4,99€ par contrat, sans abonnement ni frais cachés. Vous payez uniquement ce dont vous avez besoin.</div>
-      </div>
-    </div>
-    <div class="chiffres">
-      <div class="chiffre-card">
-        <div class="chiffre-val">5 min</div>
-        <div class="chiffre-label">Temps moyen de génération</div>
-      </div>
-      <div class="chiffre-card">
-        <div class="chiffre-val">6</div>
-        <div class="chiffre-label">Types de contrats disponibles</div>
-      </div>
-      <div class="chiffre-card">
-        <div class="chiffre-label">à partir de</div>
-        <div class="chiffre-val">4,99€</div>
-      </div>
-    </div>
+<section class="hero">
+  <div class="hero-badge"><div class="hero-badge-dot"></div>La plateforme des entrepreneurs indépendants</div>
+  <h1>Tous tes outils.<br><em>Un seul endroit.</em></h1>
+  <p class="hero-sub">Zelko regroupe les outils essentiels pour gérer, sécuriser et développer ton activité.</p>
+  <div class="hero-stats">
+    <div><div class="hero-stat-n">6</div><div class="hero-stat-l">Outils disponibles</div></div>
+    <div style="width:0.5px;height:32px;background:var(--border)"></div>
+    <div><div class="hero-stat-n">FR · BE · CH</div><div class="hero-stat-l">Pays couverts</div></div>
+    <div style="width:0.5px;height:32px;background:var(--border)"></div>
+    <div><div class="hero-stat-n">100%</div><div class="hero-stat-l">Bootstrappé</div></div>
+    <div style="width:0.5px;height:32px;background:var(--border)"></div>
+    <div><div class="hero-stat-n">0€</div><div class="hero-stat-l">Pour commencer</div></div>
   </div>
 </section>
-
-<!-- CONTRACTS -->
-<section class="contracts" id="contrats">
-  <div class="section-tag">Nos documents</div>
-  <h2 class="section-title">Quel contrat<br>vous faut-il ?</h2>
-  <p class="section-sub">Sélectionnez le document adapté à votre situation. Notre générateur vous guide étape par étape.</p>
-
-  <div class="contracts-grid">
-    <a href="nda.html" class="contract-card available">
-      <div class="contract-icon">🤝</div>
-      <div class="contract-name">Accord de confidentialité</div>
-      <div class="contract-desc">Protégez vos informations sensibles lors de négociations, partenariats ou discussions précontractuelles.</div>
-      <div class="contract-meta">
-        <span class="contract-price">4,99€</span>
-        <span>·</span>
-        <span>~5 minutes</span>
-      </div>
+<section class="tools-section" id="outils">
+  <div class="tools-header">
+    <div class="tools-title">Tous les outils</div>
+    <div class="tools-count">5 outils · 1 bientôt</div>
+  </div>
+  <div class="grid">
+    <a href="https://lex.zelko.fr" class="card featured">
+      <div class="card-top"><div class="card-icon ic-purple">📄</div><span class="badge b-live">Live</span></div>
+      <div class="card-name">Lex</div>
+      <div class="card-by">by Zelko · Contrats juridiques</div>
+      <div class="card-desc">NDA, CGV, bail commercial, contrat de travail — générés en quelques minutes, conformes au droit français.</div>
+      <div class="card-footer"><div class="price">dès 4,99€ <span class="price-sub">/ contrat</span></div><span class="card-arrow">→</span></div>
     </a>
-
-    <a href="prestation.html" class="contract-card available">
-      <div class="contract-icon">📋</div>
-      <div class="contract-name">Contrat de prestation</div>
-      <div class="contract-desc">Sécurisez vos missions freelance ou sous-traitance avec un contrat complet et personnalisé.</div>
-      <div class="contract-meta">
-        <span class="contract-price">7,99€</span>
-        <span>·</span>
-        <span>~8 minutes</span>
-      </div>
+    <a href="https://scan.zelko.fr" class="card">
+      <div class="card-top"><div class="card-icon ic-red">🔍</div><span class="badge b-new">Nouveau</span></div>
+      <div class="card-name">Scan</div>
+      <div class="card-by">by Zelko · Audit contractuel IA</div>
+      <div class="card-desc">Uploade ton contrat. Scan analyse les clauses déséquilibrées, les risques juridiques et génère un rapport PDF.</div>
+      <div class="card-footer"><div class="price">9,99€ <span class="price-sub">/ audit</span></div><span class="card-arrow">→</span></div>
     </a>
-
-    <a href="cgv.html" class="contract-card available">
-      <div class="contract-icon">🛒</div>
-      <div class="contract-name">Conditions Générales de Vente</div>
-      <div class="contract-desc">CGV conformes pour votre boutique en ligne ou votre activité de vente de produits et services.</div>
-      <div class="contract-meta">
-        <span class="contract-price">11,99€</span>
-        <span>·</span>
-        <span>~10 minutes</span>
-      </div>
+    <a href="https://ping.zelko.fr" class="card">
+      <div class="card-top"><div class="card-icon ic-amber">🔔</div><span class="badge b-new">Nouveau</span></div>
+      <div class="card-name">Ping</div>
+      <div class="card-by">by Zelko · Relance factures</div>
+      <div class="card-desc">Tes factures impayées relancées automatiquement. J+7, J+15, J+30 — mise en demeure juridique incluse.</div>
+      <div class="card-footer"><div class="price">12€ <span class="price-sub">/ mois</span></div><span class="card-arrow">→</span></div>
     </a>
-
-    <a href="bail-habitation.html" class="contract-card available">
-      <div class="contract-icon">🏠</div>
-      <div class="contract-name">Bail d'habitation</div>
-      <div class="contract-desc">Location vide ou meublée conforme à la loi du 6 juillet 1989 et à la loi ALUR. Inclut garant et inventaire.</div>
-      <div class="contract-meta">
-        <span class="contract-price">9,99€</span>
-        <span>·</span>
-        <span>~8 minutes</span>
-      </div>
+    <a href="https://flik.zelko.fr" class="card">
+      <div class="card-top"><div class="card-icon ic-green">✨</div><span class="badge b-new">Nouveau</span></div>
+      <div class="card-name">Flik</div>
+      <div class="card-by">by Zelko · Fiches produit IA</div>
+      <div class="card-desc">Photo ou mots-clés → fiche produit SEO prête à publier en 10 secondes. Vinted, Shopify, Amazon, Etsy.</div>
+      <div class="card-footer"><div class="price">19€ <span class="price-sub">/ mois</span></div><span class="card-arrow">→</span></div>
     </a>
-
-    <a href="bail-commercial.html" class="contract-card available">
-      <div class="contract-icon">🏪</div>
-      <div class="contract-name">Bail commercial</div>
-      <div class="contract-desc">Bail 3-6-9, bail professionnel ou bail précaire — pour louer un local commercial, artisanal ou professionnel.</div>
-      <div class="contract-meta">
-        <span class="contract-price">24,99€</span>
-        <span>·</span>
-        <span>~10 minutes</span>
-      </div>
+    <a href="https://marge.zelko.fr" class="card">
+      <div class="card-top"><div class="card-icon ic-blue">📊</div><span class="badge b-new">Nouveau</span></div>
+      <div class="card-name">Marge</div>
+      <div class="card-by">by Zelko · Dashboard e-commerce</div>
+      <div class="card-desc">Connecte tes plateformes et vois tes vraies marges après frais, retours et livraison.</div>
+      <div class="card-footer"><div class="price">24€ <span class="price-sub">/ mois</span></div><span class="card-arrow">→</span></div>
     </a>
-
-
-
-    <a href="contrat-travail.html" class="contract-card available">
-      <div class="contract-icon">💼</div>
-      <div class="contract-name">Contrat de travail</div>
-      <div class="contract-desc">Rédigez un contrat CDI ou CDD conforme au droit français pour vos recrutements.</div>
-      <div class="contract-meta">
-        <span class="contract-price">7,99€</span>
-        <span>·</span>
-        <span>~8 minutes</span>
-      </div>
+    <a class="card disabled">
+      <div class="card-top"><div class="card-icon ic-teal">👥</div><span class="badge b-soon">Bientôt</span></div>
+      <div class="card-name">Flow</div>
+      <div class="card-by">by Zelko · Gestion freelances</div>
+      <div class="card-desc">Gère tes freelances et sous-traitants. Contrats, paiements, suivi de mission centralisés.</div>
+      <div class="card-footer"><div class="price" style="color:var(--muted)">En développement</div></div>
     </a>
-
-
   </div>
 </section>
-
-<!-- DETAILS -->
-<section class="details" id="details">
-  <div class="details-inner">
-    <div class="section-tag">Guide des contrats</div>
-    <h2 class="section-title">À quoi sert<br>chaque contrat ?</h2>
-    <p class="section-sub">Cliquez sur un contrat pour voir son utilité, le bon moment pour l'utiliser, et les textes de loi applicables.</p>
-
-    <div class="accordion">
-
-      <div class="acc-item">
-        <button class="acc-trigger" onclick="toggle(this)">
-          <span class="acc-icon">🤝</span>
-          <span class="acc-name">Accord de confidentialité (NDA)</span>
-          <span class="acc-chevron">▼</span>
-        </button>
-        <div class="acc-body">
-          <div class="acc-row">
-            <div>
-              <div class="acc-block-label">Ce que c'est</div>
-              <div class="acc-block-text">Un engagement contractuel — mutuel ou unilatéral — par lequel une ou deux parties s'obligent à ne pas divulguer des informations confidentielles reçues dans le cadre d'une relation professionnelle. Il peut couvrir des données techniques, financières, commerciales ou stratégiques.</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Quand l'utiliser</div>
-              <div class="acc-block-text">Avant toute négociation commerciale, discussion de partenariat, levée de fonds, entretien avec un investisseur, ou partage d'informations sensibles avec un prestataire, sous-traitant ou candidat à un poste stratégique.</div>
-            </div>
-          </div>
-          <div class="acc-row" style="margin-top:0">
-            <div>
-              <div class="acc-block-label">Ce qu'il protège</div>
-              <div class="acc-block-text">Savoir-faire, données clients, plans de développement, prototypes, informations financières non publiées, stratégie commerciale, code source, formules ou procédés techniques.</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Durée typique</div>
-              <div class="acc-block-text">De 1 à 5 ans selon les enjeux. Certaines clauses peuvent être à durée indéterminée pour les secrets commerciaux les plus sensibles.</div>
-            </div>
-          </div>
-          <div class="acc-articles">
-            <span class="article-tag">Art. 1103 Code civil</span>
-            <span class="article-tag">Art. L151-1 Code de commerce</span>
-            <span class="article-tag">Loi du 30 juil. 2018 — secret des affaires</span>
-            <span class="article-tag">Directive UE 2016/943</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="acc-item">
-        <button class="acc-trigger" onclick="toggle(this)">
-          <span class="acc-icon">📋</span>
-          <span class="acc-name">Contrat de prestation de services</span>
-          <span class="acc-chevron">▼</span>
-        </button>
-        <div class="acc-body">
-          <div class="acc-row">
-            <div>
-              <div class="acc-block-label">Ce que c'est</div>
-              <div class="acc-block-text">Un contrat par lequel un prestataire (freelance, consultant ou société) s'engage à réaliser une mission définie pour un client, contre rémunération. Il précise les livrables, les délais, le prix, les conditions de paiement et la propriété intellectuelle.</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Quand l'utiliser</div>
-              <div class="acc-block-text">Dès qu'une mission est confiée à un prestataire externe : développement web, conseil en stratégie, design graphique, rédaction, formation, audit, etc. Indispensable même pour les petites missions.</div>
-            </div>
-          </div>
-          <div class="acc-row" style="margin-top:0">
-            <div>
-              <div class="acc-block-label">Points clés couverts</div>
-              <div class="acc-block-text">Description de la mission, livrables attendus, calendrier, prix HT/TTC, conditions de paiement, pénalités de retard, propriété intellectuelle, clause de confidentialité et résiliation.</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Risque sans contrat</div>
-              <div class="acc-block-text">Litige sur les livrables, non-paiement, revendication de propriété intellectuelle par le client, ou qualification en contrat de travail déguisé (risque de requalification en CDI).</div>
-            </div>
-          </div>
-          <div class="acc-articles">
-            <span class="article-tag">Art. 1710 Code civil</span>
-            <span class="article-tag">Art. L441-1 Code de commerce</span>
-            <span class="article-tag">Art. L111-1 Code de la propriété intellectuelle</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="acc-item">
-        <button class="acc-trigger" onclick="toggle(this)">
-          <span class="acc-icon">🛒</span>
-          <span class="acc-name">Conditions Générales de Vente (CGV)</span>
-          <span class="acc-chevron">▼</span>
-        </button>
-        <div class="acc-body">
-          <div class="acc-row">
-            <div>
-              <div class="acc-block-label">Ce que c'est</div>
-              <div class="acc-block-text">Le document qui régit les relations entre un vendeur et ses clients : prix, délais de livraison, politique de retour, responsabilités et litiges.</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Quand l'utiliser</div>
-              <div class="acc-block-text">Obligatoires pour tout e-commerçant vendant à des particuliers (B2C). Fortement recommandées en B2B pour sécuriser chaque transaction.</div>
-            </div>
-          </div>
-          <div class="acc-articles">
-            <span class="article-tag">Art. L441-1 Code de commerce</span>
-            <span class="article-tag">Art. L221-11 Code de la consommation</span>
-            <span class="article-tag">Directive UE 2011/83</span>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="acc-item">
-        <button class="acc-trigger" onclick="toggle(this)">
-          <span class="acc-icon">💼</span>
-          <span class="acc-name">Contrat de travail (CDI / CDD)</span>
-          <span class="acc-chevron">▼</span>
-        </button>
-        <div class="acc-body">
-          <div class="acc-row">
-            <div>
-              <div class="acc-block-label">Ce que c'est</div>
-              <div class="acc-block-text">Le contrat qui formalise la relation employeur-salarié : poste, rémunération, durée de travail, période d'essai et conditions de rupture.</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Quand l'utiliser</div>
-              <div class="acc-block-text">Dès votre premier recrutement. Le CDI est la règle générale, le CDD est l'exception réservée à des cas précis (remplacement, accroissement temporaire d'activité).</div>
-            </div>
-          </div>
-          <div class="acc-articles">
-            <span class="article-tag">Art. L1221-1 Code du travail</span>
-            <span class="article-tag">Art. L1242-1 Code du travail</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="acc-item">
-        <button class="acc-trigger" onclick="toggle(this)">
-          <span class="acc-icon">🏠</span>
-          <span class="acc-name">Bail d'habitation (vide ou meublé)</span>
-          <span class="acc-chevron">▼</span>
-        </button>
-        <div class="acc-body">
-          <div class="acc-row">
-            <div>
-              <div class="acc-block-label">Ce que c'est</div>
-              <div class="acc-block-text">Un contrat de location d'un logement à usage d'habitation principale. Le bail vide dure 3 ans (bailleur particulier) ou 6 ans (bailleur société). Le bail meublé dure 1 an (ou 9 mois pour les étudiants).</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Quand l'utiliser</div>
-              <div class="acc-block-text">Dès qu'un propriétaire loue son bien à un locataire pour en faire sa résidence principale. Obligatoire pour formaliser la relation et protéger les deux parties.</div>
-            </div>
-          </div>
-          <div class="acc-row" style="margin-top:0">
-            <div>
-              <div class="acc-block-label">Points clés couverts</div>
-              <div class="acc-block-text">Description du logement, DPE, loyer et charges, dépôt de garantie, état des lieux, durée et conditions de résiliation, garant, assurance, clause résolutoire.</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Risque sans contrat</div>
-              <div class="acc-block-text">Absence de protection légale, litiges sur l'état des lieux, impossibilité de récupérer le logement en cas d'impayé, requalification en hébergement à titre gratuit.</div>
-            </div>
-          </div>
-          <div class="acc-articles">
-            <span class="article-tag">Loi du 6 juillet 1989</span>
-            <span class="article-tag">Loi ALUR du 24 mars 2014</span>
-            <span class="article-tag">Décret du 26 août 1987</span>
-            <span class="article-tag">Art. 25-3 et s. (meublé)</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="acc-item">
-        <button class="acc-trigger" onclick="toggle(this)">
-          <span class="acc-icon">🏪</span>
-          <span class="acc-name">Bail commercial (3-6-9 / Professionnel / Précaire)</span>
-          <span class="acc-chevron">▼</span>
-        </button>
-        <div class="acc-body">
-          <div class="acc-row">
-            <div>
-              <div class="acc-block-label">Ce que c'est</div>
-              <div class="acc-block-text">Un contrat de location d'un local à usage commercial, artisanal ou professionnel. Le bail 3-6-9 offre une protection maximale au locataire (droit au renouvellement). Le bail précaire est limité à 3 ans sans renouvellement automatique.</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Quand l'utiliser</div>
-              <div class="acc-block-text">Dès qu'un entrepreneur loue un local pour exercer son activité : boutique, restaurant, bureau, cabinet médical, atelier artisanal. Obligatoire pour bénéficier du statut protecteur des baux commerciaux.</div>
-            </div>
-          </div>
-          <div class="acc-row" style="margin-top:0">
-            <div>
-              <div class="acc-block-label">Points clés couverts</div>
-              <div class="acc-block-text">Désignation du local, activité autorisée, durée, loyer et révision (ILC/ILAT), dépôt de garantie, répartition des charges (loi Pinel), état des lieux, travaux et droit au renouvellement.</div>
-            </div>
-            <div>
-              <div class="acc-block-label">Risque sans contrat</div>
-              <div class="acc-block-text">Absence de protection légale, expulsion sans indemnité, litiges sur les charges et les travaux, impossibilité de céder le fonds de commerce.</div>
-            </div>
-          </div>
-          <div class="acc-articles">
-            <span class="article-tag">Art. L145-1 Code de commerce</span>
-            <span class="article-tag">Loi Pinel du 18 juin 2014</span>
-            <span class="article-tag">Décret du 3 nov. 2014</span>
-            <span class="article-tag">Art. 57-A Loi 23 déc. 1986</span>
-          </div>
-        </div>
-      </div>
-
-
-
-    </div>
+<div class="banner" id="tarifs">
+  <div>
+    <h3>Un abonnement. Tous les outils.</h3>
+    <p>Accède à <em>l'ensemble du catalogue Zelko</em> pour le prix d'un déjeuner.<br>Plus d'excuses pour ne pas être organisé.</p>
   </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how" id="comment">
-  <div class="how-inner">
-    <div class="section-tag">Simple & rapide</div>
-    <h2 class="section-title">Comment ça marche ?</h2>
-    <p class="section-sub">Trois étapes pour obtenir un contrat solide, en quelques minutes.</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">Étape 1</div>
-        <div class="step-title">Choisissez votre contrat</div>
-        <div class="step-desc">Sélectionnez le document adapté à votre situation parmi notre bibliothèque de contrats en droit français.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">Étape 2</div>
-        <div class="step-title">Remplissez le formulaire</div>
-        <div class="step-desc">Répondez aux questions en langage clair. Le contrat se génère en temps réel sous vos yeux.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">Étape 3</div>
-        <div class="step-title">Téléchargez votre PDF</div>
-        <div class="step-desc">Obtenez un document professionnel, prêt à être signé. À partir de 4,99€ par contrat, sans abonnement.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer class="footer-main">
+  <button class="btn-white">Voir les tarifs →</button>
+</div>
+<footer>
   <div class="footer-inner">
-    <div class="footer-brand">
-      <a href="index.html" class="logo-footer">Zel<span>ko</span></a>
-      <p>Générez vos contrats juridiques conformes au droit français en quelques minutes. Rapide, simple et fiable.</p>
+    <div class="footer-logo">zelko<b>.</b></div>
+    <div class="footer-links">
+      <a href="#" class="footer-link">À propos</a>
+      <a href="#" class="footer-link">CGU</a>
+      <a href="#" class="footer-link">Mentions légales</a>
+      <a href="#" class="footer-link">Confidentialité</a>
+      <a href="mailto:contact@zelko.fr" class="footer-link">Contact</a>
     </div>
-    <div class="footer-col">
-      <h4>Contrats</h4>
-      <ul>
-        <li><a href="nda.html">Accord de confidentialité</a></li>
-        <li><a href="prestation.html">Contrat de prestation</a></li>
-        <li><a href="cgv.html">CGV</a></li>
-        <li><a href="contrat-travail.html">Contrat de travail</a></li>
-        <li><a href="bail-habitation.html">Bail d'habitation</a></li>
-        <li><a href="bail-commercial.html">Bail commercial</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Guide</h4>
-      <ul>
-        <li><a href="#details">À quoi sert chaque contrat ?</a></li>
-        <li><a href="#comment">Comment ça marche</a>
-    <a href="a-propos.html">À propos</a></li>
-        <li><a href="cgu.html">CGU</a></li>
-        <li><a href="mentions-legales.html">Mentions légales</a></li>
-        <li><a href="confidentialite.html">Confidentialité</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <ul>
-        <li><a href="mailto:contact@zelko.fr">contact@zelko.fr</a></li>
-        <li><a href="cgu.html">Conditions d'utilisation</a></li>
-      </ul>
-    </div>
+    <div class="footer-copy">© 2026 Zelko · Tous droits réservés</div>
   </div>
 </footer>
-<div class="footer-bottom">
-  <div class="footer-bottom-inner">
-    <span>© 2026 Zelko · Tous droits réservés · Les documents générés sont fournis à titre informatif.</span>
-    <div class="footer-legal">
-      <a href="cgu.html">Conditions générales</a>
-      <span class="footer-legal-sep">·</span>
-      <a href="mentions-legales.html">Mentions légales</a>
-      <span class="footer-legal-sep">·</span>
-      <a href="confidentialite.html">Politique de confidentialité</a>
-    </div>
-  </div>
-</div>
-
-<script>
-function toggle(btn) {
-  const body = btn.nextElementSibling;
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.acc-body.open').forEach(b => b.classList.remove('open'));
-  document.querySelectorAll('.acc-trigger.open').forEach(b => b.classList.remove('open'));
-  if (!isOpen) {
-    body.classList.add('open');
-    btn.classList.add('open');
-  }
-}
-</script>
 </body>
 </html>
