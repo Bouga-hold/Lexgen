@@ -130,15 +130,12 @@ nav{
 }
 .card-by{font-size:0.7rem;color:#bbb;margin-bottom:0.5rem;letter-spacing:0.03em}
 .card-desc{font-size:0.83rem;color:#555;line-height:1.6;flex:1;margin-bottom:0.9rem}
-
-/* Ligne "Ce que ça fait" */
 .card-what{
   font-size:0.78rem;color:var(--green-dark);
   background:var(--green-light);
   border-radius:6px;padding:0.45rem 0.7rem;
   margin-bottom:1rem;line-height:1.5;
 }
-
 .card-footer{
   display:flex;align-items:center;justify-content:space-between;
   padding-top:0.9rem;border-top:0.5px solid #f0ece4;
@@ -163,7 +160,7 @@ nav{
   font-size:1.1rem;color:var(--black);
   margin-bottom:0.3rem;letter-spacing:-0.02em;
 }
-.cta-section p{font-size:0.85rem;color:var(--muted);line-height:1.6}
+.cta-section p{font-size:0.85rem;color:var(--muted);line-height:1.6;max-width:520px}
 .btn-dark{
   font-size:0.85rem;padding:0.7rem 1.5rem;
   border-radius:10px;border:none;
@@ -211,8 +208,6 @@ footer{
   <div class="nav-links">
     <a class="nav-link" href="#outils">Outils</a>
     <a class="nav-link" href="/tarifs.html">Tarifs</a>
-    <a class="nav-link" href="#">Blog</a>
-    <a class="nav-link" href="#">À propos</a>
   </div>
   <div class="nav-right">
     <button class="btn-ghost">Se connecter</button>
@@ -232,8 +227,18 @@ footer{
     </div>
     <div style="width:0.5px;height:32px;background:var(--border)"></div>
     <div>
+      <div class="hero-stat-n">&lt; 10 min</div>
+      <div class="hero-stat-l">Pour générer un contrat</div>
+    </div>
+    <div style="width:0.5px;height:32px;background:var(--border)"></div>
+    <div>
       <div class="hero-stat-n">0€</div>
       <div class="hero-stat-l">Pour commencer</div>
+    </div>
+    <div style="width:0.5px;height:32px;background:var(--border)"></div>
+    <div>
+      <div class="hero-stat-n">Droit FR</div>
+      <div class="hero-stat-l">Tous les documents conformes</div>
     </div>
   </div>
 </section>
@@ -271,7 +276,7 @@ footer{
       </div>
       <div class="card-name">Scan</div>
       <div class="card-by">Audit contractuel IA</div>
-      <div class="card-desc">On te soumet un contrat à signer ? Avant de parapher, uploade-le sur Scan. L'IA identifie les clauses déséquilibrées, les protections manquantes et te donne un rapport clair avec les risques classés par niveau.</div>
+      <div class="card-desc">On te soumet un contrat à signer ? Avant de parapher, uploade-le sur Scan. L'IA identifie les clauses déséquilibrées, les protections manquantes et te donne un rapport avec les risques classés par niveau.</div>
       <div class="card-what">✦ Idéal avant de signer n'importe quel contrat professionnel</div>
       <div class="card-footer">
         <div class="price">9,99€ <span class="price-sub">/ audit</span></div>
@@ -283,12 +288,12 @@ footer{
     <a href="https://ping.zelko.fr" class="card">
       <div class="card-top">
         <div class="card-icon ic-amber">🔔</div>
-        <span class="badge b-new">Nouveau</span>
+        <span class="badge b-new">Bientôt</span>
       </div>
       <div class="card-name">Ping</div>
       <div class="card-by">Relance de factures impayées</div>
-      <div class="card-desc">Tu as des factures impayées qui traînent ? Ping envoie automatiquement les relances à J+7, J+15 et J+30 — et génère une mise en demeure juridique si nécessaire. Tu n'as plus rien à faire.</div>
-      <div class="card-what">✦ Idéal pour les indépendants qui n'ont pas le temps de courir après les clients</div>
+      <div class="card-desc">Tu as des factures impayées qui traînent ? Ping envoie automatiquement les relances à J+7, J+15 et J+30, et génère une mise en demeure juridique si nécessaire.</div>
+      <div class="card-what">✦ Idéal pour les indépendants qui n'ont pas le temps de courir après les paiements</div>
       <div class="card-footer">
         <div class="price">12€ <span class="price-sub">/ mois</span></div>
         <span class="card-arrow">→</span>
@@ -299,11 +304,11 @@ footer{
     <a href="https://flik.zelko.fr" class="card">
       <div class="card-top">
         <div class="card-icon ic-green">✨</div>
-        <span class="badge b-new">Nouveau</span>
+        <span class="badge b-new">Bientôt</span>
       </div>
       <div class="card-name">Flik</div>
       <div class="card-by">Fiches produit IA</div>
-      <div class="card-desc">Tu vends sur Vinted, Shopify ou Amazon ? Donne à Flik une photo ou quelques mots-clés et il génère une fiche produit SEO optimisée en 10 secondes. Des dizaines de fiches par jour, sans effort.</div>
+      <div class="card-desc">Tu vends sur Vinted, Shopify ou Amazon ? Donne à Flik une photo ou quelques mots-clés et il génère une fiche produit SEO optimisée en 10 secondes.</div>
       <div class="card-what">✦ Idéal pour les revendeurs et e-commerçants multi-plateformes</div>
       <div class="card-footer">
         <div class="price">19€ <span class="price-sub">/ mois</span></div>
@@ -315,12 +320,12 @@ footer{
     <a href="https://marge.zelko.fr" class="card">
       <div class="card-top">
         <div class="card-icon ic-blue">📊</div>
-        <span class="badge b-new">Nouveau</span>
+        <span class="badge b-new">Bientôt</span>
       </div>
       <div class="card-name">Marge</div>
       <div class="card-by">Dashboard e-commerce</div>
-      <div class="card-desc">Tu sais combien tu vends, mais tu ne sais pas vraiment ce que tu gagnes. Marge connecte tes plateformes et calcule tes vraies marges après frais, retours et livraison — en temps réel.</div>
-      <div class="card-what">✦ Idéal pour les vendeurs multi-canaux qui veulent piloter leur rentabilité</div>
+      <div class="card-desc">Tu sais combien tu vends, mais pas ce que tu gagnes vraiment. Marge connecte tes plateformes et calcule tes vraies marges après frais, retours et livraison.</div>
+      <div class="card-what">✦ Idéal pour piloter la rentabilité d'une activité multi-canaux</div>
       <div class="card-footer">
         <div class="price">24€ <span class="price-sub">/ mois</span></div>
         <span class="card-arrow">→</span>
@@ -347,8 +352,8 @@ footer{
 <!-- CTA -->
 <div class="cta-section">
   <div>
-    <h3>Chaque outil, à son prix.</h3>
-    <p>Pas d'abonnement global. Tu paies uniquement ce que tu utilises — à l'acte ou au mois selon l'outil.</p>
+    <h3>Un outil. Un prix. Pas de surprise.</h3>
+    <p>Chez Zelko, chaque outil a son tarif propre. Tu paies uniquement ce que tu utilises — à l'acte pour les contrats, au mois pour les outils récurrents. Aucun engagement, aucun abonnement global imposé.</p>
   </div>
   <a href="/tarifs.html" class="btn-dark">Voir les tarifs →</a>
 </div>
@@ -357,7 +362,6 @@ footer{
   <div class="footer-inner">
     <div class="footer-logo">zelko<b>.</b></div>
     <div class="footer-links">
-      <a href="#" class="footer-link">À propos</a>
       <a href="/cgu.html" class="footer-link">CGU</a>
       <a href="/mentions-legales.html" class="footer-link">Mentions légales</a>
       <a href="/confidentialite.html" class="footer-link">Confidentialité</a>
