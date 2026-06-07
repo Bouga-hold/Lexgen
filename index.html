@@ -40,7 +40,7 @@ nav{
 
 /* HERO */
 .hero{
-  padding:5rem 2.5rem 4rem;
+  padding:4rem 2.5rem 3rem;
   max-width:1100px;margin:0 auto;
   text-align:center;
 }
@@ -49,35 +49,34 @@ nav{
   background:var(--white);border:0.5px solid var(--border);
   border-radius:100px;padding:0.35rem 1.1rem;
   font-size:0.72rem;color:var(--muted);
-  margin-bottom:2rem;letter-spacing:0.05em;text-transform:uppercase;
+  margin-bottom:1.75rem;letter-spacing:0.05em;text-transform:uppercase;
 }
 .hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
 .hero h1{
   font-family:'Syne',sans-serif;font-weight:800;
   font-size:3.2rem;line-height:1.04;
   letter-spacing:-0.04em;color:var(--black);
-  margin-bottom:1.25rem;
+  margin-bottom:1.1rem;
   max-width:700px;margin-left:auto;margin-right:auto;
 }
 .hero h1 em{font-style:normal;color:var(--green)}
 .hero-sub{
   font-size:1.05rem;color:#666;
-  max-width:500px;margin:0 auto 3rem;
+  max-width:480px;margin:0 auto 2.5rem;
   line-height:1.7;
 }
 .hero-stats{
   display:flex;align-items:center;justify-content:center;
   gap:2.5rem;flex-wrap:wrap;
-  padding:1.5rem 0;
+  padding:1.25rem 0;
   border-top:0.5px solid var(--border);
   border-bottom:0.5px solid var(--border);
-  margin-top:1rem;
 }
 .hero-stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--black)}
 .hero-stat-l{font-size:0.75rem;color:var(--muted);margin-top:0.2rem}
 
 /* TOOLS GRID */
-.tools-section{padding:3rem 2.5rem;max-width:1100px;margin:0 auto}
+.tools-section{padding:3rem 2.5rem 2rem;max-width:1100px;margin:0 auto}
 .tools-header{
   display:flex;align-items:baseline;justify-content:space-between;
   margin-bottom:1.75rem;
@@ -85,12 +84,12 @@ nav{
 .tools-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:-0.02em;color:var(--black)}
 .tools-count{font-size:0.78rem;color:var(--muted)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
 
 .card{
   background:var(--white);
   border:0.5px solid var(--border);
-  border-radius:16px;padding:1.5rem;
+  border-radius:16px;padding:1.6rem;
   cursor:pointer;
   transition:all 0.18s;
   text-decoration:none;
@@ -98,13 +97,13 @@ nav{
   position:relative;
   overflow:hidden;
 }
-.card:hover{border-color:#bbb;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.card:hover{border-color:#bbb;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.07)}
 .card.featured{border:1.5px solid var(--black)}
 .card.disabled{opacity:0.45;pointer-events:none}
 
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.1rem}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
 .card-icon{
-  width:42px;height:42px;border-radius:12px;
+  width:44px;height:44px;border-radius:12px;
   display:flex;align-items:center;justify-content:center;
   font-size:20px;flex-shrink:0;
 }
@@ -114,7 +113,6 @@ nav{
 .ic-purple{background:#eeedfe}
 .ic-red{background:#fde8e0}
 .ic-teal{background:#e1f5ee}
-.ic-gray{background:#f0f0ee}
 
 .badge{
   font-size:0.6rem;padding:0.2rem 0.6rem;border-radius:4px;
@@ -124,19 +122,26 @@ nav{
 .b-live{background:var(--black);color:var(--white)}
 .b-new{background:var(--green-light);color:var(--green-dark)}
 .b-soon{background:#f2efe8;color:#bbb;border:0.5px solid var(--border)}
-.b-beta{background:#e6f1fb;color:#0c447c}
 
 .card-name{
   font-family:'Syne',sans-serif;font-weight:800;
-  font-size:1.1rem;color:var(--black);
-  letter-spacing:-0.02em;margin-bottom:0.15rem;
+  font-size:1.15rem;color:var(--black);
+  letter-spacing:-0.02em;margin-bottom:0.1rem;
 }
-.card-by{font-size:0.7rem;color:#bbb;margin-bottom:0.6rem;letter-spacing:0.03em}
-.card-desc{font-size:0.82rem;color:#666;line-height:1.55;flex:1;margin-bottom:1.1rem}
+.card-by{font-size:0.7rem;color:#bbb;margin-bottom:0.5rem;letter-spacing:0.03em}
+.card-desc{font-size:0.83rem;color:#555;line-height:1.6;flex:1;margin-bottom:0.9rem}
+
+/* Ligne "Ce que ça fait" */
+.card-what{
+  font-size:0.78rem;color:var(--green-dark);
+  background:var(--green-light);
+  border-radius:6px;padding:0.45rem 0.7rem;
+  margin-bottom:1rem;line-height:1.5;
+}
 
 .card-footer{
   display:flex;align-items:center;justify-content:space-between;
-  padding-top:1rem;border-top:0.5px solid #f0ece4;
+  padding-top:0.9rem;border-top:0.5px solid #f0ece4;
   margin-top:auto;
 }
 .price{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--black)}
@@ -144,33 +149,33 @@ nav{
 .card-arrow{font-size:18px;color:#ddd;transition:all 0.15s}
 .card:hover .card-arrow{color:var(--black);transform:translateX(2px)}
 
-/* BANNER */
-.banner{
-  margin:0 2.5rem;
-  background:var(--black);
-  border-radius:16px;padding:2.5rem;
+/* CTA SECTION */
+.cta-section{
+  margin:0 2.5rem 2rem;
+  background:var(--white);
+  border:0.5px solid var(--border);
+  border-radius:16px;padding:2rem 2.5rem;
   display:flex;align-items:center;justify-content:space-between;
   gap:2rem;flex-wrap:wrap;
 }
-.banner h3{
+.cta-section h3{
   font-family:'Syne',sans-serif;font-weight:800;
-  font-size:1.25rem;color:var(--white);
-  margin-bottom:0.4rem;letter-spacing:-0.02em;
+  font-size:1.1rem;color:var(--black);
+  margin-bottom:0.3rem;letter-spacing:-0.02em;
 }
-.banner p{font-size:0.88rem;color:#666;line-height:1.6}
-.banner p em{font-style:normal;color:#a8e060}
-.btn-white{
-  font-size:0.88rem;padding:0.75rem 1.75rem;
+.cta-section p{font-size:0.85rem;color:var(--muted);line-height:1.6}
+.btn-dark{
+  font-size:0.85rem;padding:0.7rem 1.5rem;
   border-radius:10px;border:none;
-  background:var(--white);color:var(--black);
+  background:var(--black);color:var(--white);
   cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;
-  white-space:nowrap;transition:background 0.15s;
+  white-space:nowrap;transition:background 0.15s;text-decoration:none;display:inline-block;
 }
-.btn-white:hover{background:#e8e8e4}
+.btn-dark:hover{background:#2a2a2a}
 
 /* FOOTER */
 footer{
-  margin-top:4rem;
+  margin-top:3rem;
   background:var(--white);
   border-top:0.5px solid var(--border);
   padding:2rem 2.5rem;
@@ -190,10 +195,10 @@ footer{
 @media(max-width:700px){
   nav{padding:1rem 1.25rem}
   .nav-links{display:none}
-  .hero{padding:3rem 1.25rem 2.5rem}
+  .hero{padding:2.5rem 1.25rem 2rem}
   .hero h1{font-size:2.2rem}
   .tools-section{padding:2rem 1.25rem}
-  .banner{margin:0 1.25rem;padding:1.75rem}
+  .cta-section{margin:0 1.25rem;padding:1.5rem}
   footer{padding:1.5rem 1.25rem}
   .hero-stats{gap:1.5rem}
 }
@@ -219,21 +224,11 @@ footer{
 <section class="hero">
   <div class="hero-badge"><div class="hero-badge-dot"></div>La plateforme des entrepreneurs indépendants</div>
   <h1>Tous tes outils.<br><em>Un seul endroit.</em></h1>
-  <p class="hero-sub">Zelko regroupe les outils essentiels pour gérer, sécuriser et développer ton activité — sans te ruiner, sans perdre de temps.</p>
+  <p class="hero-sub">Zelko regroupe les outils essentiels pour gérer, sécuriser et développer ton activité. Simplement.</p>
   <div class="hero-stats">
     <div>
       <div class="hero-stat-n">6</div>
       <div class="hero-stat-l">Outils disponibles</div>
-    </div>
-    <div style="width:0.5px;height:32px;background:var(--border)"></div>
-    <div>
-      <div class="hero-stat-n">FR · BE · CH</div>
-      <div class="hero-stat-l">Pays couverts</div>
-    </div>
-    <div style="width:0.5px;height:32px;background:var(--border)"></div>
-    <div>
-      <div class="hero-stat-n">100%</div>
-      <div class="hero-stat-l">Bootstrappé</div>
     </div>
     <div style="width:0.5px;height:32px;background:var(--border)"></div>
     <div>
@@ -247,7 +242,7 @@ footer{
 <section class="tools-section" id="outils">
   <div class="tools-header">
     <div class="tools-title">Tous les outils</div>
-    <div class="tools-count">5 outils · 2 bientôt</div>
+    <div class="tools-count">4 disponibles · 2 bientôt</div>
   </div>
 
   <div class="grid">
@@ -259,10 +254,11 @@ footer{
         <span class="badge b-live">Live</span>
       </div>
       <div class="card-name">Lex</div>
-      <div class="card-by">by Zelko · Contrats juridiques</div>
-      <div class="card-desc">NDA, CGV, bail commercial, contrat de travail — générés en quelques minutes, conformes au droit français.</div>
+      <div class="card-by">Contrats juridiques</div>
+      <div class="card-desc">Tu as besoin d'un NDA, d'un contrat de prestation, d'un bail ou de CGV ? Lex te génère un document conforme au droit français en moins de 10 minutes, sans passer par un avocat.</div>
+      <div class="card-what">✦ Idéal pour les freelances, TPE et auto-entrepreneurs</div>
       <div class="card-footer">
-        <div class="price">dès 4,99€ <span class="price-sub">/ contrat</span></div>
+        <div class="price">dès 7,99€ <span class="price-sub">/ contrat</span></div>
         <span class="card-arrow">→</span>
       </div>
     </a>
@@ -274,8 +270,9 @@ footer{
         <span class="badge b-new">Nouveau</span>
       </div>
       <div class="card-name">Scan</div>
-      <div class="card-by">by Zelko · Audit contractuel IA</div>
-      <div class="card-desc">Uploade ton contrat. Scan analyse les clauses déséquilibrées, les risques juridiques et te donne un rapport clair en PDF.</div>
+      <div class="card-by">Audit contractuel IA</div>
+      <div class="card-desc">On te soumet un contrat à signer ? Avant de parapher, uploade-le sur Scan. L'IA identifie les clauses déséquilibrées, les protections manquantes et te donne un rapport clair avec les risques classés par niveau.</div>
+      <div class="card-what">✦ Idéal avant de signer n'importe quel contrat professionnel</div>
       <div class="card-footer">
         <div class="price">9,99€ <span class="price-sub">/ audit</span></div>
         <span class="card-arrow">→</span>
@@ -289,8 +286,9 @@ footer{
         <span class="badge b-new">Nouveau</span>
       </div>
       <div class="card-name">Ping</div>
-      <div class="card-by">by Zelko · Relance factures</div>
-      <div class="card-desc">Tes factures impayées relancées automatiquement. J+7, J+15, J+30 — mise en demeure juridique incluse.</div>
+      <div class="card-by">Relance de factures impayées</div>
+      <div class="card-desc">Tu as des factures impayées qui traînent ? Ping envoie automatiquement les relances à J+7, J+15 et J+30 — et génère une mise en demeure juridique si nécessaire. Tu n'as plus rien à faire.</div>
+      <div class="card-what">✦ Idéal pour les indépendants qui n'ont pas le temps de courir après les clients</div>
       <div class="card-footer">
         <div class="price">12€ <span class="price-sub">/ mois</span></div>
         <span class="card-arrow">→</span>
@@ -304,8 +302,9 @@ footer{
         <span class="badge b-new">Nouveau</span>
       </div>
       <div class="card-name">Flik</div>
-      <div class="card-by">by Zelko · Fiches produit IA</div>
-      <div class="card-desc">Photo ou mots-clés → fiche produit SEO prête à publier en 10 secondes. Compatible Vinted, Shopify, Amazon, Etsy.</div>
+      <div class="card-by">Fiches produit IA</div>
+      <div class="card-desc">Tu vends sur Vinted, Shopify ou Amazon ? Donne à Flik une photo ou quelques mots-clés et il génère une fiche produit SEO optimisée en 10 secondes. Des dizaines de fiches par jour, sans effort.</div>
+      <div class="card-what">✦ Idéal pour les revendeurs et e-commerçants multi-plateformes</div>
       <div class="card-footer">
         <div class="price">19€ <span class="price-sub">/ mois</span></div>
         <span class="card-arrow">→</span>
@@ -319,8 +318,9 @@ footer{
         <span class="badge b-new">Nouveau</span>
       </div>
       <div class="card-name">Marge</div>
-      <div class="card-by">by Zelko · Dashboard e-commerce</div>
-      <div class="card-desc">Connecte tes plateformes et vois enfin tes vraies marges après frais, retours et livraison. Shopify, Vinted, Amazon, Etsy.</div>
+      <div class="card-by">Dashboard e-commerce</div>
+      <div class="card-desc">Tu sais combien tu vends, mais tu ne sais pas vraiment ce que tu gagnes. Marge connecte tes plateformes et calcule tes vraies marges après frais, retours et livraison — en temps réel.</div>
+      <div class="card-what">✦ Idéal pour les vendeurs multi-canaux qui veulent piloter leur rentabilité</div>
       <div class="card-footer">
         <div class="price">24€ <span class="price-sub">/ mois</span></div>
         <span class="card-arrow">→</span>
@@ -334,8 +334,8 @@ footer{
         <span class="badge b-soon">Bientôt</span>
       </div>
       <div class="card-name">Flow</div>
-      <div class="card-by">by Zelko · Gestion freelances</div>
-      <div class="card-desc">Gère tes freelances et sous-traitants. Contrats, paiements, suivi de mission centralisés en un endroit.</div>
+      <div class="card-by">Gestion freelances</div>
+      <div class="card-desc">Gère tes freelances et sous-traitants. Contrats, paiements, suivi de mission centralisés en un seul endroit.</div>
       <div class="card-footer">
         <div class="price" style="color:var(--muted)">En développement</div>
       </div>
@@ -344,13 +344,13 @@ footer{
   </div>
 </section>
 
-<!-- BANNER -->
-<div class="banner" id="tarifs">
+<!-- CTA -->
+<div class="cta-section">
   <div>
-    <h3>Un abonnement. Tous les outils.</h3>
-    <p>Accède à <em>l'ensemble du catalogue Zelko</em> pour le prix d'un déjeuner.<br>Plus d'excuses pour ne pas être organisé.</p>
+    <h3>Chaque outil, à son prix.</h3>
+    <p>Pas d'abonnement global. Tu paies uniquement ce que tu utilises — à l'acte ou au mois selon l'outil.</p>
   </div>
-  <a href="/tarifs.html" class="btn-white">Voir les tarifs →</a>
+  <a href="/tarifs.html" class="btn-dark">Voir les tarifs →</a>
 </div>
 
 <footer>
@@ -358,9 +358,9 @@ footer{
     <div class="footer-logo">zelko<b>.</b></div>
     <div class="footer-links">
       <a href="#" class="footer-link">À propos</a>
-      <a href="#" class="footer-link">CGU</a>
-      <a href="#" class="footer-link">Mentions légales</a>
-      <a href="#" class="footer-link">Confidentialité</a>
+      <a href="/cgu.html" class="footer-link">CGU</a>
+      <a href="/mentions-legales.html" class="footer-link">Mentions légales</a>
+      <a href="/confidentialite.html" class="footer-link">Confidentialité</a>
       <a href="mailto:contact@zelko.fr" class="footer-link">Contact</a>
     </div>
     <div class="footer-copy">© 2026 Zelko · Tous droits réservés</div>
