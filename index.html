@@ -4,77 +4,209 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zelko — La plateforme des entrepreneurs</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--green:#1a4a1a;--green-light:#e8f0e8;--green-mid:#2d5a2d;--white:#ffffff;--cream:#fafaf8;--border:#e5e7e5;--text:#1a1a1a;--muted:#6b7280}
+:root{
+  --black:#0c0c0c;
+  --white:#fafaf7;
+  --cream:#f2efe8;
+  --green:#3a8000;
+  --green-light:#eaf3de;
+  --green-dark:#27500a;
+  --border:#e4e0d8;
+  --text:#1a1a1a;
+  --muted:#888;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
-nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:var(--white);border-bottom:1px solid var(--border)}
-.logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.6rem;color:var(--green);text-decoration:none}
-.nav-links{display:flex;gap:1.75rem}
-.nav-link{font-size:0.9rem;color:var(--muted);text-decoration:none}
-.nav-link:hover{color:var(--green)}
-.nav-right{display:flex;gap:0.75rem}
-.btn-ghost{font-size:0.85rem;padding:0.5rem 1.2rem;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;font-family:'Inter',sans-serif}
-.btn-primary{font-size:0.85rem;padding:0.5rem 1.3rem;border-radius:6px;border:none;background:var(--green);color:var(--white);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500}
-.hero{padding:4.5rem 2.5rem 3.5rem;max-width:1100px;margin:0 auto;text-align:center}
-.hero-tag{display:inline-block;background:var(--green-light);color:var(--green);font-size:0.75rem;padding:0.35rem 1rem;border-radius:100px;margin-bottom:1.75rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase}
-.hero h1{font-family:'Playfair Display',serif;font-weight:700;font-size:3.2rem;line-height:1.15;color:var(--green);margin-bottom:1.1rem;max-width:640px;margin-left:auto;margin-right:auto}
-.hero h1 em{font-style:italic}
-.hero-sub{font-size:1.1rem;color:var(--muted);max-width:500px;margin:0 auto 3rem;line-height:1.75}
-.hero-stats{display:flex;align-items:center;justify-content:center;gap:3.5rem;padding:1.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.stat-n{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--green);font-weight:700}
-.stat-l{font-size:0.78rem;color:var(--muted);margin-top:0.25rem}
-.section{padding:3.5rem 2.5rem;max-width:1100px;margin:0 auto}
-.section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2rem}
-.section-title{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);font-weight:700}
-.section-count{font-size:0.82rem;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}
-.card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.75rem;text-decoration:none;display:flex;flex-direction:column;transition:all 0.15s}
-.card:hover{border-color:var(--green-mid);box-shadow:0 6px 20px rgba(26,74,26,0.08);transform:translateY(-2px)}
-.card.featured{border:2px solid var(--green)}
-.card.disabled{opacity:0.4;pointer-events:none}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem}
-.card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
-.ic-green{background:var(--green-light)}
-.ic-amber{background:#fef3c7}
-.ic-blue{background:#dbeafe}
-.ic-purple{background:#ede9fe}
-.ic-red{background:#fee2e2}
-.ic-teal{background:#d1fae5}
-.badge{font-size:0.65rem;padding:0.25rem 0.65rem;border-radius:4px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase}
-.b-live{background:var(--green);color:var(--white)}
-.b-new{background:var(--green-light);color:var(--green)}
-.b-soon{background:#f3f4f6;color:#9ca3af;border:1px solid var(--border)}
-.card-name{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--green);font-weight:700;margin-bottom:0.2rem}
-.card-by{font-size:0.75rem;color:#9ca3af;margin-bottom:0.65rem}
-.card-desc{font-size:0.88rem;color:var(--muted);line-height:1.6;flex:1;margin-bottom:1.25rem}
-.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--border);margin-top:auto}
-.price{font-size:0.95rem;font-weight:600;color:var(--text)}
-.price-sub{font-size:0.72rem;font-weight:400;color:var(--muted)}
-.card-arrow{font-size:18px;color:#d1d5db;transition:all 0.15s}
-.card:hover .card-arrow{color:var(--green)}
-.banner{background:var(--green);border-radius:14px;padding:2.75rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin:0 2.5rem}
-.banner h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--white);margin-bottom:0.4rem}
-.banner p{font-size:0.9rem;color:#a7c4a7;line-height:1.6}
-.banner p em{font-style:normal;color:#d4edda}
-.btn-white{font-size:0.88rem;padding:0.7rem 1.75rem;border-radius:6px;border:none;background:var(--white);color:var(--green);cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;white-space:nowrap}
-footer{margin-top:4rem;background:var(--white);border-top:1px solid var(--border);padding:2rem 2.5rem}
-.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.footer-logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--green);font-weight:700}
-.footer-links{display:flex;gap:1.75rem}
-.footer-link{font-size:0.8rem;color:#9ca3af;text-decoration:none}
-.footer-link:hover{color:var(--green)}
-.footer-copy{font-size:0.75rem;color:#d1d5db}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+
+/* NAV */
+nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 2.5rem;background:var(--white);
+  border-bottom:0.5px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:-0.04em;color:var(--black);text-decoration:none}
+.logo b{color:var(--green)}
+.nav-links{display:flex;gap:0.25rem}
+.nav-link{font-size:0.82rem;color:var(--muted);padding:0.4rem 0.9rem;border-radius:6px;cursor:pointer;transition:background 0.15s;text-decoration:none}
+.nav-link:hover{background:var(--cream);color:var(--black)}
+.nav-right{display:flex;gap:0.75rem;align-items:center}
+.btn-ghost{font-size:0.82rem;padding:0.45rem 1.1rem;border-radius:8px;border:0.5px solid var(--border);background:transparent;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;transition:border-color 0.15s}
+.btn-ghost:hover{border-color:#aaa}
+.btn-primary{font-size:0.82rem;padding:0.45rem 1.2rem;border-radius:8px;border:none;background:var(--black);color:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
+
+/* HERO */
+.hero{
+  padding:5rem 2.5rem 4rem;
+  max-width:1100px;margin:0 auto;
+  text-align:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:var(--white);border:0.5px solid var(--border);
+  border-radius:100px;padding:0.35rem 1.1rem;
+  font-size:0.72rem;color:var(--muted);
+  margin-bottom:2rem;letter-spacing:0.05em;text-transform:uppercase;
+}
+.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
+.hero h1{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:3.2rem;line-height:1.04;
+  letter-spacing:-0.04em;color:var(--black);
+  margin-bottom:1.25rem;
+  max-width:700px;margin-left:auto;margin-right:auto;
+}
+.hero h1 em{font-style:normal;color:var(--green)}
+.hero-sub{
+  font-size:1.05rem;color:#666;
+  max-width:500px;margin:0 auto 3rem;
+  line-height:1.7;
+}
+.hero-stats{
+  display:flex;align-items:center;justify-content:center;
+  gap:2.5rem;flex-wrap:wrap;
+  padding:1.5rem 0;
+  border-top:0.5px solid var(--border);
+  border-bottom:0.5px solid var(--border);
+  margin-top:1rem;
+}
+.hero-stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--black)}
+.hero-stat-l{font-size:0.75rem;color:var(--muted);margin-top:0.2rem}
+
+/* TOOLS GRID */
+.tools-section{padding:3rem 2.5rem;max-width:1100px;margin:0 auto}
+.tools-header{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:1.75rem;
+}
+.tools-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:-0.02em;color:var(--black)}
+.tools-count{font-size:0.78rem;color:var(--muted)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem}
+
+.card{
+  background:var(--white);
+  border:0.5px solid var(--border);
+  border-radius:16px;padding:1.5rem;
+  cursor:pointer;
+  transition:all 0.18s;
+  text-decoration:none;
+  display:flex;flex-direction:column;
+  position:relative;
+  overflow:hidden;
+}
+.card:hover{border-color:#bbb;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.card.featured{border:1.5px solid var(--black)}
+.card.disabled{opacity:0.45;pointer-events:none}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.1rem}
+.card-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.ic-green{background:#eaf3de}
+.ic-amber{background:#faeeda}
+.ic-blue{background:#e6f1fb}
+.ic-purple{background:#eeedfe}
+.ic-red{background:#fde8e0}
+.ic-teal{background:#e1f5ee}
+.ic-gray{background:#f0f0ee}
+
+.badge{
+  font-size:0.6rem;padding:0.2rem 0.6rem;border-radius:4px;
+  font-weight:600;letter-spacing:0.07em;text-transform:uppercase;
+  flex-shrink:0;
+}
+.b-live{background:var(--black);color:var(--white)}
+.b-new{background:var(--green-light);color:var(--green-dark)}
+.b-soon{background:#f2efe8;color:#bbb;border:0.5px solid var(--border)}
+.b-beta{background:#e6f1fb;color:#0c447c}
+
+.card-name{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1.1rem;color:var(--black);
+  letter-spacing:-0.02em;margin-bottom:0.15rem;
+}
+.card-by{font-size:0.7rem;color:#bbb;margin-bottom:0.6rem;letter-spacing:0.03em}
+.card-desc{font-size:0.82rem;color:#666;line-height:1.55;flex:1;margin-bottom:1.1rem}
+
+.card-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:1rem;border-top:0.5px solid #f0ece4;
+  margin-top:auto;
+}
+.price{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--black)}
+.price-sub{font-size:0.68rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif}
+.card-arrow{font-size:18px;color:#ddd;transition:all 0.15s}
+.card:hover .card-arrow{color:var(--black);transform:translateX(2px)}
+
+/* BANNER */
+.banner{
+  margin:0 2.5rem;
+  background:var(--black);
+  border-radius:16px;padding:2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:2rem;flex-wrap:wrap;
+}
+.banner h3{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1.25rem;color:var(--white);
+  margin-bottom:0.4rem;letter-spacing:-0.02em;
+}
+.banner p{font-size:0.88rem;color:#666;line-height:1.6}
+.banner p em{font-style:normal;color:#a8e060}
+.btn-white{
+  font-size:0.88rem;padding:0.75rem 1.75rem;
+  border-radius:10px;border:none;
+  background:var(--white);color:var(--black);
+  cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;
+  white-space:nowrap;transition:background 0.15s;
+}
+.btn-white:hover{background:#e8e8e4}
+
+/* FOOTER */
+footer{
+  margin-top:4rem;
+  background:var(--white);
+  border-top:0.5px solid var(--border);
+  padding:2rem 2.5rem;
+}
+.footer-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1.5rem;
+}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--black)}
+.footer-logo b{color:var(--green)}
+.footer-links{display:flex;gap:2rem;flex-wrap:wrap}
+.footer-link{font-size:0.78rem;color:#bbb;cursor:pointer;text-decoration:none}
+.footer-link:hover{color:var(--text)}
+.footer-copy{font-size:0.72rem;color:#ccc}
+
+@media(max-width:700px){
+  nav{padding:1rem 1.25rem}
+  .nav-links{display:none}
+  .hero{padding:3rem 1.25rem 2.5rem}
+  .hero h1{font-size:2.2rem}
+  .tools-section{padding:2rem 1.25rem}
+  .banner{margin:0 1.25rem;padding:1.75rem}
+  footer{padding:1.5rem 1.25rem}
+  .hero-stats{gap:1.5rem}
+}
 </style>
 </head>
 <body>
+
 <nav>
-  <a href="/" class="logo">Zelko</a>
+  <a href="/" class="logo">zelko<b>.</b></a>
   <div class="nav-links">
     <a class="nav-link" href="#outils">Outils</a>
-    <a class="nav-link" href="#tarifs">Tarifs</a>
+    <a class="nav-link" href="/tarifs.html">Tarifs</a>
+    <a class="nav-link" href="#">Blog</a>
     <a class="nav-link" href="#">À propos</a>
   </div>
   <div class="nav-right">
@@ -82,87 +214,158 @@ footer{margin-top:4rem;background:var(--white);border-top:1px solid var(--border
     <button class="btn-primary">Commencer gratuitement</button>
   </div>
 </nav>
+
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-tag">La plateforme des entrepreneurs indépendants</div>
-  <h1>Tous vos outils.<br><em>Un seul endroit.</em></h1>
-  <p class="hero-sub">Zelko regroupe les outils essentiels pour gérer, sécuriser et développer votre activité — sans vous ruiner, sans perdre de temps.</p>
+  <div class="hero-badge"><div class="hero-badge-dot"></div>La plateforme des entrepreneurs indépendants</div>
+  <h1>Tous tes outils.<br><em>Un seul endroit.</em></h1>
+  <p class="hero-sub">Zelko regroupe les outils essentiels pour gérer, sécuriser et développer ton activité — sans te ruiner, sans perdre de temps.</p>
   <div class="hero-stats">
-    <div><div class="stat-n">6</div><div class="stat-l">Outils disponibles</div></div>
-    <div style="width:1px;height:36px;background:var(--border)"></div>
-    <div><div class="stat-n">100%</div><div class="stat-l">Bootstrappé</div></div>
-    <div style="width:1px;height:36px;background:var(--border)"></div>
-    <div><div class="stat-n">0€</div><div class="stat-l">Pour commencer</div></div>
+    <div>
+      <div class="hero-stat-n">6</div>
+      <div class="hero-stat-l">Outils disponibles</div>
+    </div>
+    <div style="width:0.5px;height:32px;background:var(--border)"></div>
+    <div>
+      <div class="hero-stat-n">FR · BE · CH</div>
+      <div class="hero-stat-l">Pays couverts</div>
+    </div>
+    <div style="width:0.5px;height:32px;background:var(--border)"></div>
+    <div>
+      <div class="hero-stat-n">100%</div>
+      <div class="hero-stat-l">Bootstrappé</div>
+    </div>
+    <div style="width:0.5px;height:32px;background:var(--border)"></div>
+    <div>
+      <div class="hero-stat-n">0€</div>
+      <div class="hero-stat-l">Pour commencer</div>
+    </div>
   </div>
 </section>
-<section class="section" id="outils">
-  <div class="section-header">
-    <div class="section-title">Nos outils</div>
-    <div class="section-count">5 outils · 1 bientôt</div>
+
+<!-- TOOLS -->
+<section class="tools-section" id="outils">
+  <div class="tools-header">
+    <div class="tools-title">Tous les outils</div>
+    <div class="tools-count">5 outils · 2 bientôt</div>
   </div>
+
   <div class="grid">
-    <a href="/lex.html" class="card featured">
-      <div class="card-top"><div class="card-icon ic-purple">📄</div><span class="badge b-live">Live</span></div>
+
+    <!-- LEX -->
+    <a href="https://lex.zelko.fr" class="card featured">
+      <div class="card-top">
+        <div class="card-icon ic-purple">📄</div>
+        <span class="badge b-live">Live</span>
+      </div>
       <div class="card-name">Lex</div>
       <div class="card-by">by Zelko · Contrats juridiques</div>
       <div class="card-desc">NDA, CGV, bail commercial, contrat de travail — générés en quelques minutes, conformes au droit français.</div>
-      <div class="card-footer"><div class="price">dès 4,99€ <span class="price-sub">/ contrat</span></div><span class="card-arrow">→</span></div>
+      <div class="card-footer">
+        <div class="price">dès 4,99€ <span class="price-sub">/ contrat</span></div>
+        <span class="card-arrow">→</span>
+      </div>
     </a>
-    <a href="#" class="card">
-      <div class="card-top"><div class="card-icon ic-red">🔍</div><span class="badge b-new">Bientôt</span></div>
+
+    <!-- SCAN -->
+    <a href="https://scan.zelko.fr" class="card">
+      <div class="card-top">
+        <div class="card-icon ic-red">🔍</div>
+        <span class="badge b-new">Nouveau</span>
+      </div>
       <div class="card-name">Scan</div>
       <div class="card-by">by Zelko · Audit contractuel IA</div>
-      <div class="card-desc">Uploade ton contrat. Scan analyse les clauses déséquilibrées, les risques juridiques et génère un rapport PDF.</div>
-      <div class="card-footer"><div class="price">9,99€ <span class="price-sub">/ audit</span></div><span class="card-arrow">→</span></div>
+      <div class="card-desc">Uploade ton contrat. Scan analyse les clauses déséquilibrées, les risques juridiques et te donne un rapport clair en PDF.</div>
+      <div class="card-footer">
+        <div class="price">9,99€ <span class="price-sub">/ audit</span></div>
+        <span class="card-arrow">→</span>
+      </div>
     </a>
-    <a href="#" class="card">
-      <div class="card-top"><div class="card-icon ic-amber">🔔</div><span class="badge b-new">Bientôt</span></div>
+
+    <!-- PING -->
+    <a href="https://ping.zelko.fr" class="card">
+      <div class="card-top">
+        <div class="card-icon ic-amber">🔔</div>
+        <span class="badge b-new">Nouveau</span>
+      </div>
       <div class="card-name">Ping</div>
       <div class="card-by">by Zelko · Relance factures</div>
       <div class="card-desc">Tes factures impayées relancées automatiquement. J+7, J+15, J+30 — mise en demeure juridique incluse.</div>
-      <div class="card-footer"><div class="price">12€ <span class="price-sub">/ mois</span></div><span class="card-arrow">→</span></div>
+      <div class="card-footer">
+        <div class="price">12€ <span class="price-sub">/ mois</span></div>
+        <span class="card-arrow">→</span>
+      </div>
     </a>
-    <a href="#" class="card">
-      <div class="card-top"><div class="card-icon ic-green">✨</div><span class="badge b-new">Bientôt</span></div>
+
+    <!-- FLIK -->
+    <a href="https://flik.zelko.fr" class="card">
+      <div class="card-top">
+        <div class="card-icon ic-green">✨</div>
+        <span class="badge b-new">Nouveau</span>
+      </div>
       <div class="card-name">Flik</div>
       <div class="card-by">by Zelko · Fiches produit IA</div>
-      <div class="card-desc">Photo ou mots-clés → fiche produit SEO prête à publier en 10 secondes. Vinted, Shopify, Amazon, Etsy.</div>
-      <div class="card-footer"><div class="price">19€ <span class="price-sub">/ mois</span></div><span class="card-arrow">→</span></div>
+      <div class="card-desc">Photo ou mots-clés → fiche produit SEO prête à publier en 10 secondes. Compatible Vinted, Shopify, Amazon, Etsy.</div>
+      <div class="card-footer">
+        <div class="price">19€ <span class="price-sub">/ mois</span></div>
+        <span class="card-arrow">→</span>
+      </div>
     </a>
-    <a href="#" class="card">
-      <div class="card-top"><div class="card-icon ic-blue">📊</div><span class="badge b-new">Bientôt</span></div>
+
+    <!-- MARGE -->
+    <a href="https://marge.zelko.fr" class="card">
+      <div class="card-top">
+        <div class="card-icon ic-blue">📊</div>
+        <span class="badge b-new">Nouveau</span>
+      </div>
       <div class="card-name">Marge</div>
       <div class="card-by">by Zelko · Dashboard e-commerce</div>
-      <div class="card-desc">Connecte tes plateformes et vois tes vraies marges après frais, retours et livraison.</div>
-      <div class="card-footer"><div class="price">24€ <span class="price-sub">/ mois</span></div><span class="card-arrow">→</span></div>
+      <div class="card-desc">Connecte tes plateformes et vois enfin tes vraies marges après frais, retours et livraison. Shopify, Vinted, Amazon, Etsy.</div>
+      <div class="card-footer">
+        <div class="price">24€ <span class="price-sub">/ mois</span></div>
+        <span class="card-arrow">→</span>
+      </div>
     </a>
+
+    <!-- FLOW (bientôt) -->
     <a class="card disabled">
-      <div class="card-top"><div class="card-icon ic-teal">👥</div><span class="badge b-soon">Bientôt</span></div>
+      <div class="card-top">
+        <div class="card-icon ic-teal">👥</div>
+        <span class="badge b-soon">Bientôt</span>
+      </div>
       <div class="card-name">Flow</div>
       <div class="card-by">by Zelko · Gestion freelances</div>
-      <div class="card-desc">Gère tes freelances et sous-traitants. Contrats, paiements, suivi de mission centralisés.</div>
-      <div class="card-footer"><div class="price" style="color:#9ca3af">En développement</div></div>
+      <div class="card-desc">Gère tes freelances et sous-traitants. Contrats, paiements, suivi de mission centralisés en un endroit.</div>
+      <div class="card-footer">
+        <div class="price" style="color:var(--muted)">En développement</div>
+      </div>
     </a>
+
   </div>
 </section>
+
+<!-- BANNER -->
 <div class="banner" id="tarifs">
   <div>
     <h3>Un abonnement. Tous les outils.</h3>
     <p>Accède à <em>l'ensemble du catalogue Zelko</em> pour le prix d'un déjeuner.<br>Plus d'excuses pour ne pas être organisé.</p>
   </div>
-  <button class="btn-white">Voir les tarifs →</button>
+  <a href="/tarifs.html" class="btn-white">Voir les tarifs →</a>
 </div>
+
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo">Zelko</div>
+    <div class="footer-logo">zelko<b>.</b></div>
     <div class="footer-links">
-      <a href="https://www.zelko.fr/a-propos.html" class="footer-link">À propos</a>
-      <a href="https://www.zelko.fr/cgu.html" class="footer-link">CGU</a>
-      <a href="https://www.zelko.fr/mentions-legales.html" class="footer-link">Mentions légales</a>
-      <a href="https://www.zelko.fr/confidentialite.html" class="footer-link">Confidentialité</a>
+      <a href="#" class="footer-link">À propos</a>
+      <a href="#" class="footer-link">CGU</a>
+      <a href="#" class="footer-link">Mentions légales</a>
+      <a href="#" class="footer-link">Confidentialité</a>
       <a href="mailto:contact@zelko.fr" class="footer-link">Contact</a>
     </div>
     <div class="footer-copy">© 2026 Zelko · Tous droits réservés</div>
   </div>
 </footer>
+
 </body>
 </html>
